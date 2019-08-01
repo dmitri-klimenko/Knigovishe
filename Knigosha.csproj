@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-Knigosha-30565842-6ECB-4F35-B520-0F676F775C17</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Controllers\Api\" />
+    <Folder Include="Core\Dtos\" />
+    <Folder Include="Core\Repositories\" />
+    <Folder Include="Persistence\EntityConfigurations\" />
+    <Folder Include="Persistence\Repositories\" />
+  </ItemGroup>
+
+</Project>
