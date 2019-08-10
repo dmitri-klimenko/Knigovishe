@@ -1,4 +1,4 @@
-namespace Knigosha.Core.Models
+namespace Knigosha.Core.ViewModels
 {
     public class ErrorViewModel
     {

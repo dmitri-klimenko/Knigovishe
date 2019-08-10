@@ -1,0 +1,38 @@
+﻿using Knigosha.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Knigosha.Persistence.EntityConfigurations
+{
+    public class BookConfiguration : IEntityTypeConfiguration<Book>
+    {
+        public void Configure(EntityTypeBuilder<Book> builder)
+        {
+            builder.ToTable("Books");
+            builder.HasKey(b => b.Id);
+
+            builder.Property(b => b.Title).IsRequired().HasMaxLength(255);
+            builder.Property(b => b.BookAuthor).IsRequired().HasMaxLength(255);
+            builder.Property(b => b.Publisher).IsRequired().HasMaxLength(255);
+            builder.Property(b => b.YearPublished).IsRequired().HasMaxLength(4);
+            builder.Property(b => b.BookCategory).IsRequired();
+            builder.Property(b => b.CoverPhoto).IsRequired();
+            builder.Property(b => b.Grade).IsRequired();
+            builder.Property(b => b.IsShortForm).IsRequired();
+            builder.Property(b => b.Isbn1).IsRequired();
+            builder.Property(b => b.Description).IsRequired();
+            builder.Property(b => b.Tags).IsRequired();
+            builder.Property(b => b.QuestionsAuthor).IsRequired();
+
+            builder.HasMany(b => b.Answers)
+                .WithOne(a => a.Book)
+                .HasForeignKey(a => a.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(b => b.Questions)
+                .WithOne(q => q.Book)
+                .HasForeignKey(q => q.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+}

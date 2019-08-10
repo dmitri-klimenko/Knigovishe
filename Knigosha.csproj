@@ -17,7 +17,6 @@
     <Folder Include="Controllers\Api\" />
     <Folder Include="Core\Dtos\" />
     <Folder Include="Core\Repositories\" />
-    <Folder Include="Persistence\EntityConfigurations\" />
     <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
