@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Knigosha.Core.Models;
-using Knigosha.Core.ViewModels;
+﻿using Knigosha.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Knigosha.Controllers
 {
@@ -16,7 +11,7 @@ namespace Knigosha.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Help()
         {
             return View();
         }

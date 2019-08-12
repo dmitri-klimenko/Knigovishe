@@ -63,6 +63,10 @@ body {
   background-color: #fff;
 }
 
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif !important;
+}
+
 [tabindex="-1"]:focus {
   outline: 0 !important;
 }

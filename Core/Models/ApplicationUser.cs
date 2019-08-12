@@ -17,8 +17,6 @@ namespace Knigosha.Core.Models
 
         public string Password { get; set; }
 
-        //public string RepeatPassword { get; set; }
-
         public override string Email { get; set; }
 
         public override string PhoneNumber { get; set; }
@@ -63,6 +61,8 @@ namespace Knigosha.Core.Models
         public Class Class { get; set; }
 
         public Family Family { get; set; }
+
+        public bool SubscribedToNewsletter { get; set; }
 
 
         public ICollection<Subscription> Subscriptions { get; set; }

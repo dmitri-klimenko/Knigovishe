@@ -1,36 +1,102 @@
-﻿@model Knigosha.Core.ViewModels.AccountViewModels.RegisterViewModel
+﻿@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.ViewModels.AccountViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Register";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div style="text-align: center">
+    <div id="registration" class="col-md-5">
 
-<div class="row">
-    <div class="col-md-4">
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
+            <h4><strong>Регистрация профиля</strong></h4>
+            <p>Чтобы получить доступ к вопросникам, пожалуйста, введите Ваши данные.</p>
             <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="UserType"></label>
+                <select asp-for="UserType" asp-items="Html.GetEnumSelectList<UserTypes>()" class="form-control"></select>
             </div>
             <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surname"></label>
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <p><strong>*Пожалуйста, введите адрес Вашей электронной почты или адрес электронной почты одного из родителей:</strong></p>
+            <div class="form-group">
+
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ParentEmail"></label>
+                    <input asp-for="ParentEmail" class="form-control" />
+                    <span asp-validation-for="ParentEmail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Country"></label>
+                    <input asp-for="Country" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="City"></label>
+                    <input asp-for="City" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="School"></label>
+                    <input asp-for="School" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Grade"></label>
+                    <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"></select>
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="Parallel"></label>
+                    <input asp-for="Parallel" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActivationCode"></label>
+                    <input asp-for="ActivationCode" class="form-control" />
+
+                </div>
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <input asp-for="IsSubscribedToNewsletter" />
+                <label asp-for="IsSubscribedToNewsletter"></label>
             </div>
-            <button type="submit" class="btn btn-outline-secondary">Register</button>
+            <div class="form-group">
+                <input asp-for="TermsOfUse" />
+                <label>Я подтверждаю согласие с <a asp-controller="Home" asp-action="Help">Условиями пользования</a></label>
+            </div>
+            <button type="submit" class="pumpkin-flat-button">Регистрация</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+
+
+
 }
+
+

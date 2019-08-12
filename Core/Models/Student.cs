@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Knigosha.Core.Models
+﻿namespace Knigosha.Core.Models
 {
     public class Student : ApplicationUser
     {
@@ -19,7 +17,6 @@ namespace Knigosha.Core.Models
         // to viewModel public IList<SelectListItem> Schools { get; set; }
         public string School { get; set; }
 
-        [EmailAddress]
         public string ParentEmail { get; set; }
 
         public string GreetingName { get; set; }

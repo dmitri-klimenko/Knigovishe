@@ -12,21 +12,21 @@ namespace Knigosha.Core.Models.Enums
         Three = 3,
         [Display(Name = "4")]
         Four = 4,
-        [Display(Name = "Five")]
+        [Display(Name = "5")]
         Five = 5,
-        [Display(Name = "Six")]
+        [Display(Name = "6")]
         Six = 6,
-        [Display(Name = "Seven")]
+        [Display(Name = "7")]
         Seven = 7,
-        [Display(Name = "Eight")]
+        [Display(Name = "8")]
         Eight = 8,
-        [Display(Name = "Nine")]
+        [Display(Name = "9")]
         Nine = 9,
         [Display(Name = "10")]
         Ten = 10,
-        [Display(Name = "Eleven")]
+        [Display(Name = "11")]
         Eleven = 11,
-        [Display(Name = "Twelve")]
+        [Display(Name = "12")]
         Twelve = 12,
 
 

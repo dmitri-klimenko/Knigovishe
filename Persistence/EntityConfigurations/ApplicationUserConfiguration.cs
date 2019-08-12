@@ -10,8 +10,8 @@ namespace Knigosha.Persistence.EntityConfigurations
         {
             builder.HasKey(a => a.Id);
 
-            builder.Property(a => a.Name).IsRequired().HasMaxLength(255);
-            builder.Property(a => a.Surname).IsRequired().HasMaxLength(255);
+            builder.Property(a => a.Name).IsRequired().HasMaxLength(50);
+            builder.Property(a => a.Surname).IsRequired().HasMaxLength(50);
             builder.Property(a => a.Email).IsRequired();
             builder.Property(a => a.Grade).IsRequired();
             builder.Property(a => a.Password).IsRequired().HasMaxLength(50);
