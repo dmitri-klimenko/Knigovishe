@@ -12,25 +12,28 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "Пожалуйста, введите Ваше имя")]
         [Display(Name = "*Имя:")]
-        [MaxLength(50)]
+
+        [StringLength(50, ErrorMessage = "Ваше имя должно содержать минимум {1} и максимум {0} знаков.", MinimumLength = 2)]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, введите Вашу фамилию")]
         [Display(Name = "*Фамилия:")]
-        [MaxLength(50)]
+        [StringLength(50, ErrorMessage = "Ваша фамилия должна содержать минимум {1} и максимум {0} знаков.", MinimumLength = 2)]
         public string Surname { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, введите Ваше имя пользователя")]
         [Display(Name = "*Имя пользователя:")]
-        [MaxLength(50)]
+        [StringLength(50, ErrorMessage = "Ваше имя пользователя должно содержать минимум {1} и максимум {0} знаков.", MinimumLength = 2)]
         public string UserName { get; set; }
 
-        [EmailAddress]
-        [Display(Name = "Адрес электронной почты:")]
+        [EmailAddress(ErrorMessage = "Пожалуйста, введите действующий адрес электронной почты.")]
         public string Email { get; set; }
 
-        //Only for Student
-        [EmailAddress]
+        [Required(ErrorMessage = "Пожалуйста, введите адрес Вашей электронной почты")]
+        [EmailAddress(ErrorMessage = "Пожалуйста, введите действующий адрес электронной почты.")]
+        public string RequiredEmail { get; set; }
+
+        [EmailAddress(ErrorMessage = "Пожалуйста, введите действующий адрес электронной почты.")]
         [Display(Name = "Адрес электронной почты родителя:")]
         public string ParentEmail { get; set; }
 
@@ -40,18 +43,24 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
         [Display(Name = "Страна:")]
         public string Country { get; set; }
 
+        [Display(Name = "Регион:")]
+        public string Region { get; set; }
+
         [Display(Name = "Город:")]
         public string City { get; set; }
 
-        // Hide for parent
+        [Display(Name = "Город:")]
+        public string CityInRegion { get; set; }
+
         [Display(Name = "Школа:")]
         public string School { get; set; }
 
-        // Hide for parent
+        [Display(Name = "Школа:")]
+        public string SchoolInRussiaRegionCity { get; set; }
+
         [Display(Name = "Класс:")]
         public Grades Grade { get; set; }
 
-        // Hide for parent
         [Display(Name = "Параллель (буква):")]
         public string Parallel { get; set; }
 

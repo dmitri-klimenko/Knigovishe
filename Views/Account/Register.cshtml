@@ -1,7 +1,7 @@
 ﻿@using Knigosha.Core.Models.Enums
 @model Knigosha.Core.ViewModels.AccountViewModels.RegisterViewModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Регистрация";
 }
 
 <div style="text-align: center">
@@ -13,7 +13,7 @@
             <hr />
             <div class="form-group">
                 <label asp-for="UserType"></label>
-                <select asp-for="UserType" asp-items="Html.GetEnumSelectList<UserTypes>()" class="form-control"></select>
+                <select asp-for="UserType" asp-items="Html.GetEnumSelectList<UserTypes>()" class="form-control" id="userType"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Name"></label>
@@ -30,53 +30,81 @@
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <p><strong>*Пожалуйста, введите адрес Вашей электронной почты или адрес электронной почты одного из родителей:</strong></p>
+            <p id="text"><strong>*Пожалуйста, введите адрес Вашей электронной почты или адрес электронной почты одного из родителей:</strong></p>
+            <div class="form-group" id="emailDiv">
+                <label>Адрес электронной почты:</label>
+                <input asp-for="Email" class="form-control" id="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="requiredEmailDiv">
+                <label>*Адрес электронной почты:</label>
+                <input asp-for="RequiredEmail" class="form-control" id="requiredEmail" />
+                <span asp-validation-for="RequiredEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="parentEmailDiv">
+                <label asp-for="ParentEmail"></label>
+                <input asp-for="ParentEmail" class="form-control" id="parentEmail" />
+                <span asp-validation-for="ParentEmail" class="text-danger"></span>
+            </div>
             <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country"></label>
+                <select asp-for="Country"
+                        class="form-control"
+                        id="countries">
+                </select>
+            </div>
+            <div class="form-group" id="regionsDiv">
+                <label asp-for="Region"></label>
+                <select asp-for="Region"
+                        class="form-control"
+                        id="regions">
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ParentEmail"></label>
-                    <input asp-for="ParentEmail" class="form-control" />
-                    <span asp-validation-for="ParentEmail" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PhoneNumber"></label>
-                    <input asp-for="PhoneNumber" class="form-control" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Country"></label>
-                    <input asp-for="Country" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="City"></label>
-                    <input asp-for="City" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="School"></label>
-                    <input asp-for="School" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Grade"></label>
-                    <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"></select>
+            <div class="form-group" id="cityDiv">
+                <label asp-for="City"></label>
+                <input asp-for="City" class="form-control" />
+            </div>
 
-                </div>
-                <div class="form-group">
-                    <label asp-for="Parallel"></label>
-                    <input asp-for="Parallel" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="ActivationCode"></label>
-                    <input asp-for="ActivationCode" class="form-control" />
+            <div class="form-group" id="citiesInRegionDiv">
+                <label asp-for="CityInRegion"></label>
+                <select asp-for="CityInRegion"
+                        class="form-control"
+                        id="citiesInRegion">
+                </select>
+            </div>
 
-                </div>
+            <div class="form-group" id="schoolDiv">
+                <label asp-for="School"></label>
+                <input asp-for="School" class="form-control" />
+            </div>
+
+            <div class="form-group" id="schoolInRussiaRegionCityDiv">
+                <label asp-for="SchoolInRussiaRegionCity"></label>
+                <select asp-for="SchoolInRussiaRegionCity" class="form-control" id="schoolInRussiaRegionCity"></select>
+            </div>
+            <div class="form-group" id="gradeDiv">
+                <label asp-for="Grade"></label>
+                <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"></select>
+
+            </div>
+            <div class="form-group" id="parallelDiv">
+                <label asp-for="Parallel"></label>
+                <input asp-for="Parallel" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivationCode"></label>
+                <input asp-for="ActivationCode" class="form-control" />
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <input asp-for="Password" class="form-control" data-toggle="password" />
             </div>
 
             <div class="form-group">
@@ -95,8 +123,174 @@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            var serviceToken = '9a2cc7629a2cc7629a2cc7628e9a4084c199a2c9a2cc762c77e6033cd66439600a91745';
+            var currentApiVersion = '5.101';
+            var russian = '0';
+            var russiaId = '1';
+
+            $.ajax({
+                url: 'https://api.vk.com/method/database.getCountries',
+                dataType: 'jsonp',
+                data: { need_all: '1', access_token: serviceToken, v: currentApiVersion, count: '234', lang: russian },
+                success: function (data) {
+                    $.each(data.response.items,
+                        function () {
+                            $('#countries').append($("<option />").val(this.id).text(this.title));
+                            $('#countries option[value="1"]').prop('selected', true);
+                        });
+                }
+            });
 
 
+            $.ajax({
+                url: 'https://api.vk.com/method/database.getRegions',
+                dataType: 'jsonp',
+                data: {
+                    country_id: russiaId,
+                    access_token: serviceToken,
+                    v: currentApiVersion,
+                    lang: russian
+                },
+                success: function (data) {
+                    $('#regions').append('<option> - Выберите регион - </option>');
+                    $.each(data.response.items,
+                        function () {
+                            $('#regions').append($("<option />").val(this.id).text(this.title));
+                        });
+                }
+            });
+
+
+
+            $("#userType").change(function () {
+
+                if ($(this).val() == "1") {
+                    $('#text').show();
+                    $('#emailDiv').show();
+                    $('#parentEmailDiv').show();
+                    $('#requiredEmailDiv').hide();
+                    $('#requiredEmail').removeAttr('required');
+                    $('#requiredEmail').removeAttr('data-error');
+                } else {
+                    $('#text').hide();
+                    $('#emailDiv').hide();
+                    $('#parentEmailDiv').hide();
+                    $('#requiredEmailDiv').show();
+                    $('#requiredEmail').attr('required', '');
+                    $('#requiredEmail').attr('data-error', 'Пожалуйста, введите действующий адрес электронной почты.');
+                }
+
+            });
+            $("#userType").trigger("change");
+
+            $("#userType").change(function () {
+                if ($(this).val() === "3") {
+                    $('#schoolInRussiaRegionCityDiv').hide();
+                    $('#gradeDiv').hide();
+                    $('#parallelDiv').hide();
+
+                } else {
+                    $('#schoolInRussiaRegionCityDiv').show();
+                    $('#gradeDiv').show();
+                    $('#parallelDiv').show();
+                }
+            });
+            $('#userType').trigger('change', true);
+
+
+            $("#regions").change(function () {
+                var selectedRegion = $(this).val();
+                $('.addedSelect').remove();
+                $.ajax({
+                    url: 'https://api.vk.com/method/database.getCities',
+                    dataType: 'jsonp',
+                    data: {
+                        country_id: russiaId,
+                        region_id: selectedRegion,
+                        access_token: serviceToken,
+                        v: currentApiVersion,
+                        count: '1000',
+                        lang: russian
+                    },
+                    success: function (data) {
+                        var numberOfCities = data.response.count;
+                        if (numberOfCities > 1000) {
+                            var numberOfCalls = Math.ceil(numberOfCities / 1000);
+                            for (var i = 1; i < numberOfCalls; i++) {
+
+                                (function (index) {
+
+                                    console.log('iterator: ' + index);
+
+                                    var select = $('<select>')
+                                        .addClass('form-control')
+                                        .addClass('addedSelect')
+                                        .attr('id', 'citiesInRegion' + index)
+                                        .appendTo('#citiesInRegionDiv');
+
+                                    $.ajax({
+                                        url: 'https://api.vk.com/method/database.getCities',
+                                        dataType: 'jsonp',
+                                        data: {
+                                            country_id: russiaId,
+                                            region_id: selectedRegion,
+                                            access_token: serviceToken,
+                                            v: currentApiVersion,
+                                            count: '1000',
+                                            offset: index + '000',
+                                            lang: russian
+                                        },
+                                        success: function (data2) {
+                                            var text = (index * 1000 + 1).toString() + ' - ' + ((index + 1) * 1000).toString();
+                                            select.empty().append('<option> - Города ' + text + '</option>');
+                                            $.each(data2.response.items,
+                                                function () {
+                                                    select.append($("<option />").val(this.id).text(this.title));
+                                                });
+                                        }
+                                    });
+                                })(i);
+                            }
+                        }
+
+                        $('#citiesInRegion').empty().append('<option> - Города 1 - 1000</option>');
+                        $.each(data.response.items,
+                            function () {
+                                $('#citiesInRegion').append($("<option />").val(this.id).text(this.title));
+                            });
+                    }
+                });
+
+            });
+            $('#regions').trigger('change', true);
+
+
+            $("#countries").change(function () {
+
+                if ($(this).val() !== "1") {
+                    $('#regionsDiv').hide();
+                    $('#citiesInRegionDiv').hide();
+                    $('#schoolInRussiaRegionCityDiv').hide();
+                    $('#cityDiv').show();
+                    $('#schoolDiv').show();
+
+                } else {
+                    $('#regionsDiv').show();
+                    $('#citiesInRegionDiv').show();
+                    $('#schoolInRussiaRegionCityDiv').show();
+                    $('#cityDiv').hide();
+                    $('#schoolDiv').hide();
+
+                }
+
+            });
+
+
+        });
+    </script>
 }
-
-

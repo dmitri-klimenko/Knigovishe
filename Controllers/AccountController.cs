@@ -1,4 +1,5 @@
 ﻿using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.AccountViewModels;
 using Knigosha.Extensions;
 using Knigosha.Services;
@@ -215,6 +216,21 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+            if (model.UserType == UserTypes.Student && string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.ParentEmail))
+            {
+                var validationMessage = "Пожалуйста, введите Ваш адрес электронной почты или адрес электронной почты одного из родителей.";
+                this.ModelState.AddModelError("Email", validationMessage);
+                this.ModelState.AddModelError("ParentEmail", validationMessage);
+            }
+
+            if (model.UserType == UserTypes.Student && !string.IsNullOrEmpty(model.Email) && !string.IsNullOrEmpty(model.ParentEmail))
+            {
+                var validationMessage = "Пожалуйста, введите либо Ваш адрес электронной почты, либо адрес электронной почты одного из родителей.";
+                this.ModelState.AddModelError("Email", validationMessage);
+                this.ModelState.AddModelError("ParentEmail", validationMessage);
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
