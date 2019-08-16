@@ -6,7 +6,7 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Пожалуйста, выберите тип пользователя.")]
         [Display(Name = "*Я")]
         public UserTypes UserType { get; set; }
 

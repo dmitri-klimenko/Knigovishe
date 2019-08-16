@@ -166,7 +166,6 @@
             });
 
 
-
             $("#userType").change(function () {
 
                 if ($(this).val() == "1") {
@@ -218,18 +217,21 @@
                         lang: russian
                     },
                     success: function (data) {
+
                         var numberOfCities = data.response.count;
+
                         if (numberOfCities > 1000) {
+
                             var numberOfCalls = Math.ceil(numberOfCities / 1000);
+
                             for (var i = 1; i < numberOfCalls; i++) {
 
                                 (function (index) {
 
-                                    console.log('iterator: ' + index);
-
                                     var select = $('<select>')
                                         .addClass('form-control')
                                         .addClass('addedSelect')
+                                        .attr('name', 'CityInRegion')
                                         .attr('id', 'citiesInRegion' + index)
                                         .appendTo('#citiesInRegionDiv');
 
@@ -246,7 +248,9 @@
                                             lang: russian
                                         },
                                         success: function (data2) {
-                                            var text = (index * 1000 + 1).toString() + ' - ' + ((index + 1) * 1000).toString();
+                                            var text = (index * 1000 + 1).toString() +
+                                                ' - ' +
+                                                ((index + 1) * 1000).toString();
                                             select.empty().append('<option> - Города ' + text + '</option>');
                                             $.each(data2.response.items,
                                                 function () {
@@ -254,9 +258,20 @@
                                                 });
                                         }
                                     });
+
+
                                 })(i);
+
                             }
+
+                            $('#citiesInRegionDiv *').change(function () {
+                                $('select[name=CityInRegion]').not(":focus").each(function () {
+                                    this.selectedIndex = 0;
+                                });
+
+                            });
                         }
+
 
                         $('#citiesInRegion').empty().append('<option> - Города 1 - 1000</option>');
                         $.each(data.response.items,
@@ -265,8 +280,8 @@
                             });
                     }
                 });
-
             });
+
             $('#regions').trigger('change', true);
 
 
