@@ -143,9 +143,209 @@
                             $('#countries').append($("<option />").val(this.id).text(this.title));
                             $('#countries option[value="1"]').prop('selected', true);
                         });
+
+                    var userVal = $("#userType").val();
+                    var countryVal = $("#countries").val();
+
+                    $("#userType").change(function () {
+                        userVal = $(this).val();
+                        console.log(userVal, countryVal);
+                        if (userVal == "1") {
+                            if (countryVal == "1") {
+                                $('#text').show();
+                                $('#emailDiv').show();
+                                $('#parentEmailDiv').show();
+                                $('#requiredEmailDiv').hide();
+                                $('#requiredEmail').removeAttr('required');
+                                $('#requiredEmail').removeAttr('data-error');
+                                $('#schoolInRussiaRegionCityDiv').show();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            } else {
+                                $('#text').show();
+                                $('#emailDiv').show();
+                                $('#parentEmailDiv').show();
+                                $('#requiredEmailDiv').hide();
+                                $('#requiredEmail').removeAttr('required');
+                                $('#requiredEmail').removeAttr('data-error');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').show();
+                            }
+                        } else if (userVal == "2") {
+                            if (countryVal == "1") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').show();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            } else {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').show();
+                            }
+                        } else if (userVal == "3") {
+                            if (countryVal == "1") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').hide();
+                                $('#parallelDiv').hide();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            } else {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').hide();
+                                $('#parallelDiv').hide();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').hide();
+                            }
+                        }
+                    }).change();
+
+                    $("#countries").change(function () {
+                        countryVal = $(this).val();
+                        console.log(userVal, countryVal);
+                        if (countryVal == "1") {
+                            if (userVal == "1") {
+                                $('#text').show();
+                                $('#emailDiv').show();
+                                $('#parentEmailDiv').show();
+                                $('#requiredEmailDiv').hide();
+                                $('#requiredEmail').removeAttr('required');
+                                $('#requiredEmail').removeAttr('data-error');
+                                $('#schoolInRussiaRegionCityDiv').show();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            } else if (userVal == "2") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').show();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            } else if (userVal == "3") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').show();
+                                $('#citiesInRegionDiv').show();
+                                $('#gradeDiv').hide();
+                                $('#parallelDiv').hide();
+                                $('#cityDiv').hide();
+                                $('#schoolDiv').hide();
+                            }
+                        } else if (countryVal !== "1") {
+                            if (userVal == "1") {
+                                $('#text').show();
+                                $('#emailDiv').show();
+                                $('#parentEmailDiv').show();
+                                $('#requiredEmailDiv').hide();
+                                $('#requiredEmail').removeAttr('required');
+                                $('#requiredEmail').removeAttr('data-error');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').show();
+                            } else if (userVal == "2") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').show();
+                                $('#parallelDiv').show();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').show();
+                            } else if (userVal == "3") {
+                                $('#text').hide();
+                                $('#emailDiv').hide();
+                                $('#parentEmailDiv').hide();
+                                $('#requiredEmailDiv').show();
+                                $('#requiredEmail').attr('required', '');
+                                $('#requiredEmail').attr('data-error',
+                                    'Пожалуйста, введите действующий адрес электронной почты.');
+                                $('#schoolInRussiaRegionCityDiv').hide();
+                                $('#regionsDiv').hide();
+                                $('#citiesInRegionDiv').hide();
+                                $('#gradeDiv').hide();
+                                $('#parallelDiv').hide();
+                                $('#cityDiv').show();
+                                $('#schoolDiv').hide();
+                            }
+                        }
+                    }).change();
                 }
             });
-
 
             $.ajax({
                 url: 'https://api.vk.com/method/database.getRegions',
@@ -165,43 +365,6 @@
                 }
             });
 
-
-            $("#userType").change(function () {
-
-                if ($(this).val() == "1") {
-                    $('#text').show();
-                    $('#emailDiv').show();
-                    $('#parentEmailDiv').show();
-                    $('#requiredEmailDiv').hide();
-                    $('#requiredEmail').removeAttr('required');
-                    $('#requiredEmail').removeAttr('data-error');
-                } else {
-                    $('#text').hide();
-                    $('#emailDiv').hide();
-                    $('#parentEmailDiv').hide();
-                    $('#requiredEmailDiv').show();
-                    $('#requiredEmail').attr('required', '');
-                    $('#requiredEmail').attr('data-error', 'Пожалуйста, введите действующий адрес электронной почты.');
-                }
-
-            });
-            $("#userType").trigger("change");
-
-            $("#userType").change(function () {
-                if ($(this).val() === "3") {
-                    $('#schoolInRussiaRegionCityDiv').hide();
-                    $('#gradeDiv').hide();
-                    $('#parallelDiv').hide();
-
-                } else {
-                    $('#schoolInRussiaRegionCityDiv').show();
-                    $('#gradeDiv').show();
-                    $('#parallelDiv').show();
-                }
-            });
-            $('#userType').trigger('change', true);
-
-
             $("#regions").change(function () {
                 var selectedRegion = $(this).val();
                 $('.addedSelect').remove();
@@ -217,24 +380,17 @@
                         lang: russian
                     },
                     success: function (data) {
-
                         var numberOfCities = data.response.count;
-
                         if (numberOfCities > 1000) {
-
                             var numberOfCalls = Math.ceil(numberOfCities / 1000);
-
                             for (var i = 1; i < numberOfCalls; i++) {
-
                                 (function (index) {
-
                                     var select = $('<select>')
                                         .addClass('form-control')
                                         .addClass('addedSelect')
                                         .attr('name', 'CityInRegion')
                                         .attr('id', 'citiesInRegion' + index)
                                         .appendTo('#citiesInRegionDiv');
-
                                     $.ajax({
                                         url: 'https://api.vk.com/method/database.getCities',
                                         dataType: 'jsonp',
@@ -258,12 +414,9 @@
                                                 });
                                         }
                                     });
-
-
                                 })(i);
 
                             }
-
                             $('#citiesInRegionDiv *').change(function () {
                                 $('select[name=CityInRegion]').not(":focus").each(function () {
                                     this.selectedIndex = 0;
@@ -271,8 +424,6 @@
 
                             });
                         }
-
-
                         $('#citiesInRegion').empty().append('<option> - Города 1 - 1000</option>');
                         $.each(data.response.items,
                             function () {
@@ -281,31 +432,7 @@
                     }
                 });
             });
-
             $('#regions').trigger('change', true);
-
-
-            $("#countries").change(function () {
-
-                if ($(this).val() !== "1") {
-                    $('#regionsDiv').hide();
-                    $('#citiesInRegionDiv').hide();
-                    $('#schoolInRussiaRegionCityDiv').hide();
-                    $('#cityDiv').show();
-                    $('#schoolDiv').show();
-
-                } else {
-                    $('#regionsDiv').show();
-                    $('#citiesInRegionDiv').show();
-                    $('#schoolInRussiaRegionCityDiv').show();
-                    $('#cityDiv').hide();
-                    $('#schoolDiv').hide();
-
-                }
-
-            });
-
-
         });
     </script>
 }
