@@ -51,43 +51,38 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="countriesDiv">
                 <label asp-for="Country"></label>
                 <select asp-for="Country"
                         class="form-control"
                         id="countries">
                 </select>
             </div>
-            <div class="form-group" id="regionsDiv">
-                <label asp-for="Region"></label>
-                <select asp-for="Region"
+
+            <div class="form-group" id="mainCitiesRussiaDiv">
+                <label asp-for="MainCityRussia"></label>
+                <select asp-for="MainCityRussia"
                         class="form-control"
-                        id="regions">
+                        id="mainCitiesRussia">
                 </select>
             </div>
 
-            <div class="form-group" id="cityDiv">
-                <label asp-for="City"></label>
-                <input asp-for="City" class="form-control" />
+            <div class="form-group" id="cityInputDiv">
+                <label asp-for="CityInput"></label>
+                <input asp-for="CityInput" class="form-control" id="cityInput" />
             </div>
 
-            <div class="form-group" id="citiesInRegionDiv">
-                <label asp-for="CityInRegion"></label>
-                <select asp-for="CityInRegion"
-                        class="form-control"
-                        id="citiesInRegion">
-                </select>
+
+            <div class="form-group" id="schoolsSelectDiv">
+                <label asp-for="SchoolSelect"></label>
+                <select asp-for="SchoolSelect" class="form-control" id="schoolsSelect"></select>
             </div>
 
-            <div class="form-group" id="schoolDiv">
-                <label asp-for="School"></label>
-                <input asp-for="School" class="form-control" />
+            <div class="form-group" id="schoolInputDiv">
+                <label asp-for="SchoolInput"></label>
+                <input asp-for="SchoolInput" class="form-control" id="schoolInput" />
             </div>
 
-            <div class="form-group" id="schoolInRussiaRegionCityDiv">
-                <label asp-for="SchoolInRussiaRegionCity"></label>
-                <select asp-for="SchoolInRussiaRegionCity" class="form-control" id="schoolInRussiaRegionCity"></select>
-            </div>
             <div class="form-group" id="gradeDiv">
                 <label asp-for="Grade"></label>
                 <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"></select>
@@ -126,277 +121,239 @@
     <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
 
     <script>
+
         $(document).ready(function () {
 
-            var serviceToken = '9a2cc7629a2cc7629a2cc7628e9a4084c199a2c9a2cc762c77e6033cd66439600a91745';
-            var currentApiVersion = '5.101';
-            var russian = '0';
-            var russiaId = '1';
+            var serviceToken = "9a2cc7629a2cc7629a2cc7628e9a4084c199a2c9a2cc762c77e6033cd66439600a91745";
+            var currentApiVersion = "5.101";
+            var russian = "0";
+            var russiaId = "1";
+            var student = "1";
+            var teacher = "2";
+            var parent = "3";
+            var russia = "1";
 
-            $.ajax({
-                url: 'https://api.vk.com/method/database.getCountries',
-                dataType: 'jsonp',
-                data: { need_all: '1', access_token: serviceToken, v: currentApiVersion, count: '234', lang: russian },
-                success: function (data) {
-                    $.each(data.response.items,
-                        function () {
-                            $('#countries').append($("<option />").val(this.id).text(this.title));
-                            $('#countries option[value="1"]').prop('selected', true);
-                        });
+            function studentRussia() {
+                $('#text').show();
+                $('#emailDiv').show();
+                $('#parentEmailDiv').show();
+                $('#requiredEmailDiv').hide();
+                $('#requiredEmail').removeAttr('required');
+                $('#requiredEmail').removeAttr('data-error');
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').hide();
+                $('#schoolsSelect').empty().append('<option>Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+            function studentNotRussia() {
+                $('#text').show();
+                $('#emailDiv').show();
+                $('#parentEmailDiv').show();
+                $('#requiredEmailDiv').hide();
+                $('#requiredEmail').removeAttr('required');
+                $('#requiredEmail').removeAttr('data-error');
+                $('#mainCitiesRussiaDiv').hide();
+                $('#cityInputDiv').show();
+                $('#schoolInputDiv').show();
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+            function teacherRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').show();
+                $('#requiredEmail').attr('required', '');
+                $('#requiredEmail').attr('data-error',
+                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#schoolsSelect').empty().append('<option>Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').hide();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+            function teacherNotRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').show();
+                $('#requiredEmail').attr('required', '');
+                $('#requiredEmail').attr('data-error',
+                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#mainCitiesRussiaDiv').hide();
+                $('#cityInputDiv').show();
+                $('#schoolInputDiv').show();
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+            function parentRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').show();
+                $('#requiredEmail').attr('required', '');
+                $('#requiredEmail').attr('data-error',
+                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').hide();
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').hide();
+                $('#parallelDiv').hide();
+            }
+            function parentNotRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').show();
+                $('#requiredEmail').attr('required', '');
+                $('#requiredEmail').attr('data-error',
+                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#mainCitiesRussiaDiv').hide();
+                $('#cityInputDiv').show();
+                $('#schoolInputDiv').hide();
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').hide();
+                $('#parallelDiv').hide();
+            }
+            function blankCityNotParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').hide();
+                $('#schoolsSelect').empty().append('<option>Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+            };
+            function blankCityParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').hide();
+                $('#schoolsSelectDiv').hide();
+            };
+            function otherCityNotParent() {
+                $('#schoolInputDiv').show();
+                $('#cityInputDiv').show();
+                $('#schoolsSelectDiv').hide();
+            };
+            function otherCityParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').show();
+                $('#schoolsSelectDiv').hide();
+            };
+            function mainCityParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').hide();
+                $('#schoolsSelectDiv').hide();
+            };
+            function mainCityNotParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').hide();
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+            };
 
-                    var userVal = $("#userType").val();
-                    var countryVal = $("#countries").val();
+            var userVal = $("#userType").val();
+            var countryVal = $("#countries").val();
+            var mainCityRussiaVal = $("#mainCitiesRussia").val();
 
-                    $("#userType").change(function () {
-                        userVal = $(this).val();
-                        console.log(userVal, countryVal);
-                        if (userVal == "1") {
-                            if (countryVal == "1") {
-                                $('#text').show();
-                                $('#emailDiv').show();
-                                $('#parentEmailDiv').show();
-                                $('#requiredEmailDiv').hide();
-                                $('#requiredEmail').removeAttr('required');
-                                $('#requiredEmail').removeAttr('data-error');
-                                $('#schoolInRussiaRegionCityDiv').show();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            } else {
-                                $('#text').show();
-                                $('#emailDiv').show();
-                                $('#parentEmailDiv').show();
-                                $('#requiredEmailDiv').hide();
-                                $('#requiredEmail').removeAttr('required');
-                                $('#requiredEmail').removeAttr('data-error');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').show();
-                            }
-                        } else if (userVal == "2") {
-                            if (countryVal == "1") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').show();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            } else {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').show();
-                            }
-                        } else if (userVal == "3") {
-                            if (countryVal == "1") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').hide();
-                                $('#parallelDiv').hide();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            } else {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').hide();
-                                $('#parallelDiv').hide();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').hide();
-                            }
-                        }
-                    }).change();
+            getMainCities();
+            getCountries();
 
-                    $("#countries").change(function () {
-                        countryVal = $(this).val();
-                        console.log(userVal, countryVal);
-                        if (countryVal == "1") {
-                            if (userVal == "1") {
-                                $('#text').show();
-                                $('#emailDiv').show();
-                                $('#parentEmailDiv').show();
-                                $('#requiredEmailDiv').hide();
-                                $('#requiredEmail').removeAttr('required');
-                                $('#requiredEmail').removeAttr('data-error');
-                                $('#schoolInRussiaRegionCityDiv').show();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            } else if (userVal == "2") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').show();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            } else if (userVal == "3") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').show();
-                                $('#citiesInRegionDiv').show();
-                                $('#gradeDiv').hide();
-                                $('#parallelDiv').hide();
-                                $('#cityDiv').hide();
-                                $('#schoolDiv').hide();
-                            }
-                        } else if (countryVal !== "1") {
-                            if (userVal == "1") {
-                                $('#text').show();
-                                $('#emailDiv').show();
-                                $('#parentEmailDiv').show();
-                                $('#requiredEmailDiv').hide();
-                                $('#requiredEmail').removeAttr('required');
-                                $('#requiredEmail').removeAttr('data-error');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').show();
-                            } else if (userVal == "2") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').show();
-                                $('#parallelDiv').show();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').show();
-                            } else if (userVal == "3") {
-                                $('#text').hide();
-                                $('#emailDiv').hide();
-                                $('#parentEmailDiv').hide();
-                                $('#requiredEmailDiv').show();
-                                $('#requiredEmail').attr('required', '');
-                                $('#requiredEmail').attr('data-error',
-                                    'Пожалуйста, введите действующий адрес электронной почты.');
-                                $('#schoolInRussiaRegionCityDiv').hide();
-                                $('#regionsDiv').hide();
-                                $('#citiesInRegionDiv').hide();
-                                $('#gradeDiv').hide();
-                                $('#parallelDiv').hide();
-                                $('#cityDiv').show();
-                                $('#schoolDiv').hide();
-                            }
-                        }
-                    }).change();
-                }
-            });
-
-            $.ajax({
-                url: 'https://api.vk.com/method/database.getRegions',
-                dataType: 'jsonp',
-                data: {
-                    country_id: russiaId,
-                    access_token: serviceToken,
-                    v: currentApiVersion,
-                    lang: russian
-                },
-                success: function (data) {
-                    $('#regions').append('<option> - Выберите регион - </option>');
-                    $.each(data.response.items,
-                        function () {
-                            $('#regions').append($("<option />").val(this.id).text(this.title));
-                        });
-                }
-            });
-
-            $("#regions").change(function () {
-                var selectedRegion = $(this).val();
-                $('.addedSelect').remove();
+            function getCountries() {
+                $.ajax({
+                    url: 'https://api.vk.com/method/database.getCountries',
+                    dataType: 'jsonp',
+                    data: { need_all: '1', access_token: serviceToken, v: currentApiVersion, count: '234', lang: russian },
+                    success: function (data) {
+                        $.each(data.response.items,
+                            function () {
+                                $('#countries').append($("<option />").val(this.id).text(this.title));
+                                $('#countries option[value="1"]').prop('selected', true);
+                            });
+                        countriesListener();
+                        userTypeListener();
+                    }
+                });
+            }
+            function getMainCities() {
                 $.ajax({
                     url: 'https://api.vk.com/method/database.getCities',
                     dataType: 'jsonp',
                     data: {
                         country_id: russiaId,
-                        region_id: selectedRegion,
+                        need_all: 0,
+                        access_token: serviceToken,
+                        v: currentApiVersion,
+                        lang: russian
+                    },
+                    success: function (data) {
+                        $('#mainCitiesRussia').append('<option></option>')
+                            .append('<option> - Другой город - </option>');
+                        $.each(data.response.items,
+                            function () {
+                                $('#mainCitiesRussia').append($("<option />").val(this.id).text(this.title));
+                                $('#countries option[value="0"]').prop('selected', true);
+                            });
+                        mainCityListener();
+                    }
+                });
+            }
+            function toggleSchools() {
+                $('#schoolsSelectDiv *').change(function () {
+                    $('select[name=SchoolSelect]').not(":focus").each(function () {
+                        this.selectedIndex = 0;
+                    });
+                });
+            }
+            function getSchools() {
+                $.ajax({
+                    url: 'https://api.vk.com/method/database.getSchools',
+                    dataType: 'jsonp',
+                    data: {
+                        city_id: mainCityRussiaVal,
                         access_token: serviceToken,
                         v: currentApiVersion,
                         count: '1000',
                         lang: russian
                     },
                     success: function (data) {
-                        var numberOfCities = data.response.count;
-                        if (numberOfCities > 1000) {
-                            var numberOfCalls = Math.ceil(numberOfCities / 1000);
+                        var numberOfSchools = data.response.count;
+                        var numberOfCalls = Math.ceil(numberOfSchools / 1000);
+                        if (numberOfCalls === 1) {
+                            $('#schoolsSelect').empty()
+                                .append('<option> - Школы 1 - 1000</option>');
+                            $.each(data.response.items,
+                                function () {
+                                    $('#schoolsSelect').append($("<option />").val(this.id).text(this.title));
+                                });
+                        } else {
+                            $('#schoolsSelect').empty()
+                                .append('<option> - Школы 1 - 1000</option>');
+                            $.each(data.response.items,
+                                function () {
+                                    $('#schoolsSelect').append($("<option />").val(this.id).text(this.title));
+                                });
                             for (var i = 1; i < numberOfCalls; i++) {
                                 (function (index) {
                                     var select = $('<select>')
                                         .addClass('form-control')
-                                        .addClass('addedSelect')
-                                        .attr('name', 'CityInRegion')
-                                        .attr('id', 'citiesInRegion' + index)
-                                        .appendTo('#citiesInRegionDiv');
+                                        .addClass('addedSchoolSelect').attr('name', 'SchoolSelect')
+                                        .attr('id', 'schoolsSelect' + index).appendTo('#schoolsSelectDiv');
                                     $.ajax({
-                                        url: 'https://api.vk.com/method/database.getCities',
+                                        url: 'https://api.vk.com/method/database.getSchools',
                                         dataType: 'jsonp',
                                         data: {
-                                            country_id: russiaId,
-                                            region_id: selectedRegion,
+                                            city_id: mainCityRussiaVal,
                                             access_token: serviceToken,
                                             v: currentApiVersion,
                                             count: '1000',
@@ -404,10 +361,8 @@
                                             lang: russian
                                         },
                                         success: function (data2) {
-                                            var text = (index * 1000 + 1).toString() +
-                                                ' - ' +
-                                                ((index + 1) * 1000).toString();
-                                            select.empty().append('<option> - Города ' + text + '</option>');
+                                            var text = (index * 1000 + 1).toString() + ' - ' + ((index + 1) * 1000).toString();
+                                            select.empty().append('<option> - Школы ' + text + '</option>');
                                             $.each(data2.response.items,
                                                 function () {
                                                     select.append($("<option />").val(this.id).text(this.title));
@@ -415,24 +370,60 @@
                                         }
                                     });
                                 })(i);
-
                             }
-                            $('#citiesInRegionDiv *').change(function () {
-                                $('select[name=CityInRegion]').not(":focus").each(function () {
-                                    this.selectedIndex = 0;
-                                });
-
-                            });
                         }
-                        $('#citiesInRegion').empty().append('<option> - Города 1 - 1000</option>');
-                        $.each(data.response.items,
-                            function () {
-                                $('#citiesInRegion').append($("<option />").val(this.id).text(this.title));
-                            });
+                        toggleSchools();
                     }
                 });
-            });
-            $('#regions').trigger('change', true);
+            }
+            function userTypeListener() {
+                $("#userType").change(function () {
+                    userVal = $(this).val();
+                    if (userVal === student)
+                        countryVal === russia ? studentRussia() : studentNotRussia();
+                    else if (userVal === teacher)
+                        countryVal === russia ? teacherRussia() : teacherNotRussia();
+                    else if (userVal === parent)
+                        countryVal === russia ? parentRussia() : parentNotRussia();
+                }).change();
+            }
+            function countriesListener() {
+                $("#countries").change(function () {
+                    countryVal = $(this).val();
+                    if (countryVal === russia) {
+                        if (userVal === student)
+                            studentRussia();
+                        else if (userVal === teacher)
+                            teacherRussia();
+                        else if (userVal === parent)
+                            parentRussia();
+                    } else if (countryVal !== russia) {
+                        if (userVal === student)
+                            studentNotRussia();
+                        else if (userVal === teacher)
+                            teacherNotRussia();
+                        else if (userVal === parent)
+                            parentNotRussia();
+                    }
+                }).change();
+            }
+            function mainCityListener() {
+                $("#mainCitiesRussia").change(function () {
+                    mainCityRussiaVal = $(this).val();
+                    if (this.selectedIndex === 0)
+                        userVal === parent ? blankCityParent() : blankCityNotParent();
+                    else if (this.selectedIndex === 1)
+                        userVal === parent ? otherCityParent() : otherCityNotParent();
+                    else if (this.selectedIndex > 1)
+                        if (userVal === parent) {
+                            mainCityParent();
+                        } else {
+                            mainCityNotParent();
+                            getSchools();
+                        }
+                });
+            }
         });
+
     </script>
 }

@@ -43,20 +43,18 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
         [Display(Name = "Страна:")]
         public string Country { get; set; }
 
-        [Display(Name = "Регион:")]
-        public string Region { get; set; }
+        [Display(Name = "Город:")]
+        public string CityInput { get; set; }
 
         [Display(Name = "Город:")]
-        public string City { get; set; }
+        public string MainCityRussia { get; set; }
 
-        [Display(Name = "Город:")]
-        public string CityInRegion { get; set; }
 
         [Display(Name = "Школа:")]
-        public string School { get; set; }
+        public string SchoolInput { get; set; }
 
         [Display(Name = "Школа:")]
-        public string SchoolInRussiaRegionCity { get; set; }
+        public string SchoolSelect { get; set; }
 
         [Display(Name = "Класс:")]
         public Grades Grade { get; set; }

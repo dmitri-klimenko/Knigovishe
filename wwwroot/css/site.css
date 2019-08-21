@@ -108,6 +108,10 @@ body {
     display: none;
 } 
 
-.addedSelect {
+.addedCitySelect {
+    margin-top: 20px !important;
+}
+
+.addedSchoolSelect {
     margin-top: 20px !important;
 }
