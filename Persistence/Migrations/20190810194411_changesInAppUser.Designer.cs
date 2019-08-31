@@ -300,7 +300,7 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
                 {
                     b.Property<string>("ReceiverId");
 
@@ -739,7 +739,7 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "Receiver")
                         .WithMany("ReceivedMessages")

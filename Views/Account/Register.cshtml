@@ -7,9 +7,10 @@
 <div style="text-align: center">
     <div id="registration" class="col-md-5">
 
-        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4><strong>Регистрация профиля</strong></h4>
-            <p>Чтобы получить доступ к вопросникам, пожалуйста, введите Ваши данные.</p>
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" id="form">
+            <h5><strong>Регистрация профиля</strong></h5>
+            <p style="text-align: center">Чтобы получить доступ к вопросникам, пожалуйста, введите Ваши данные.</p>
+
             <hr />
             <div class="form-group">
                 <label asp-for="UserType"></label>
@@ -24,32 +25,35 @@
                 <label asp-for="Surname"></label>
                 <input asp-for="Surname" class="form-control" />
                 <span asp-validation-for="Surname" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="UserName"></label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <p id="text"><strong>*Пожалуйста, введите адрес Вашей электронной почты или адрес электронной почты одного из родителей:</strong></p>
+
+            <p id="text">*Пожалуйста, введите адрес Вашей почты или адрес почты одного из родителей:</p>
             <div class="form-group" id="emailDiv">
-                <label>Адрес электронной почты:</label>
-                <input asp-for="Email" class="form-control" id="email" />
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control " id="email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group" id="requiredEmailDiv">
-                <label>*Адрес электронной почты:</label>
+
+            <div class="form-group" id="requiredEmailDiv" style="display: none">
+                <label asp-for="RequiredEmail"></label>
                 <input asp-for="RequiredEmail" class="form-control" id="requiredEmail" />
                 <span asp-validation-for="RequiredEmail" class="text-danger"></span>
             </div>
+
             <div class="form-group" id="parentEmailDiv">
                 <label asp-for="ParentEmail"></label>
-                <input asp-for="ParentEmail" class="form-control" id="parentEmail" />
+                <input asp-for="ParentEmail" class="form-control " id="parentEmail" />
                 <span asp-validation-for="ParentEmail" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group" id="countriesDiv">
                 <label asp-for="Country"></label>
@@ -67,7 +71,7 @@
                 </select>
             </div>
 
-            <div class="form-group" id="cityInputDiv">
+            <div class="form-group" id="cityInputDiv" style="display: none">
                 <label asp-for="CityInput"></label>
                 <input asp-for="CityInput" class="form-control" id="cityInput" />
             </div>
@@ -78,14 +82,14 @@
                 <select asp-for="SchoolSelect" class="form-control" id="schoolsSelect"></select>
             </div>
 
-            <div class="form-group" id="schoolInputDiv">
+            <div class="form-group" id="schoolInputDiv" style="display: none">
                 <label asp-for="SchoolInput"></label>
                 <input asp-for="SchoolInput" class="form-control" id="schoolInput" />
             </div>
 
             <div class="form-group" id="gradeDiv">
                 <label asp-for="Grade"></label>
-                <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"></select>
+                <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control" id="grade"></select>
 
             </div>
             <div class="form-group" id="parallelDiv">
@@ -95,20 +99,25 @@
             <div class="form-group">
                 <label asp-for="ActivationCode"></label>
                 <input asp-for="ActivationCode" class="form-control" />
+
             </div>
 
             <div class="form-group">
                 <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" data-toggle="password" />
+                <input asp-for="Password" class="form-control" data-toggle="password" id="registerPassword" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <input asp-for="IsSubscribedToNewsletter" />
-                <label asp-for="IsSubscribedToNewsletter"></label>
+                <label asp-for="IsSubscribedToNewsletter" style="display: inline"></label>
             </div>
             <div class="form-group">
+
                 <input asp-for="TermsOfUse" />
-                <label>Я подтверждаю согласие с <a asp-controller="Home" asp-action="Help">Условиями пользования</a></label>
+                <label style="display: inline">Я подтверждаю согласие с <a asp-controller="Home" asp-action="Help">Условиями пользования</a></label>
+                <span style="display: block" asp-validation-for="TermsOfUse" class="text-danger"></span>
             </div>
             <button type="submit" class="pumpkin-flat-button">Регистрация</button>
         </form>
@@ -119,7 +128,8 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
-
+    <script src="~/lib/select2-4.0.8/dist/js/select2.min.js"></script>
+    <script src="~/lib/select2-4.0.8/dist/js/i18n/ru.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -133,17 +143,18 @@
             var parent = "3";
             var russia = "1";
 
+            getCountries();
+            getMainCities();
+
             function studentRussia() {
                 $('#text').show();
                 $('#emailDiv').show();
                 $('#parentEmailDiv').show();
-                $('#requiredEmailDiv').hide();
-                $('#requiredEmail').removeAttr('required');
-                $('#requiredEmail').removeAttr('data-error');
                 $('#mainCitiesRussia').val("");
                 $('#mainCitiesRussiaDiv').show();
-                $('#cityInputDiv').hide();
-                $('#schoolInputDiv').hide();
+                $('#requiredEmailDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
                 $('#schoolsSelect').empty().append('<option>Выберите город</option>');
                 $('.addedSchoolSelect').remove();
                 $('#schoolsSelectDiv').show();
@@ -154,12 +165,10 @@
                 $('#text').show();
                 $('#emailDiv').show();
                 $('#parentEmailDiv').show();
-                $('#requiredEmailDiv').hide();
-                $('#requiredEmail').removeAttr('required');
-                $('#requiredEmail').removeAttr('data-error');
                 $('#mainCitiesRussiaDiv').hide();
-                $('#cityInputDiv').show();
-                $('#schoolInputDiv').show();
+                $('#requiredEmailDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolInputDiv').css("display", "block");
                 $('#schoolsSelectDiv').hide();
                 $('#gradeDiv').show();
                 $('#parallelDiv').show();
@@ -168,17 +177,14 @@
                 $('#text').hide();
                 $('#emailDiv').hide();
                 $('#parentEmailDiv').hide();
-                $('#requiredEmailDiv').show();
-                $('#requiredEmail').attr('required', '');
-                $('#requiredEmail').attr('data-error',
-                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#requiredEmailDiv').css("display", "block");
                 $('#mainCitiesRussia').val("");
                 $('#mainCitiesRussiaDiv').show();
                 $('#schoolsSelect').empty().append('<option>Выберите город</option>');
                 $('.addedSchoolSelect').remove();
                 $('#schoolsSelectDiv').show();
-                $('#cityInputDiv').hide();
-                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
                 $('#gradeDiv').show();
                 $('#parallelDiv').show();
             }
@@ -186,13 +192,10 @@
                 $('#text').hide();
                 $('#emailDiv').hide();
                 $('#parentEmailDiv').hide();
-                $('#requiredEmailDiv').show();
-                $('#requiredEmail').attr('required', '');
-                $('#requiredEmail').attr('data-error',
-                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#requiredEmailDiv').css("display", "block");
                 $('#mainCitiesRussiaDiv').hide();
-                $('#cityInputDiv').show();
-                $('#schoolInputDiv').show();
+                $('#cityInputDiv').scss("display", "block");
+                $('#schoolInputDiv').css("display", "block");
                 $('#schoolsSelectDiv').hide();
                 $('#gradeDiv').show();
                 $('#parallelDiv').show();
@@ -201,14 +204,11 @@
                 $('#text').hide();
                 $('#emailDiv').hide();
                 $('#parentEmailDiv').hide();
-                $('#requiredEmailDiv').show();
-                $('#requiredEmail').attr('required', '');
-                $('#requiredEmail').attr('data-error',
-                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#requiredEmailDiv').css("display", "block");
                 $('#mainCitiesRussia').val("");
                 $('#mainCitiesRussiaDiv').show();
-                $('#cityInputDiv').hide();
-                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
                 $('#schoolsSelectDiv').hide();
                 $('#gradeDiv').hide();
                 $('#parallelDiv').hide();
@@ -217,42 +217,39 @@
                 $('#text').hide();
                 $('#emailDiv').hide();
                 $('#parentEmailDiv').hide();
-                $('#requiredEmailDiv').show();
-                $('#requiredEmail').attr('required', '');
-                $('#requiredEmail').attr('data-error',
-                    'Пожалуйста, введите действующий адрес электронной почты.');
+                $('#requiredEmailDiv').css("display", "block");
                 $('#mainCitiesRussiaDiv').hide();
-                $('#cityInputDiv').show();
-                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolInputDiv').css("display", "none");
                 $('#schoolsSelectDiv').hide();
                 $('#gradeDiv').hide();
                 $('#parallelDiv').hide();
             }
             function blankCityNotParent() {
-                $('#schoolInputDiv').hide();
-                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
                 $('#schoolsSelect').empty().append('<option>Выберите город</option>');
                 $('.addedSchoolSelect').remove();
                 $('#schoolsSelectDiv').show();
             };
             function blankCityParent() {
-                $('#schoolInputDiv').hide();
-                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
                 $('#schoolsSelectDiv').hide();
             };
             function otherCityNotParent() {
-                $('#schoolInputDiv').show();
-                $('#cityInputDiv').show();
+                $('#schoolInputDiv').css("display", "block");
+                $('#cityInputDiv').css("display", "block");
                 $('#schoolsSelectDiv').hide();
             };
             function otherCityParent() {
-                $('#schoolInputDiv').hide();
-                $('#cityInputDiv').show();
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "block");
                 $('#schoolsSelectDiv').hide();
             };
             function mainCityParent() {
-                $('#schoolInputDiv').hide();
-                $('#cityInputDiv').hide();
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
                 $('#schoolsSelectDiv').hide();
             };
             function mainCityNotParent() {
@@ -266,25 +263,55 @@
             var countryVal = $("#countries").val();
             var mainCityRussiaVal = $("#mainCitiesRussia").val();
 
-            getMainCities();
-            getCountries();
+
+            $("#countries").select2({
+                theme: 'bootstrap4',
+                language: "ru",
+                matcher: function (params, data) {
+                    params.term = params.term || '';
+                    if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                        return data;
+                    }
+                    return false;
+                }
+            });
+
+
+            var defaultRangeValidator = $.validator.methods.range;
+            $.validator.methods.range = function (value, element, param) {
+                if (element.type === 'checkbox') {
+                    return element.checked;
+                } else {
+                    return defaultRangeValidator.call(this, value, element, param);
+                }
+            }
 
             function getCountries() {
                 $.ajax({
                     url: 'https://api.vk.com/method/database.getCountries',
                     dataType: 'jsonp',
-                    data: { need_all: '1', access_token: serviceToken, v: currentApiVersion, count: '234', lang: russian },
+                    data: {
+                        need_all: '1',
+                        access_token: serviceToken,
+                        v: currentApiVersion,
+                        count: '234',
+                        lang: russian
+                    },
                     success: function (data) {
                         $.each(data.response.items,
                             function () {
                                 $('#countries').append($("<option />").val(this.id).text(this.title));
                                 $('#countries option[value="1"]').prop('selected', true);
+
                             });
+
                         countriesListener();
                         userTypeListener();
                     }
                 });
             }
+
+
             function getMainCities() {
                 $.ajax({
                     url: 'https://api.vk.com/method/database.getCities',
@@ -308,6 +335,7 @@
                     }
                 });
             }
+
             function toggleSchools() {
                 $('#schoolsSelectDiv *').change(function () {
                     $('select[name=SchoolSelect]').not(":focus").each(function () {
@@ -315,7 +343,9 @@
                     });
                 });
             }
+
             function getSchools() {
+
                 $.ajax({
                     url: 'https://api.vk.com/method/database.getSchools',
                     dataType: 'jsonp',
@@ -361,7 +391,9 @@
                                             lang: russian
                                         },
                                         success: function (data2) {
-                                            var text = (index * 1000 + 1).toString() + ' - ' + ((index + 1) * 1000).toString();
+                                            var text = (index * 1000 + 1).toString() +
+                                                ' - ' +
+                                                ((index + 1) * 1000).toString();
                                             select.empty().append('<option> - Школы ' + text + '</option>');
                                             $.each(data2.response.items,
                                                 function () {
@@ -376,8 +408,10 @@
                     }
                 });
             }
+
             function userTypeListener() {
                 $("#userType").change(function () {
+                    console.log('userType' + $(this).val() + 'country_' + countryVal);
                     userVal = $(this).val();
                     if (userVal === student)
                         countryVal === russia ? studentRussia() : studentNotRussia();
@@ -385,10 +419,12 @@
                         countryVal === russia ? teacherRussia() : teacherNotRussia();
                     else if (userVal === parent)
                         countryVal === russia ? parentRussia() : parentNotRussia();
-                }).change();
+                });
             }
+
             function countriesListener() {
                 $("#countries").change(function () {
+                    console.log('country_' + $(this).val() + 'user_' + userVal);
                     countryVal = $(this).val();
                     if (countryVal === russia) {
                         if (userVal === student)
@@ -407,6 +443,7 @@
                     }
                 }).change();
             }
+
             function mainCityListener() {
                 $("#mainCitiesRussia").change(function () {
                     mainCityRussiaVal = $(this).val();

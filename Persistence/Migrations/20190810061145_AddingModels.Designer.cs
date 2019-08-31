@@ -300,7 +300,7 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
                 {
                     b.Property<string>("ReceiverId");
 
@@ -338,7 +338,7 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("SentMessages");
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.UserSubscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,7 +368,7 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("Subscriptions");
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.SubscriptionType", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -686,7 +686,7 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.AssociationKey", b =>
                 {
-                    b.HasOne("Knigosha.Core.Models.Subscription", "Subscription")
+                    b.HasOne("Knigosha.Core.Models.UserSubscription", "UserSubscription")
                         .WithMany("AssociationKeys")
                         .HasForeignKey("SubscriptionId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -739,7 +739,7 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "Receiver")
                         .WithMany("ReceivedMessages")
@@ -765,7 +765,7 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.UserSubscription", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
                         .WithMany("Subscriptions")
@@ -773,11 +773,11 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.SubscriptionType", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
                 {
-                    b.HasOne("Knigosha.Core.Models.Subscription", "Subscription")
-                        .WithOne("SubscriptionType")
-                        .HasForeignKey("Knigosha.Core.Models.SubscriptionType", "SubscriptionId")
+                    b.HasOne("Knigosha.Core.Models.UserSubscription", "UserSubscription")
+                        .WithOne("Subscription")
+                        .HasForeignKey("Knigosha.Core.Models.Subscription", "SubscriptionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

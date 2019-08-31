@@ -10,21 +10,19 @@ namespace Knigosha.Persistence
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<BookNote> BookNotes { get; set; }
         public DbSet<BookRating> BookRatings { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<Family> Families { get; set; }
-        public DbSet<AssociationKey> AssociationKeys { get; set; }
+        public DbSet<ActivationKey> ActivationKeys { get; set; }
         public DbSet<MarkedBook> MarkedBooks { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<ReceivedMessage> ReceivedMessages { get; set; }
-        public DbSet<SentMessage> SentMessages { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+        public DbSet<SentMessage> SentMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -35,15 +33,14 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new BookRatingConfiguration());
             builder.ApplyConfiguration(new ClassConfiguration());
             builder.ApplyConfiguration(new FamilyConfiguration());
-            builder.ApplyConfiguration(new AssociationKeyConfiguration());
+            builder.ApplyConfiguration(new ActivationKeyConfiguration());
             builder.ApplyConfiguration(new MarkedBookConfiguration());
             builder.ApplyConfiguration(new QuestionConfiguration());
-            builder.ApplyConfiguration(new ReceivedMessageConfiguration());
-            builder.ApplyConfiguration(new SentMessageConfiguration());
             builder.ApplyConfiguration(new StudentConfiguration());
+            builder.ApplyConfiguration(new UserSubscriptionConfiguration());
             builder.ApplyConfiguration(new SubscriptionConfiguration());
-            builder.ApplyConfiguration(new SubscriptionTypeConfiguration());
-
+            builder.ApplyConfiguration(new SentMessageConfiguration());
+            builder.ApplyConfiguration(new ReceivedMessageConfiguration());
             base.OnModelCreating(builder);
         }
     }

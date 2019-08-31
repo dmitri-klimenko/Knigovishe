@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UoN.ExpressiveAnnotations.NetCore.DependencyInjection;
 
 namespace Knigosha
 {
@@ -25,6 +26,7 @@ namespace Knigosha
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddExpressiveAnnotations();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -38,8 +40,16 @@ namespace Knigosha
                     Configuration.GetConnectionString("DefaultConnection")));
 
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Stores.MaxLengthForKeys = 128;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

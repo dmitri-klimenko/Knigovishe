@@ -19,6 +19,23 @@ namespace Knigosha.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Knigosha.Core.Models.ActivationKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code");
+
+                    b.Property<int>("UserSubscriptionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserSubscriptionId");
+
+                    b.ToTable("ActivationKeys");
+                });
+
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
                 {
                     b.Property<int>("BookId");
@@ -27,7 +44,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("AnswerType");
 
-                    b.Property<DateTime>("DateTime");
+                    b.Property<string>("DateTime");
 
                     b.Property<int>("Id");
 
@@ -63,6 +80,8 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("City");
 
+                    b.Property<string>("ClassId");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -76,6 +95,8 @@ namespace Knigosha.Persistence.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FamilyId");
 
                     b.Property<int>("Grade");
 
@@ -93,9 +114,11 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
-                    b.Property<int>("NumberOfCreatedBooks");
+                    b.Property<int?>("NumberOfCreatedBooks");
 
-                    b.Property<int>("NumberPointsForCreatedBooks");
+                    b.Property<int?>("NumberPointsForCreatedBooks");
+
+                    b.Property<string>("Parallel");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -111,7 +134,9 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<bool>("SubscribedToNewsletter");
+                    b.Property<string>("StudentId");
+
+                    b.Property<bool?>("SubscribedToNewsletter");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -123,7 +148,13 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(256);
 
+                    b.Property<int>("UserType");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("FamilyId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -133,26 +164,11 @@ namespace Knigosha.Persistence.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("StudentId");
+
                     b.ToTable("AspNetUsers");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("Knigosha.Core.Models.AssociationKey", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Code");
-
-                    b.Property<int>("SubscriptionId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubscriptionId");
-
-                    b.ToTable("AssociationKeys");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Book", b =>
@@ -229,6 +245,8 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("UserId");
 
+                    b.Property<string>("DateTime");
+
                     b.Property<string>("Text")
                         .HasMaxLength(255);
 
@@ -245,6 +263,8 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("UserId");
 
+                    b.Property<string>("DateTime");
+
                     b.Property<int>("Rating");
 
                     b.HasKey("BookId", "UserId");
@@ -259,6 +279,8 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<int>("BookId");
 
                     b.Property<string>("UserId");
+
+                    b.Property<string>("DateTime");
 
                     b.HasKey("BookId", "UserId");
 
@@ -308,7 +330,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Body");
 
-                    b.Property<DateTime>("DateTime");
+                    b.Property<string>("DateTime");
 
                     b.Property<string>("Topic");
 
@@ -327,7 +349,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Body");
 
-                    b.Property<DateTime>("DateTime");
+                    b.Property<string>("DateTime");
 
                     b.Property<string>("Topic");
 
@@ -344,39 +366,9 @@ namespace Knigosha.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ActivationCode");
-
                     b.Property<string>("BankData");
 
-                    b.Property<string>("Note");
-
-                    b.Property<int>("PaymentType");
-
-                    b.Property<string>("SchoolYear");
-
-                    b.Property<int>("Status");
-
-                    b.Property<DateTime>("SubscribeDateTime");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Subscriptions");
-                });
-
-            modelBuilder.Entity("Knigosha.Core.Models.SubscriptionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("MaxQuizzes");
-
-                    b.Property<int>("Name");
 
                     b.Property<int>("NumberOfParentProfiles");
 
@@ -390,7 +382,7 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<int>("SubscriptionId");
+                    b.Property<int>("SubscriptionType");
 
                     b.Property<string>("Text1")
                         .HasMaxLength(255);
@@ -401,16 +393,41 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("Text3")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ValidUntil")
-                        .IsRequired()
-                        .HasMaxLength(255);
+                    b.Property<string>("ValidUntil");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubscriptionId")
-                        .IsUnique();
+                    b.ToTable("Subscriptions");
+                });
 
-                    b.ToTable("SubscriptionTypes");
+            modelBuilder.Entity("Knigosha.Core.Models.UserSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsPaid");
+
+                    b.Property<string>("Note");
+
+                    b.Property<string>("OrderedOn");
+
+                    b.Property<int>("PaymentType");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int>("SubscriptionId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSubscriptions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -555,13 +572,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("TotalPoints");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
                     b.ToTable("Classes");
 
                     b.HasDiscriminator().HasValue("Class");
@@ -604,14 +614,6 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<int>("TotalPoints")
                         .HasColumnName("Family_TotalPoints");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnName("Family_UserId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[Family_UserId] IS NOT NULL");
-
                     b.ToTable("Families");
 
                     b.HasDiscriminator().HasValue("Family");
@@ -652,23 +654,21 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("School")
                         .HasColumnName("Student_School");
 
-                    b.Property<string>("StudentCode");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnName("Student_UserId");
-
                     b.HasIndex("ClassStudentBelongsToId");
 
                     b.HasIndex("FamilyStudentBelongsToId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[Student_UserId] IS NOT NULL");
-
                     b.ToTable("Students");
 
                     b.HasDiscriminator().HasValue("Student");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.ActivationKey", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.UserSubscription", "UserSubscription")
+                        .WithMany("ActivationKeys")
+                        .HasForeignKey("UserSubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
@@ -684,12 +684,19 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.AssociationKey", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Knigosha.Core.Models.Subscription", "Subscription")
-                        .WithMany("AssociationKeys")
-                        .HasForeignKey("SubscriptionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Knigosha.Core.Models.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId");
+
+                    b.HasOne("Knigosha.Core.Models.Family", "Family")
+                        .WithMany()
+                        .HasForeignKey("FamilyId");
+
+                    b.HasOne("Knigosha.Core.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.BookNote", b =>
@@ -765,19 +772,16 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
-                {
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Knigosha.Core.Models.SubscriptionType", b =>
+            modelBuilder.Entity("Knigosha.Core.Models.UserSubscription", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Subscription", "Subscription")
-                        .WithOne("SubscriptionType")
-                        .HasForeignKey("Knigosha.Core.Models.SubscriptionType", "SubscriptionId")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
+                        .WithMany("UserSubscriptions")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -826,22 +830,6 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Class", b =>
-                {
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
-                        .WithOne("Class")
-                        .HasForeignKey("Knigosha.Core.Models.Class", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Knigosha.Core.Models.Family", b =>
-                {
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
-                        .WithOne("Family")
-                        .HasForeignKey("Knigosha.Core.Models.Family", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Knigosha.Core.Models.Student", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Class", "ClassStudentBelongsTo")
@@ -852,11 +840,6 @@ namespace Knigosha.Persistence.Migrations
                     b.HasOne("Knigosha.Core.Models.Family", "FamilyStudentBelongsTo")
                         .WithMany("Students")
                         .HasForeignKey("FamilyStudentBelongsToId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
-                        .WithOne("Student")
-                        .HasForeignKey("Knigosha.Core.Models.Student", "UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618

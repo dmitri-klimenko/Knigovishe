@@ -217,38 +217,43 @@ namespace Knigosha.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            if (model.UserType == UserTypes.Student && string.IsNullOrEmpty(model.Email) && string.IsNullOrEmpty(model.ParentEmail))
+            var userType = model.UserType;
+
+            switch (userType)
             {
-                var validationMessage = "Пожалуйста, введите Ваш адрес электронной почты или адрес электронной почты одного из родителей.";
-                this.ModelState.AddModelError("Email", validationMessage);
-                this.ModelState.AddModelError("ParentEmail", validationMessage);
+                case (UserTypes.Student):
+                    if (ModelState.IsValid)
+                    {
+                        var student = new Student
+                        {
+                            Name = model.Name,
+                            Surname = model.Surname,
+                            Password = model.Password,
+                            UserType = model.UserType,
+                            UserName = model.UserName,
+                            Email = model.Email ?? model.ParentEmail,
+                            PhoneNumber = model.PhoneNumber,
+                            City = model.MainCityRussia ?? model.CityInput,
+                            School = model.SchoolSelect ?? model.SchoolInput,
+                            Grade = model.Grade,
+                            Parallel = model.Parallel,
+
+
+
+                        };
+                        var result = await _userManager.CreateAsync(student, model.Password);
+                        if (result.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(student, isPersistent: false);
+                            _logger.LogInformation("Student created a new account with password.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        AddErrors(result);
+                    }
+                    break;
             }
 
-            if (model.UserType == UserTypes.Student && !string.IsNullOrEmpty(model.Email) && !string.IsNullOrEmpty(model.ParentEmail))
-            {
-                var validationMessage = "Пожалуйста, введите либо Ваш адрес электронной почты, либо адрес электронной почты одного из родителей.";
-                this.ModelState.AddModelError("Email", validationMessage);
-                this.ModelState.AddModelError("ParentEmail", validationMessage);
-            }
 
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink((user.Id).ToString(), code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
-            }
 
             // If we got this far, something failed, redisplay form
             return View(model);

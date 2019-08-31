@@ -7,7 +7,7 @@ namespace Knigosha.Core.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        private Grades _grade;
+        public UserTypes UserType { get; set; }
 
         public string Name { get; set; }
 
@@ -24,27 +24,28 @@ namespace Knigosha.Core.Models
         public string Photo { get; set; }
 
         public string City { get; set; }
-        //public IList<SelectListItem> Cities { get; set; }
 
         public string Country { get; set; }
-        //public IList<SelectListItem> Countries { get; set; }
 
-        public Grades Grade
-        {
-            get => _grade;
-            set => _grade = value;
-        }
+        public string Parallel { get; set; }
+
+        public Student Student { get; set; }
+        public Family Family { get; set; }
+        public Class Class { get; set; }
+
+
+        public Grades Grade { get; set; }
 
         public AgeGroups AgeGroup
         {
             get
             {
                 AgeGroups ageGroup;
-                if (_grade == Grades.One)
+                if (Grade == Grades.One)
                     ageGroup = AgeGroups.SixPlus;
-                else if (_grade == Grades.Two || _grade == Grades.Three || _grade == Grades.Four)
+                else if (Grade == Grades.Two || Grade == Grades.Three || Grade == Grades.Four)
                     ageGroup = AgeGroups.EightPlus;
-                else if (_grade == Grades.Five || _grade == Grades.Six || _grade == Grades.Seven)
+                else if (Grade == Grades.Five || Grade == Grades.Six || Grade == Grades.Seven)
                     ageGroup = AgeGroups.ElevenPlus;
                 else ageGroup = AgeGroups.FourteenPlus;
                 return ageGroup;
@@ -52,24 +53,13 @@ namespace Knigosha.Core.Models
         }
 
 
-        public int NumberOfCreatedBooks { get; set; }
+        public int? NumberOfCreatedBooks { get; set; }
 
-        public int NumberPointsForCreatedBooks { get; set; }
+        public int? NumberPointsForCreatedBooks { get; set; }
 
-        public Student Student { get; set; }
+        public bool? SubscribedToNewsletter { get; set; }
 
-        public Class Class { get; set; }
-
-        public Family Family { get; set; }
-
-        public bool SubscribedToNewsletter { get; set; }
-
-
-        public ICollection<Subscription> Subscriptions { get; set; }
-
-        public ICollection<SentMessage> SentMessages { get; set; }
-
-        public ICollection<ReceivedMessage> ReceivedMessages { get; set; }
+        public ICollection<UserSubscription> UserSubscriptions { get; set; }
 
         public ICollection<Answer> Answers { get; set; }
 
@@ -79,16 +69,54 @@ namespace Knigosha.Core.Models
 
         public ICollection<MarkedBook> MarkedBooks { get; set; }
 
+        public ICollection<SentMessage> SentMessages { get; set; }
+
+        public ICollection<ReceivedMessage> ReceivedMessages { get; set; }
+
 
         public ApplicationUser()
         {
-            Subscriptions = new Collection<Subscription>();
-            SentMessages = new Collection<SentMessage>();
-            ReceivedMessages = new Collection<ReceivedMessage>();
+            UserSubscriptions = new Collection<UserSubscription>();
             Answers = new Collection<Answer>();
             BookNotes = new Collection<BookNote>();
             BookRatings = new Collection<BookRating>();
             MarkedBooks = new Collection<MarkedBook>();
+            SentMessages = new Collection<SentMessage>();
+            ReceivedMessages = new Collection<ReceivedMessage>();
+
         }
+
+        public void OrderSubscription(Subscription subscription)
+        {
+            UserSubscriptions.Add(new UserSubscription(this, subscription));
+        }
+
+        public void SentMessage(SentMessage message, ApplicationUser receiver)
+        {
+            SentMessages.Add(new SentMessage(this, receiver));
+        }
+
+        public void MarkBook(Book book, ApplicationUser user)
+        {
+            MarkedBooks.Add(new MarkedBook(this, book));
+        }
+
+        public void CreateBookNote(Book book, ApplicationUser user)
+        {
+            BookNotes.Add(new BookNote(this, book));
+        }
+
+        public void RateBook(Book book, ApplicationUser user)
+        {
+            BookRatings.Add(new BookRating(this, book));
+        }
+
+        public void AnswerBook(Book book, ApplicationUser user)
+        {
+            Answers.Add(new Answer(this, book));
+        }
+
+
     }
+
 }

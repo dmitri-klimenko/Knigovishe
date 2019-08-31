@@ -1,5 +1,6 @@
 ﻿using Knigosha.Core.Models.Enums;
 using System;
+using System.Globalization;
 
 namespace Knigosha.Core.Models
 {
@@ -21,7 +22,7 @@ namespace Knigosha.Core.Models
 
         public int NumberOfSkippedQuestions { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public string DateTime { get; set; }
 
         public string ReasonForRestart { get; set; }
 
@@ -37,11 +38,11 @@ namespace Knigosha.Core.Models
 
         protected Answer() { }
 
-        private Answer(ApplicationUser user, Book book)
+        public Answer(ApplicationUser user, Book book)
         {
             User = user ?? throw new ArgumentNullException(nameof(User));
             Book = book ?? throw new ArgumentNullException(nameof(Book));
-            DateTime = DateTime.Now;
+            DateTime = System.DateTime.Now.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
 
         // Start (){ }

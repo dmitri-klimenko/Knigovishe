@@ -13,7 +13,7 @@ a.navbar-brand {
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 17px !important;
   }
 }
 
@@ -25,7 +25,8 @@ a.navbar-brand {
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem #000000;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
@@ -56,38 +57,46 @@ body {
 
 body {
     font-family: 'Kurale', sans-serif !important;
-    font-size: 18px !important;
+    font-size: 17px !important;
 }
 
-
+/* Registration form */
 #registration {
     background-color: #f5f4f2;
     display: inline-block;
     text-align: left;
-    border: 1px solid darkgrey;
-    font-size: 16px;
+    border: white;
+    font-size: 17px;
     margin-top: 30px;
     padding: 23px;
+    max-width: 400px;
+    -ms-border-radius: 20px;
+    border-radius: 20px;
 }
 
 .pumpkin-flat-button {
+    margin: 0 auto;
+    display: block;
     position: relative;
     vertical-align: top;
-    width: 100%;
-    height: 45px;
+    width: 60%;
+    height: 40px;
     padding: 0;
-    font-size: 22px;
+    font-size: 20px;
     color: white;
     text-align: center;
+    text-shadow: 0 1px 2px #000000;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    background: #d35400;
+    background: #009400;
     border: 0;
-    border-radius: 5px;
-    border-bottom: 2px solid #c54e00;
+    -ms-border-radius: 25px;
+    border-radius: 25px;
+    border-bottom: 2px solid #009400;
     cursor: pointer;
-    -webkit-box-shadow: inset 0 -2px #c54e00;
-    box-shadow: inset 0 -2px #c54e00;
+    -webkit-box-shadow: inset 0 -2px #009400;
+    box-shadow: inset 0 -2px #009400;
 }
+
 .pumpkin-flat-button:active {
     top: 1px;
     outline: none;
@@ -95,9 +104,32 @@ body {
     box-shadow: none;
 }
 
+.form-control {
+    display: block;
+    width: 100%;
+    height: 35px;
+    padding: 2px;
+    padding-left: 10px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1em;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    margin-bottom: 10px;
+    border: white;
+    -ms-border-radius: 0.25rem;
+    border-radius: 0.25rem;
+    -ms-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 .form-control:focus {
-    border-color: #d35400 ;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(197, 78, 0, 0.5) ;
+    border-color: #009400;
+    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
 }
 
 #cityDiv {
@@ -115,3 +147,147 @@ body {
 .addedSchoolSelect {
     margin-top: 20px !important;
 }
+
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-results__options{
+    font-size:18px !important;
+}
+
+.text-danger {
+    color: #009400 !important;
+}
+
+#registration label {
+    margin-bottom: 3px;
+    padding-left: 3px;
+}
+
+#registration input + label {
+    padding-left: 0;
+}
+
+
+#registration p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+#text {
+    font-weight: bold;
+}
+
+p:nth-child(1) {
+    text-align: center;
+}
+
+form > h5 {
+    text-align: center;
+}
+
+select, div > input {
+    -ms-border-radius: 25px !important;
+    border-radius: 25px !important;
+}
+
+#registerPassword {
+    -ms-border-top-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
+    -ms-border-top-right-radius: 25px;
+    border-top-right-radius: 25px;
+    -ms-border-bottom-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    line-height: 1rem;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding-left: 14px !important;
+}
+
+.dropdown-menu {
+    width: 320px;
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    left: -75px;
+    top: 51px;
+    min-width: 10rem;
+    padding: 1.5em;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -ms-background-clip: padding-box;
+    background-clip: padding-box;
+    -ms-border-bottom-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    -ms-border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    -ms-border-top-right-radius: 0;
+    border-top-right-radius: 0;
+    -ms-border-top-left-radius: 0;
+    border-top-left-radius: 0;
+    border-top: none;
+    box-shadow: 0 6px 8px -1px #000000;
+    box-shadow: 0 6px 8px -1px rgba(0,0,0,.2);
+    background: #ffffff;
+    background: rgba(255,255,255,0.9);
+    padding: 15px;
+    padding-bottom: 5px;
+}
+
+#parent {
+    position: relative;
+}
+
+.form_label {
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+#forgotPass {
+    display: block;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 15px;
+    padding-top: 0;
+    color: black;
+}
+#registerLink {
+    font-size: 19px;
+    display: block;
+    text-align: center;
+    color: #009400;
+    text-decoration: underline;
+    margin-top: 8px;
+}
+
+#remembermeDiv {
+    text-align: center;
+}
+
+div.form-group {
+    margin-bottom: 0.5em;
+}
+
+nav a:-webkit-any-link:hover {
+    color: #009400 !important;
+}
+
+#loginEmail, #loginPassword {
+    background-color: #f5f4f2;
+    border: white;
+}
+
+
+

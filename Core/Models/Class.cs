@@ -4,12 +4,9 @@ namespace Knigosha.Core.Models
 {
     public class Class : ApplicationUser
     {
+        public sealed override string Id { get; set; }
 
-        public ApplicationUser User { get; set; }
 
-        public string UserId { get; set; }
-
-        //public IList<SelectListItem> Schools { get; set; }
         public string School { get; set; }
 
         public int TotalPoints { get; set; }
@@ -38,7 +35,9 @@ namespace Knigosha.Core.Models
 
         public int NumberOfStudentsInClass { get; set; }
 
-        public ICollection<Student> Students { get; set; }
+        public IList<Student> Students { get; set; }
+
+
 
     }
 }

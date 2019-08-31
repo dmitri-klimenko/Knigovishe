@@ -10,8 +10,6 @@ namespace Knigosha.Persistence.EntityConfigurations
         {
             builder.ToTable("Students");
 
-            builder.Property(s => s.UserId).IsRequired();
-
         }
     }
 }

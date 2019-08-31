@@ -10,8 +10,6 @@ namespace Knigosha.Persistence.EntityConfigurations
         {
             builder.ToTable("Classes");
 
-            builder.Property(c => c.UserId).IsRequired();
-
             builder.HasMany(c => c.Students)
                 .WithOne(s => s.ClassStudentBelongsTo)
                 .HasForeignKey(s => s.ClassStudentBelongsToId)

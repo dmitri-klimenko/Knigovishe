@@ -1,43 +1,42 @@
 ﻿using Knigosha.Core.Models.Enums;
-using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Knigosha.Core.Models
 {
     public class Subscription
     {
+        [Display(Name = "Номер абонемента")]
         public int Id { get; set; }
 
-        public ApplicationUser User { get; set; }
+        //"Бесплатное демо" 
+        //"ИндивидуальныЙ"
+        //"Семейный" 
+        //"Абонемент класса"
+        public SubscriptionTypes SubscriptionType { get; set; }
 
-        public string UserId { get; set; }
+        [Display(Name = "Цена:")]
+        public string PriceTag { get; set; }
 
-        public SubscriptionType SubscriptionType { get; set; }
+        public int Price { get; set; }
 
-        public string ActivationCode { get; set; }
+        [Display(Name = "Количество вопросников:")]
+        public int MaxQuizzes { get; set; }
 
-        public DateTime SubscribeDateTime { get; set; }
+        [Display(Name = "Ученических профилей:")]
+        public int NumberOfStudentProfiles { get; set; }
 
-        public PaymentType PaymentType { get; set; }
+        [Display(Name = "Родительских профилей:")]
+        public int NumberOfParentProfiles { get; set; }
+        [Display(Name = "Учительских профилей:")]
+        public int NumberOfTeacherProfiles { get; set; }
 
-        public string Note { get; set; }
-
-        public StatusTypes Status { get; set; }
+        [Display(Name = "Действителен до:")]
+        public string ValidUntil { get; set; }
 
         public string BankData { get; set; }
 
-        public string SchoolYear { get; set; }
-
-        public ICollection<AssociationKey> AssociationKeys { get; set; }
-
-        protected Subscription() { }
-
-        private Subscription(ApplicationUser user, SubscriptionType subscriptionType)
-        {
-            User = user ?? throw new ArgumentNullException(nameof(User));
-            SubscriptionType = subscriptionType ?? throw new ArgumentNullException(nameof(SubscriptionType));
-            SubscribeDateTime = DateTime.Now;
-        }
-
+        public string Text1 { get; set; }
+        public string Text2 { get; set; }
+        public string Text3 { get; set; }
     }
 }
