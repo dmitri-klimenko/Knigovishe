@@ -1,5 +1,7 @@
-﻿using Knigosha.Core.Models.Enums;
+﻿using System.Collections.Generic;
+using Knigosha.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
 namespace Knigosha.Core.ViewModels.AccountViewModels
@@ -42,12 +44,14 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
 
         [Display(Name = "Страна:")]
         public string Country { get; set; }
+        public List<SelectListItem> Countries { set; get; }
 
         [Display(Name = "Город:")]
         public string CityInput { get; set; }
 
         [Display(Name = "Город:")]
         public string MainCityRussia { get; set; }
+        public List<SelectListItem> MainCitiesRussia { set; get; }
 
         [Display(Name = "Школа:")]
         public string SchoolInput { get; set; }

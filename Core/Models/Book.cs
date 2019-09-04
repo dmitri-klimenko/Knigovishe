@@ -8,10 +8,6 @@ namespace Knigosha.Core.Models
 {
     public class Book
     {
-        private Grades _grade;
-        private bool _isShortForm;
-        private BookCategories _bookCategory;
-
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -25,18 +21,13 @@ namespace Knigosha.Core.Models
 
         public string Translator { get; set; }
 
-        public BookCategories BookCategory
-        {
-            get => _bookCategory;
-            set => _bookCategory = value;
-        }
+        public BookCategories BookCategory { get; set; }
 
         [RegularExpression(@"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")]
         public string Isbn1 { get; set; }
 
         [RegularExpression(@"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")]
         public string Isbn2 { get; set; }
-
 
         public int NumberOfPages { get; set; }
 
@@ -49,15 +40,15 @@ namespace Knigosha.Core.Models
             get
             {
                 AgeGroups ageGroup;
-                if (_isShortForm)
+                if (IsShortForm)
                     ageGroup = AgeGroups.SixPlus;
                 else
                 {
-                    if (_grade == Grades.One)
+                    if (Grade == Grades.One)
                         ageGroup = AgeGroups.SixPlus;
-                    else if (_grade == Grades.Two || _grade == Grades.Three || _grade == Grades.Four)
+                    else if (Grade == Grades.Two || Grade == Grades.Three || Grade == Grades.Four)
                         ageGroup = AgeGroups.EightPlus;
-                    else if (_grade == Grades.Five || _grade == Grades.Six || _grade == Grades.Seven)
+                    else if (Grade == Grades.Five || Grade == Grades.Six || Grade == Grades.Seven)
                         ageGroup = AgeGroups.ElevenPlus;
                     else ageGroup = AgeGroups.FourteenPlus;
                 }
@@ -66,24 +57,15 @@ namespace Knigosha.Core.Models
             }
         }
 
+        public Grades Grade { get; set; }
 
-        public Grades Grade
-        {
-            get => _grade;
-            set => _grade = value;
-        }
-
-        public bool HasOpinionQuestion => _bookCategory == BookCategories.Fiction;
+        public bool HasOpinionQuestion => BookCategory == BookCategories.Fiction;
 
         public int NumberOfContentQuestions { get; set; }
 
         public int NumberOfComprehensionQuestions { get; set; }
 
-        public bool IsShortForm
-        {
-            get => _isShortForm;
-            set => _isShortForm = value;
-        }
+        public bool IsShortForm { get; set; }
 
         public string Tags { get; set; }
 

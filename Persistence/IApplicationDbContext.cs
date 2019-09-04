@@ -18,5 +18,9 @@ namespace Knigosha.Persistence
         DbSet<UserSubscription> UserSubscriptions { get; set; }
         DbSet<Subscription> Subscriptions { get; set; }
         DbSet<ApplicationUser> Users { get; set; }
+        DbSet<Country> Countries { get; set; }
+        DbSet<City> Cities { get; set; }
+        DbSet<School> Schools { get; set; }
+
     }
 }

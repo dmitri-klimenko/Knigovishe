@@ -9,8 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Knigosha.Persistence;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Knigosha.Controllers
 {
@@ -22,8 +26,9 @@ namespace Knigosha.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(
+        public AccountController(ApplicationDbContext context, 
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
@@ -33,6 +38,7 @@ namespace Knigosha.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context; 
         }
 
         [TempData]
@@ -207,7 +213,22 @@ namespace Knigosha.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+
+            var vm = new RegisterViewModel();
+            vm.Countries = _context.Countries.Select(c => new SelectListItem()
+                { Value = c.Id.ToString(), Text = c.Title }).ToList();
+            vm.MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
+            {Value = c.Id.ToString(), Text = c.Title }).ToList();
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult GetSchoolList(int cityId)
+        {
+            var schoolList = new SelectList(_context.Schools.Where(s => s.City.Id == cityId), "Id", "Title");
+            return Json(schoolList);
         }
 
         [HttpPost]
@@ -237,6 +258,7 @@ namespace Knigosha.Controllers
                             School = model.SchoolSelect ?? model.SchoolInput,
                             Grade = model.Grade,
                             Parallel = model.Parallel,
+                            Country = model.Country,
 
 
 
@@ -258,6 +280,7 @@ namespace Knigosha.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -388,7 +411,7 @@ namespace Knigosha.Controllers
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink((user.Id).ToString(), code, Request.Scheme);
+                var callbackUrl = Url.ResetPasswordCallbackLink((user.Id), code, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));

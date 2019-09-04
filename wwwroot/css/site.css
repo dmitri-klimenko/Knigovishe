@@ -61,7 +61,15 @@ body {
 }
 
 /* Registration form */
-#registration {
+div.form-group {
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+#registration, #forgot {
     background-color: #f5f4f2;
     display: inline-block;
     text-align: left;
@@ -74,7 +82,7 @@ body {
     border-radius: 20px;
 }
 
-.pumpkin-flat-button {
+.green-flat-button {
     margin: 0 auto;
     display: block;
     position: relative;
@@ -97,13 +105,24 @@ body {
     box-shadow: inset 0 -2px #009400;
 }
 
-.pumpkin-flat-button:active {
+.green-flat-button:active {
     top: 1px;
     outline: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+#loginButton {
+    width: 40%
+}
 
+#forgotButton {
+    margin-top: 20px;
+    width: 45%
+}
+#registrationButton {
+    width: 50%;
+    margin-top: 10px;
+}
 .form-control {
     display: block;
     width: 100%;
@@ -116,7 +135,7 @@ body {
     color: #495057;
     background-color: #fff;
     background-clip: padding-box;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     border: white;
     -ms-border-radius: 0.25rem;
     border-radius: 0.25rem;
@@ -254,7 +273,13 @@ select, div > input {
     padding-left: 10px;
     padding-bottom: 5px;
 }
-
+#loginForm label {
+    padding-left: 12px;
+    margin-bottom: 0.1rem;
+}
+#remembermeDiv label {
+    padding-left: 0
+}
 #forgotPass {
     display: block;
     text-align: center;
@@ -276,9 +301,6 @@ select, div > input {
     text-align: center;
 }
 
-div.form-group {
-    margin-bottom: 0.5em;
-}
 
 nav a:-webkit-any-link:hover {
     color: #009400 !important;
@@ -289,5 +311,12 @@ nav a:-webkit-any-link:hover {
     border: white;
 }
 
+/*dashboard*/
 
-
+#dashboard {
+    background-color: #de2c1f !important;
+}
+#dashboard a{
+    color: white;
+}
+#newBook{ margin: 15px;}
