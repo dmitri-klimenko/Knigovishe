@@ -99,9 +99,9 @@
 
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="registerPassword">
                 <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" data-toggle="password" id="registerPassword" />
+                <input asp-for="Password" class="form-control" data-toggle="password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
@@ -363,7 +363,7 @@
                                 $("#schoolsSelect").empty();
                                 $.each(data,
                                     function(i, school) {
-                                        item += '<option value="' + school.value + '">' + school.text + '</option>'
+                                        item += '<option value="' + school.value + '">' + school.text + '</option>';
                                     });
                                 $("#schoolsSelect").html(item);
                             });

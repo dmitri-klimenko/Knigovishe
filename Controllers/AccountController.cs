@@ -1,8 +1,6 @@
 ﻿using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.AccountViewModels;
-using Knigosha.Extensions;
-using Knigosha.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +12,7 @@ using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Knigosha.Persistence;
+using Knigosha.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Knigosha.Controllers

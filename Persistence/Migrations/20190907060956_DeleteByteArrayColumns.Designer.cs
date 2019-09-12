@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190907060956_DeleteByteArrayColumns")]
+    partial class DeleteByteArrayColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,8 +89,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Country");
 
-                    b.Property<string>("DateAdded");
-
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
@@ -131,8 +131,6 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("Photo");
 
                     b.Property<string>("SecurityStamp");
 
@@ -189,10 +187,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<float>("CalculatedRating");
 
-                    b.Property<string>("CoverPhoto")
-                        .IsRequired();
-
-                    b.Property<string>("DateAdded");
+                    b.Property<int>("DateAdded");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -212,7 +207,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("NumberOfPages");
 
-                    b.Property<int?>("PartOfSchoolProgramAtGrade");
+                    b.Property<int>("PartOfSchoolProgramAtGrade");
 
                     b.Property<string>("Publisher")
                         .IsRequired()
@@ -1483,8 +1478,6 @@ namespace Knigosha.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BookId");
-
-                    b.Property<byte?>("QuestionNumber");
 
                     b.Property<int>("QuestionType");
 

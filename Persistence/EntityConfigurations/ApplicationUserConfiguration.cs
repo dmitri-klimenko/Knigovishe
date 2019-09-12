@@ -1,6 +1,9 @@
-﻿using Knigosha.Core.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
+using Knigosha.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.EntityConfigurations
 {
@@ -16,6 +19,7 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.Property(a => a.Grade).IsRequired();
             builder.Property(a => a.Password).IsRequired().HasMaxLength(50);
             builder.Property(a => a.UserName).IsRequired().HasMaxLength(50);
+
 
 
             builder.HasMany(a => a.MarkedBooks)

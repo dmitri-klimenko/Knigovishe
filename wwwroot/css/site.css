@@ -61,11 +61,11 @@ body {
 }
 
 /* Registration form */
-div.form-group {
+#registration div.form-group {
     margin-top: 10px;
 }
 
-.form-group {
+#registration .form-group {
     margin-bottom: 0;
 }
 
@@ -79,7 +79,7 @@ div.form-group {
     padding: 23px;
     max-width: 400px;
     -ms-border-radius: 20px;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 .green-flat-button {
@@ -96,7 +96,7 @@ div.form-group {
     text-shadow: 0 1px 2px #000000;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
     background: #009400;
-    border: 0;
+    /*border: 0;*/
     -ms-border-radius: 25px;
     border-radius: 25px;
     border-bottom: 2px solid #009400;
@@ -105,15 +105,16 @@ div.form-group {
     box-shadow: inset 0 -2px #009400;
 }
 
+
+
 .green-flat-button:active {
     top: 1px;
     outline: none;
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-#loginButton {
-    width: 40%
-}
+
+
 
 #forgotButton {
     margin-top: 20px;
@@ -123,7 +124,7 @@ div.form-group {
     width: 50%;
     margin-top: 10px;
 }
-.form-control {
+#registration .form-control, #forgot .form-control {
     display: block;
     width: 100%;
     height: 35px;
@@ -131,25 +132,19 @@ div.form-group {
     padding-left: 10px;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1em;
     color: #495057;
     background-color: #fff;
     background-clip: padding-box;
     margin-bottom: 0;
     border: white;
-    -ms-border-radius: 0.25rem;
-    border-radius: 0.25rem;
-    -ms-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    border-radius: 25px;
 }
 
-.form-control:focus {
-    border-color: #009400;
-    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
-}
+    #registration .form-control:focus, #forgot .form-control:focus {
+        border-color: #009400;
+        box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
+    }
 
 #cityDiv {
     display: none;
@@ -208,29 +203,24 @@ form > h5 {
     text-align: center;
 }
 
-select, div > input {
+#registration select, #registration div > input {
     -ms-border-radius: 25px !important;
     border-radius: 25px !important;
-}
-
-#registerPassword {
-    -ms-border-top-right-radius: 0 !important;
-    border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.input-group > .input-group-append > .btn, .input-group > .input-group-append > .input-group-text, .input-group > .input-group-prepend:not(:first-child) > .btn, .input-group > .input-group-prepend:not(:first-child) > .input-group-text, .input-group > .input-group-prepend:first-child > .btn:not(:first-child), .input-group > .input-group-prepend:first-child > .input-group-text:not(:first-child) {
-    -ms-border-top-right-radius: 25px;
-    border-top-right-radius: 25px;
-    -ms-border-bottom-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    line-height: 1rem;
 }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
     padding-left: 14px !important;
 }
 
+#registerPassword .btn {
+    border-top-right-radius: 45%;
+    border-bottom-right-radius: 45%;
+    line-height: 1em !important;
+    color: darkgray;
+    border-color: darkgray;
+}
+
+/* dropdown ligon form */
 .dropdown-menu {
     width: 320px;
     position: absolute;
@@ -264,7 +254,9 @@ select, div > input {
     padding: 15px;
     padding-bottom: 5px;
 }
-
+#loginButton {
+    width: 40%
+}
 #parent {
     position: relative;
 }
@@ -300,23 +292,123 @@ select, div > input {
 #remembermeDiv {
     text-align: center;
 }
-
-
-nav a:-webkit-any-link:hover {
-    color: #009400 !important;
-}
-
 #loginEmail, #loginPassword {
     background-color: #f5f4f2;
     border: white;
+    border-radius: 25px; 
+}
+
+#loginEmail:focus, #loginPassword:focus{
+    border-color: #009400;
+    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
+}
+
+#registration #registerPassword input {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    width: fit-content !important;
+}
+
+#loginForm .form-group {
+    margin-bottom: 5px;
+}
+#dropdownDiv .form-control {
+    height: 35px;
+}
+
+
+/* nav link */
+nav a:-webkit-any-link:hover {
+    color: #009400 !important;
 }
 
 /*dashboard*/
 
 #dashboard {
-    background-color: #de2c1f !important;
+    background-color: #dc3545 !important;
 }
 #dashboard a{
     color: white;
 }
-#newBook{ margin: 15px;}
+
+
+/*Admin pages headers */
+
+.header {
+    margin-top: 10px;
+}
+.adminButton {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+/* Create book form*/
+
+.adminForm .form-control:focus{
+    border-color: #009400;
+    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
+}
+
+#questionDetail {
+    margin-top: 15px
+}
+
+/* tables */
+
+.table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+img#coverPhoto {
+    width: 120px;
+}
+
+img#detailsCoverPhoto, img#deleteCoverPhoto {
+    width: 200px;
+    margin-top: 15px;
+}
+
+td, th {
+    text-align: center;
+}
+
+#deleteIcon {
+    color: #dc3545;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+dt {
+    margin-bottom: 7px; 
+}
+
+.questionNumberColumn {
+    width: 5%
+}
+
+.deleteEditColumn {
+    width: 17%
+}
+
+.mainContentColumn{
+    text-align: left
+}
+
+.toQuestionsColumn {
+    width: 13%
+}
+.forColumn {
+    width: 7%
+}
+
+.bookCoverColumn {
+    width: 14%
+}
+.addedDateColumn {
+    width: 13%
+}
+.break-word {
+    word-break: break-word
+}

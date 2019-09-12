@@ -1,7 +1,7 @@
 using Knigosha.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Knigosha.Extensions
+namespace Knigosha.Utilities
 {
     public static class UrlHelperExtensions
 

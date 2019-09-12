@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Knigosha.Services
+namespace Knigosha.Utilities
 {
     public interface IEmailSender
     {

@@ -1,4 +1,5 @@
-﻿using Knigosha.Core.Models.Enums;
+﻿using System;
+using Knigosha.Core.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -59,6 +60,8 @@ namespace Knigosha.Core.Models
 
         public bool? SubscribedToNewsletter { get; set; }
 
+        public string DateAdded { get; set; }
+
         public ICollection<UserSubscription> UserSubscriptions { get; set; }
 
         public ICollection<Answer> Answers { get; set; }
@@ -83,6 +86,7 @@ namespace Knigosha.Core.Models
             MarkedBooks = new Collection<MarkedBook>();
             SentMessages = new Collection<SentMessage>();
             ReceivedMessages = new Collection<ReceivedMessage>();
+            DateAdded = DateTime.Now.ToString("d");
 
         }
 

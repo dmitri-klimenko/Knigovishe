@@ -1,0 +1,49 @@
+﻿@using Microsoft.EntityFrameworkCore.Internal
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model IEnumerable<Knigosha.Core.Models.Question>
+
+@{
+    ViewData["Title"] = "Вопросы";
+}
+<div>
+    <partial name="_DashboardPartial"/>
+    <div class="header">
+        <h4>Вопросы по книге "@ViewData["BookTitle"]"</h4>
+        <a asp-controller="Book" asp-action="Index" class="btn btn btn-light ">Назад к книгам</a>
+    </div>
+    <hr/>
+    <a asp-controller="Questions" asp-action="Create" asp-route-id=@ViewData["BookId"] class="btn btn btn-light" style="margin-bottom: 15px">Новый вопрос</a>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="questionNumberColumn">
+                #
+            </th>
+            <th >
+                Текст вопроса
+            </th>
+            <th class="deleteEditColumn"></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @(Model.IndexOf(item) + 1)
+                </th>
+                <td class="mainContentColumn">
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Text)</a>
+                </td>
+                <td class="deleteEditColumn">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+

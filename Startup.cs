@@ -1,6 +1,6 @@
 ﻿using Knigosha.Core.Models;
 using Knigosha.Persistence;
-using Knigosha.Services;
+using Knigosha.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +27,7 @@ namespace Knigosha
         {
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddExpressiveAnnotations();
+        
 
             services.Configure<CookiePolicyOptions>(options =>
             {

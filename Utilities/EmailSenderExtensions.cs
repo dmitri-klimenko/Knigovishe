@@ -1,8 +1,7 @@
-using Knigosha.Services;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace Knigosha.Extensions
+namespace Knigosha.Utilities
 {
     public static class EmailSenderExtensions
 

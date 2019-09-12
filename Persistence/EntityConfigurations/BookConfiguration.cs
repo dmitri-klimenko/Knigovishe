@@ -1,6 +1,8 @@
-﻿using Knigosha.Core.Models;
+﻿using System.Text;
+using Knigosha.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.EntityConfigurations
 {
@@ -18,21 +20,16 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.Property(b => b.BookCategory).IsRequired();
             builder.Property(b => b.CoverPhoto).IsRequired();
             builder.Property(b => b.Grade).IsRequired();
-            builder.Property(b => b.IsShortForm).IsRequired();
             builder.Property(b => b.Isbn1).IsRequired();
             builder.Property(b => b.Description).IsRequired();
             builder.Property(b => b.Tags).IsRequired();
             builder.Property(b => b.QuestionsAuthor).IsRequired();
 
-            builder.HasMany(b => b.Answers)
-                .WithOne(a => a.Book)
-                .HasForeignKey(a => a.BookId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.HasMany(b => b.Questions)
                 .WithOne(q => q.Book)
                 .HasForeignKey(q => q.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

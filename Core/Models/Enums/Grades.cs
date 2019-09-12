@@ -27,10 +27,6 @@ namespace Knigosha.Core.Models.Enums
         [Display(Name = "11")]
         Eleven = 11,
         [Display(Name = "12")]
-        Twelve = 12,
-
-
-
-
+        Twelve = 12
     }
 }

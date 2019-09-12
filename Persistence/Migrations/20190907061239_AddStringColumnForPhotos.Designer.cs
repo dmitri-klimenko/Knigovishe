@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190907061239_AddStringColumnForPhotos")]
+    partial class AddStringColumnForPhotos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,8 +88,6 @@ namespace Knigosha.Persistence.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Country");
-
-                    b.Property<string>("DateAdded");
 
                     b.Property<string>("Discriminator")
                         .IsRequired();
@@ -189,10 +189,9 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<float>("CalculatedRating");
 
-                    b.Property<string>("CoverPhoto")
-                        .IsRequired();
+                    b.Property<string>("CoverPhoto");
 
-                    b.Property<string>("DateAdded");
+                    b.Property<int>("DateAdded");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -212,7 +211,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("NumberOfPages");
 
-                    b.Property<int?>("PartOfSchoolProgramAtGrade");
+                    b.Property<int>("PartOfSchoolProgramAtGrade");
 
                     b.Property<string>("Publisher")
                         .IsRequired()
@@ -1483,8 +1482,6 @@ namespace Knigosha.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BookId");
-
-                    b.Property<byte?>("QuestionNumber");
 
                     b.Property<int>("QuestionType");
 

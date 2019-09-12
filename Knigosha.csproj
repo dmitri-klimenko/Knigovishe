@@ -11,6 +11,10 @@
     <Compile Remove="Persistence\Migrations\20190828191624_StudentFamilyClassSmallChanges.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20190901203136_empty.cs" />
     <Compile Remove="Persistence\Migrations\20190901203136_empty.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190904211701_Test.cs" />
+    <Compile Remove="Persistence\Migrations\20190904211701_Test.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190912004749_Add_Question_Number_Property.cs" />
+    <Compile Remove="Persistence\Migrations\20190912004749_Add_Question_Number_Property.Designer.cs" />
   </ItemGroup>
 
 
@@ -27,6 +31,8 @@
     <Folder Include="Core\Dtos\" />
     <Folder Include="Core\Repositories\" />
     <Folder Include="Persistence\Repositories\" />
+    <Folder Include="Views\Shared\EditrorTemplates\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 
@@ -43,6 +49,7 @@
     <EmbeddedResource Update="MyAppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MyAppResources.Designer.cs</LastGenOutput>
+      <LogicalName>Knigosha.MyAppResources.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 

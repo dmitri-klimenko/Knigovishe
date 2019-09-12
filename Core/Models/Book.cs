@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace Knigosha.Core.Models
 {
@@ -16,17 +17,12 @@ namespace Knigosha.Core.Models
 
         public string Publisher { get; set; }
 
-        [RegularExpression(@"\d{4}")]
         public string YearPublished { get; set; }
-
-        public string Translator { get; set; }
 
         public BookCategories BookCategory { get; set; }
 
-        [RegularExpression(@"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")]
         public string Isbn1 { get; set; }
 
-        [RegularExpression(@"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")]
         public string Isbn2 { get; set; }
 
         public int NumberOfPages { get; set; }
@@ -35,6 +31,7 @@ namespace Knigosha.Core.Models
 
         public string CoverPhoto { get; set; }
 
+        [Display(Name = "Возрастная группа:")]
         public AgeGroups AgeGroup
         {
             get
@@ -57,7 +54,9 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public Grades Grade { get; set; }
+        public Grades? Grade { get; set; }
+
+        public string Translator { get; set; }
 
         public bool HasOpinionQuestion => BookCategory == BookCategories.Fiction;
 
@@ -69,27 +68,26 @@ namespace Knigosha.Core.Models
 
         public string Tags { get; set; }
 
-        public int DateAdded { get; set; }
+        public string DateAdded { get; set; }
 
         public string Description { get; set; }
 
-        public string QuestionsAuthor { get; set; }
+        public  string QuestionsAuthor { get; set; }
 
         public string AddedByAdmin { get; set; }
 
-        public Grades PartOfSchoolProgramAtGrade { get; set; }
+        public Grades? PartOfSchoolProgramAtGrade { get; set; }
 
         public int TimesCompleted { get; set; }
 
         public ICollection<Question> Questions { get; set; }
 
-        public ICollection<Answer> Answers { get; set; }
 
-        private Book()
+        public Book()
         {
+         
             Questions = new Collection<Question>();
-            Answers = new Collection<Answer>();
-            DateAdded = DateTime.Now.Year;
+            DateAdded = DateTime.Now.ToString("d");
         }
     }
 

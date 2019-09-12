@@ -1,7 +1,5 @@
 ﻿using Knigosha.Core.Models;
 using Knigosha.Core.ViewModels.ManageViewModels;
-using Knigosha.Extensions;
-using Knigosha.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Knigosha.Utilities;
 
 namespace Knigosha.Controllers
 {
