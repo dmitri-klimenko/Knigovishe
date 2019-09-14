@@ -1,0 +1,46 @@
+﻿@model Knigosha.Core.Models.Text
+
+@{
+    ViewData["Title"] = "Детали текста";
+}
+<partial name="_DashboardPartial" />
+<div id="textDetail">
+    <h4>Детали текста</h4>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Namespace)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Namespace)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Key)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Key)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class="break-word col-sm-8">
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.DateAdded)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DateAdded)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.DateEdited)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DateEdited)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary" >Редактировать</a> 
+    <a style="margin-left: 20px" asp-action="Index" class="btn btn btn-light" >Назад</a>
+</div>

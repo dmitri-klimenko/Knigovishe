@@ -29,6 +29,7 @@ namespace Knigosha.Persistence
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<School> Schools { get; set; }
+        public DbSet<Text> Texts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -134,6 +135,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new CountryConfiguration());
             builder.ApplyConfiguration(new CityConfiguration());
             builder.ApplyConfiguration(new SchoolConfiguration());
+            builder.ApplyConfiguration(new TextConfiguration());
             base.OnModelCreating(builder);
         }
     }

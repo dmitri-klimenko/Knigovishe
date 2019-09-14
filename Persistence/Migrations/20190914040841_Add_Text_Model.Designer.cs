@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190914040841_Add_Text_Model")]
+    partial class Add_Text_Model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,8 +195,6 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired();
 
                     b.Property<string>("DateAdded");
-
-                    b.Property<string>("DateEdited");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -1482,10 +1482,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("BookId");
 
-                    b.Property<string>("DateAdded");
-
-                    b.Property<string>("DateEdited");
-
                     b.Property<byte?>("QuestionNumber");
 
                     b.Property<int>("QuestionType");
@@ -1564,10 +1560,6 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("DateAdded");
-
-                    b.Property<string>("DateEdited");
-
                     b.Property<string>("Discount")
                         .HasMaxLength(3);
 
@@ -1618,10 +1610,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<string>("DateAdded");
-
-                    b.Property<string>("DateEdited");
 
                     b.Property<string>("Key")
                         .IsRequired()

@@ -355,6 +355,10 @@ nav a:-webkit-any-link:hover {
     margin-top: 15px
 }
 
+#textDetail {
+    margin-top: 15px
+}
+
 /* tables */
 
 .table {
@@ -407,6 +411,14 @@ dt {
     width: 14%
 }
 .addedDateColumn {
+    width: 13%
+}
+
+.namespaceColumn {
+    width: 13%
+}
+
+.keyColumn {
     width: 13%
 }
 .break-word {

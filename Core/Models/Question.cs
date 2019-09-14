@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Knigosha.Core.Models.Enums;
 using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
@@ -31,6 +32,17 @@ namespace Knigosha.Core.Models
         public QuestionTypes? QuestionType { get; set; }
 
         public byte? QuestionNumber { get; set; }
+
+        [Display(Name = "Добавлен:")]
+        public string DateAdded { get; set; }
+
+        [Display(Name = "Редактирован:")]
+        public string DateEdited { get; set; }
+
+        public Question()
+        {
+            DateAdded = DateTime.Now.ToString("d");
+        }
     }
 }
 

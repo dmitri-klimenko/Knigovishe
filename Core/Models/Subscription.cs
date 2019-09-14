@@ -1,4 +1,5 @@
-﻿using Knigosha.Core.Models.Enums;
+﻿using System;
+using Knigosha.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Knigosha.Core.Models
@@ -53,5 +54,17 @@ namespace Knigosha.Core.Models
 
         [Display(Name = "Текст 3:")]
         public string Text3 { get; set; }
+
+        [Display(Name = "Добавлен:")]
+        public string DateAdded { get; set; }
+
+        [Display(Name = "Редактирован:")]
+        public string DateEdited { get; set; }
+
+        public Subscription()
+        {
+            DateAdded = DateAdded = DateTime.Now.ToString("d");
+        }
+        
     }
 }

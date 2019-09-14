@@ -10,74 +10,72 @@ using Knigosha.Persistence;
 
 namespace Knigosha.Controllers
 {
-    public class SubscriptionsController : Controller
+    public class TextsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SubscriptionsController(ApplicationDbContext context)
+        public TextsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Subscriptions.ToListAsync());
+            return View(await _context.Texts.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var subscription = await _context.Subscriptions
+            var text = await _context.Texts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (subscription == null) return NotFound();
-            return View(subscription);
+            if (text == null) return NotFound();
+            return View(text);
         }
 
         public IActionResult Create()
         {
-            var subscription = new Subscription();
-            return View(subscription);
+            var text = new Text();
+            return View(text);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubscriptionType, Name, CurrentPrice,OldPrice,Discount,MaxQuizzes,NumberOfStudentProfiles,NumberOfParentProfiles,NumberOfTeacherProfiles,ValidUntil,BankData,Text1,Text2,Text3")] Subscription subscription)
+        public async Task<IActionResult> Create([Bind("Namespace,Key,Content")] Text text)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subscription);
+                _context.Add(text);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(subscription);
+            return View(text);
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound(); 
-
-            var subscription = await _context.Subscriptions.FindAsync(id);
-            if (subscription == null) return NotFound();
-            return View(subscription);
+            if (id == null) return NotFound();
+            var text = await _context.Texts.FindAsync(id);
+            if (text == null) return NotFound();
+            return View(text);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name, SubscriptionType,CurrentPrice,OldPrice,Discount,MaxQuizzes,NumberOfStudentProfiles,NumberOfParentProfiles,NumberOfTeacherProfiles,ValidUntil,BankData,Text1,Text2,Text3")] Subscription subscription)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Namespace,Key,Content")] Text text)
         {
-            if (id != subscription.Id) return NotFound(); 
-
+            if (id != text.Id) return NotFound();
             if (ModelState.IsValid)
             {
-                subscription.DateEdited = DateTime.Now.ToString("d");
+                text.DateEdited = DateTime.Now.ToString("d");
                 try
                 {
-                    _context.Update(subscription);
+                    _context.Update(text);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SubscriptionExists(subscription.Id))
+                    if (!TextExists(text.Id))
                     {
                         return NotFound();
                     }
@@ -88,31 +86,31 @@ namespace Knigosha.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(subscription);
+            return View(text);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-            var subscription = await _context.Subscriptions
+                var text = await _context.Texts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (subscription == null) return NotFound();
-            return View(subscription);
+            if (text == null) return NotFound();
+            return View(text);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subscription = await _context.Subscriptions.FindAsync(id);
-            _context.Subscriptions.Remove(subscription);
+            var text = await _context.Texts.FindAsync(id);
+            _context.Texts.Remove(text);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SubscriptionExists(int id)
+        private bool TextExists(int id)
         {
-            return _context.Subscriptions.Any(e => e.Id == id);
+            return _context.Texts.Any(e => e.Id == id);
         }
     }
 }

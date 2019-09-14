@@ -21,6 +21,7 @@ namespace Knigosha.Persistence
         DbSet<Country> Countries { get; set; }
         DbSet<City> Cities { get; set; }
         DbSet<School> Schools { get; set; }
+        DbSet<Text> Texts { get; set; }
 
     }
 }

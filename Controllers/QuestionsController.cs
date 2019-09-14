@@ -86,6 +86,7 @@ namespace Knigosha.Controllers
             
             if (ModelState.IsValid)
             {
+                question.DateEdited = DateTime.Now.ToString("d");
                 try
                 {
                     _context.Update(question);

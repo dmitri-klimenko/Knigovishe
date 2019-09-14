@@ -104,7 +104,12 @@ namespace Knigosha.Core.Models
 
         public string Tags { get; set; }
 
+        [Display(Name = "Добавлена:")]
         public string DateAdded { get; set; }
+
+        [Display(Name = "Редактирована:")]
+
+        public string DateEdited { get; set; }
 
         public string Description { get; set; }
 
@@ -117,7 +122,6 @@ namespace Knigosha.Core.Models
         public int TimesCompleted { get; set; }
 
         public ICollection<Question> Questions { get; set; }
-
 
         public Book()
         {

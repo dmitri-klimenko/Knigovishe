@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Knigosha.Core.Models.Text>
+
+@{
+    ViewData["Title"] = "Тексты";
+}
+<partial name="_DashboardPartial" />
+<a asp-controller="Texts" asp-action="Create" class="btn btn btn-light adminButton">Новый текст</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th >
+                @Html.DisplayNameFor(model => model.Namespace)
+            </th>
+            <th >
+                @Html.DisplayNameFor(model => model.Key)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateEdited)
+            </th>
+            <th class="deleteEditColumn"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Namespace)</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Key)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateAdded)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateEdited)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a> 
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

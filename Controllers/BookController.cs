@@ -155,6 +155,7 @@ namespace Knigosha.Controllers
                 book.NumberOfPages = editBookVm.NumberOfPages;
                 book.YearPublished = editBookVm.YearPublished;
                 book.Grade = editBookVm.Grade;
+                book.DateEdited = DateTime.Now.ToString("d");
                 try
                 {
                     await _context.SaveChangesAsync();
