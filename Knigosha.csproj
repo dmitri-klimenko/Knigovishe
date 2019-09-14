@@ -15,6 +15,8 @@
     <Compile Remove="Persistence\Migrations\20190904211701_Test.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20190912004749_Add_Question_Number_Property.cs" />
     <Compile Remove="Persistence\Migrations\20190912004749_Add_Question_Number_Property.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190912214640_AddPropertyToSubscription.cs" />
+    <Compile Remove="Persistence\Migrations\20190912214640_AddPropertyToSubscription.Designer.cs" />
   </ItemGroup>
 
 

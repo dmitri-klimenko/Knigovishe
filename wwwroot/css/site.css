@@ -412,3 +412,6 @@ dt {
 .break-word {
     word-break: break-word
 }
+input::placeholder {
+    font-weight:lighter;
+}

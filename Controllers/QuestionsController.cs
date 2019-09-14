@@ -56,15 +56,15 @@ namespace Knigosha.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Text,RightAnswer,WrongAnswer1,WrongAnswer2,QuestionType")] Question question)
+        public async Task<IActionResult> Create([Bind("BookId, Text,RightAnswer,WrongAnswer1,WrongAnswer2,QuestionType")] Question question)
         {
             if (ModelState.IsValid)
             {
-                //var book = await _context.Books.SingleAsync(b => b.Id == question.BookId);
-                //book.Questions.Add(question);
+                var book = await _context.Books.SingleAsync(b => b.Id == question.BookId);
+                book.Questions.Add(question);
                 _context.Add(question);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Create", "Questions", new {id = question.BookId});
+                return RedirectToAction("Index", "Questions", new {id = question.BookId});
             }
             return View(question);
         }

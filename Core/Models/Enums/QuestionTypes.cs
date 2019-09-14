@@ -5,12 +5,12 @@ namespace Knigosha.Core.Models.Enums
     public enum QuestionTypes
     {
         [Display(Name = "Вопрос о содержании")]
-        Content,
+        Content =1,
 
         [Display(Name = "Вопрос на понимание")]
-        Comprehension,
+        Comprehension =2,
 
         [Display(Name = "Вопрос о мнении")]
-        Opinion
+        Opinion =3
     }
 }

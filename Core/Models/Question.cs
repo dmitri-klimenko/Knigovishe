@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Knigosha.Core.Models.Enums;
+using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
 namespace Knigosha.Core.Models
 {
@@ -12,27 +13,24 @@ namespace Knigosha.Core.Models
         [Required(ErrorMessage = "Пожалуйста, введите текст вопроса")]
         [Display(Name = "Текст вопроса:")]
         public string Text { get; set; }
-      
-
-        [Required(ErrorMessage = "Пожалуйста, введите правильный ответ")]
+        
+        [RequiredIf("QuestionType == 1 || QuestionType == 2", ErrorMessage = "Пожалуйста, введите правильный ответ")]
         [Display(Name = "Правильный ответ:")]
         public string RightAnswer { get; set; }
 
-
-        [Required(ErrorMessage = "Пожалуйста, введите первый неправильный ответ")]
+        [RequiredIf("QuestionType == 1 || QuestionType == 2", ErrorMessage = "Пожалуйста, введите первый неправильный ответ")]
         [Display(Name = "Первый неправильный ответ:")]
         public string WrongAnswer1 { get; set; }
 
-        [Required(ErrorMessage = "Пожалуйста, введите второй неправильный ответ")]
-        [Display(Name = "Второй неправильный ответ::")]
+        [RequiredIf("QuestionType == 1 || QuestionType == 2", ErrorMessage = "Пожалуйста, введите второй неправильный ответ")]
+        [Display(Name = "Второй неправильный ответ:")]
         public string WrongAnswer2 { get; set; }
-
 
         [Required(ErrorMessage = "Пожалуйста, выберите тип вопроса")]
         [Display(Name = "Тип вопроса:")]
         public QuestionTypes? QuestionType { get; set; }
 
-        public byte?  QuestionNumber { get; set; }
+        public byte? QuestionNumber { get; set; }
     }
 }
 

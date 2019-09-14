@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190912202013_ChangesInSubscription")]
+    partial class ChangesInSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,6 +207,10 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired();
 
                     b.Property<string>("Isbn2");
+
+                    b.Property<int>("NumberOfComprehensionQuestions");
+
+                    b.Property<int>("NumberOfContentQuestions");
 
                     b.Property<int>("NumberOfPages");
 
@@ -1565,22 +1571,21 @@ namespace Knigosha.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<int>("Name")
-                        .HasMaxLength(255);
-
                     b.Property<string>("NumberOfParentProfiles")
+                        .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
                     b.Property<string>("NumberOfStudentProfiles")
                         .HasMaxLength(2);
 
                     b.Property<string>("NumberOfTeacherProfiles")
+                        .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
                     b.Property<string>("OldPrice")
                         .HasMaxLength(255);
 
-                    b.Property<int>("SubscriptionType");
+                    b.Property<int?>("SubscriptionType");
 
                     b.Property<string>("Text1")
                         .HasMaxLength(255);

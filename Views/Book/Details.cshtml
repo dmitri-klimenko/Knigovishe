@@ -8,8 +8,9 @@
     <img src="~/uploads/@Model.CoverPhoto" id="detailsCoverPhoto" alt="cover photo">
     <hr />
     <dl class="row">
-        <dt class = "col-sm-4">
-            Название:        </dt>
+        <dt class="col-sm-4">
+            Название:
+        </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Title)
         </dd>
@@ -26,7 +27,7 @@
             @Html.DisplayFor(model => model.Publisher)
         </dd>
         <dt class = "col-sm-4">
-      Год издания:
+           Год издания:
         </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.YearPublished)
@@ -72,18 +73,29 @@
         </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Grade)
+        </dd> 
+        <dt class = "col-sm-4">
+            Возрастная категория:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.AgeGroup)
         </dd>
         <dt class = "col-sm-4">
-           Вопросов о содержании
+           Вопросов о содержании:
         </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.NumberOfContentQuestions)
         </dd>
         <dt class="col-sm-4">
-            Вопросоа на понимание:
+            Вопросов на понимание:
         </dt>
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.NumberOfComprehensionQuestions)
+        </dd><dt class="col-sm-4">
+            Вопросов о мнении:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.NumberOfOpinionQuestions)
         </dd>
         <dt class = "col-sm-4">
             Краткая форма:

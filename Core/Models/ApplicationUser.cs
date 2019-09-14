@@ -52,8 +52,6 @@ namespace Knigosha.Core.Models
                 return ageGroup;
             }
         }
-
-
         public int? NumberOfCreatedBooks { get; set; }
 
         public int? NumberPointsForCreatedBooks { get; set; }

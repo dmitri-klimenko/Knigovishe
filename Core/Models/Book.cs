@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace Knigosha.Core.Models
 {
@@ -58,11 +59,46 @@ namespace Knigosha.Core.Models
 
         public string Translator { get; set; }
 
-        public bool HasOpinionQuestion => BookCategory == BookCategories.Fiction;
+        public int NumberOfContentQuestions
+        {
+            get
+            {
+                var count = 0;
+                foreach (var question in Questions)
+                {
+                    if (question.QuestionType == QuestionTypes.Content) count += 1;
+                }
 
-        public int NumberOfContentQuestions { get; set; }
+                return count;
+            }
+        }
 
-        public int NumberOfComprehensionQuestions { get; set; }
+        public int NumberOfComprehensionQuestions
+        {
+            get
+            {
+                var count = 0;
+                foreach (var question in Questions)
+                {
+                    if (question.QuestionType == QuestionTypes.Comprehension) count += 1;
+                }
+
+                return count;
+            }
+        }
+
+        public int NumberOfOpinionQuestions {
+            get 
+            {
+                var count = 0;
+                foreach (var question in Questions)
+                {
+                    if (question.QuestionType == QuestionTypes.Opinion) count += 1;
+                }
+
+                return count;
+            }
+        }
 
         public bool IsShortForm { get; set; }
 
