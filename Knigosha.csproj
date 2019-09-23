@@ -17,6 +17,20 @@
     <Compile Remove="Persistence\Migrations\20190912004749_Add_Question_Number_Property.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20190912214640_AddPropertyToSubscription.cs" />
     <Compile Remove="Persistence\Migrations\20190912214640_AddPropertyToSubscription.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190917032955_Chack.cs" />
+    <Compile Remove="Persistence\Migrations\20190917032955_Chack.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190917033149_Check.cs" />
+    <Compile Remove="Persistence\Migrations\20190917033149_Check.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190922230413_DeleteApplicationUserFromApplicationDbContext.cs" />
+    <Compile Remove="Persistence\Migrations\20190922230413_DeleteApplicationUserFromApplicationDbContext.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190923054936_check2.cs" />
+    <Compile Remove="Persistence\Migrations\20190923054936_check2.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190923063559_delete.cs" />
+    <Compile Remove="Persistence\Migrations\20190923063559_delete.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190923065139_addRoles.cs" />
+    <Compile Remove="Persistence\Migrations\20190923065139_addRoles.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20190923182315_Checking.cs" />
+    <Compile Remove="Persistence\Migrations\20190923182315_Checking.Designer.cs" />
   </ItemGroup>
 
 
@@ -29,12 +43,10 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\Api\" />
     <Folder Include="Core\Dtos\" />
     <Folder Include="Core\Repositories\" />
     <Folder Include="Persistence\Repositories\" />
     <Folder Include="Views\Shared\EditrorTemplates\" />
-    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 

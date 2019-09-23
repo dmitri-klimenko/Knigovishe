@@ -4,6 +4,7 @@ namespace Knigosha.Core.Models.Enums
 {
     public enum StatusTypes
     {
+  
         [DisplayName("Ожидание платежа")]
         Waiting,
         [DisplayName("Абонемент оплачен")]

@@ -1,6 +1,7 @@
 ﻿using Knigosha.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Knigosha.Controllers
 {
@@ -15,6 +16,7 @@ namespace Knigosha.Controllers
         {
             return View();
         }
+
 
         public IActionResult Dashboard()
         {

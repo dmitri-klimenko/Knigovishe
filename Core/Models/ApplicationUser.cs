@@ -3,11 +3,15 @@ using Knigosha.Core.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Knigosha.Core.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+
         public UserTypes UserType { get; set; }
 
         public string Name { get; set; }
@@ -28,14 +32,21 @@ namespace Knigosha.Core.Models
 
         public string Country { get; set; }
 
+        public string School { get; set; }
+
         public string Parallel { get; set; }
 
         public Student Student { get; set; }
+
         public Family Family { get; set; }
+
         public Class Class { get; set; }
 
-
         public Grades Grade { get; set; }
+
+        public int NumberOfCreatedBooks { get; set; }
+
+        public int PointsForCreatedBooks { get; set; }
 
         public AgeGroups AgeGroup
         {
@@ -52,13 +63,47 @@ namespace Knigosha.Core.Models
                 return ageGroup;
             }
         }
-        public int? NumberOfCreatedBooks { get; set; }
 
-        public int? NumberPointsForCreatedBooks { get; set; }
+        public int PercentageOfRightResponses
+        {
+            get
+            {
+                var percentageSum = Answers.Sum(answer => PercentageOfRightResponses);
+                return NumberOfAnswers != 0 ? percentageSum / NumberOfAnswers : 0;
+            }
+        }
 
-        public bool? SubscribedToNewsletter { get; set; }
+        public int PointsForAnswers => Answers.Sum(answer => answer.Points);
+
+        public int Points =>  PointsForAnswers + PointsForCreatedBooks;
+
+        public int NumberOfAnswers => Answers.Count;
+
+        public string Level
+        {
+            get
+            {
+                string levelName = null;
+                if (Points <= 45) levelName = "новичок";
+                else if (Points > 45 || Points <= 90) levelName = "освоившийся";
+                else if (Points > 90  || Points <= 135) levelName = "поднаторелый";
+                else if (Points > 135  || Points <= 180) levelName = "умелый";
+                else if (Points > 180  || Points <= 225) levelName = "профи";
+                else if (Points > 225  || Points <= 270) levelName = "мастер";
+                else if (Points > 270) levelName = "герой";
+                return levelName;
+            }
+        }
+
+        public int NumberOfReceivedMessages => ReceivedMessages.Count;
+
+        public bool SubscribedToNewsletter { get; set; }
 
         public string DateAdded { get; set; }
+
+        public string DateEdited { get; set; }
+
+        public string LastLogin { get; set; }
 
         public ICollection<UserSubscription> UserSubscriptions { get; set; }
 
@@ -87,37 +132,6 @@ namespace Knigosha.Core.Models
             DateAdded = DateTime.Now.ToString("d");
 
         }
-
-        public void OrderSubscription(Subscription subscription)
-        {
-            UserSubscriptions.Add(new UserSubscription(this, subscription));
-        }
-
-        public void SentMessage(SentMessage message, ApplicationUser receiver)
-        {
-            SentMessages.Add(new SentMessage(this, receiver));
-        }
-
-        public void MarkBook(Book book, ApplicationUser user)
-        {
-            MarkedBooks.Add(new MarkedBook(this, book));
-        }
-
-        public void CreateBookNote(Book book, ApplicationUser user)
-        {
-            BookNotes.Add(new BookNote(this, book));
-        }
-
-        public void RateBook(Book book, ApplicationUser user)
-        {
-            BookRatings.Add(new BookRating(this, book));
-        }
-
-        public void AnswerBook(Book book, ApplicationUser user)
-        {
-            Answers.Add(new Answer(this, book));
-        }
-
 
     }
 

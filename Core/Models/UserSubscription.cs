@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 
 namespace Knigosha.Core.Models
 {
@@ -24,7 +25,7 @@ namespace Knigosha.Core.Models
 
         public string Note { get; set; }
 
-        public StatusTypes Status { get; set; }
+        public StatusTypes? Status { get; set; }
 
         //2019/2020
         public string SchoolYear
@@ -49,67 +50,7 @@ namespace Knigosha.Core.Models
             ActivationKeys = new List<ActivationKey>();
             User = user ?? throw new ArgumentNullException(nameof(User));
             Subscription = subscription ?? throw new ArgumentNullException(nameof(Subscription));
-
-            var subscriptionType = subscription.SubscriptionType;
-
-            switch (subscriptionType)
-            {
-                case SubscriptionTypes.FreeStudent:
-                    var studentActivationKey = new ActivationKey();
-                    ActivationKeys.Add(studentActivationKey);
-                    break;
-                case SubscriptionTypes.FreeFamily:
-                    for (var i = 1; i <= 5; i++)
-                    {
-                        var familyActivationKey = new ActivationKey();
-                        ActivationKeys.Add(familyActivationKey);
-                    }
-                    break;
-                case SubscriptionTypes.FreeClass:
-                    for (var i = 1; i <= 31; i++)
-                    {
-                        var classActivationKey = new ActivationKey();
-                        ActivationKeys.Add(classActivationKey);
-                    }
-                    break;
-                default:
-                    Status = StatusTypes.Waiting;
-                    OrderedOn = DateTime.Now.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
-                    break;
-            }
-
+            
         }
-
-        public void CreateActivationKeys(UserSubscription userSubscription)
-        {
-            var paidSubscription = userSubscription;
-            var userSubscriptionType = userSubscription.Subscription.SubscriptionType;
-            switch (userSubscriptionType)
-            {
-                case SubscriptionTypes.Student:
-                    paidSubscription.Status = StatusTypes.Paid;
-                    var studentActivationKey = new ActivationKey();
-                    paidSubscription.ActivationKeys.Add(studentActivationKey);
-                    break;
-                case SubscriptionTypes.Family:
-                    paidSubscription.Status = StatusTypes.Paid;
-                    for (var i = 1; i <= 5; i++)
-                    {
-                        var familyActivationKey = new ActivationKey();
-                        paidSubscription.ActivationKeys.Add(familyActivationKey);
-                    }
-                    break;
-                case SubscriptionTypes.Class:
-                    paidSubscription.Status = StatusTypes.Paid;
-                    for (var i = 1; i <= 31; i++)
-                    {
-                        var classActivationKey = new ActivationKey();
-                        paidSubscription.ActivationKeys.Add(classActivationKey);
-                    }
-                    break;
-            }
-
-        }
-
     }
 }

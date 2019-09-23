@@ -6,8 +6,8 @@ namespace Knigosha.Core.Models.Enums
     public enum BookCategories
     {
         [Display(Name = "Художественная литература")]
-        Fiction,
+        Fiction = 1,
         [Display(Name = "Научно-познавательная литература")]
-        Nonfiction
+        Nonfiction = 2
     }
 }

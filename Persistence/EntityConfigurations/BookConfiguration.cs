@@ -14,7 +14,7 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.HasKey(b => b.Id);
 
             builder.Property(b => b.Title).IsRequired().HasMaxLength(255);
-            builder.Property(b => b.BookAuthor).IsRequired().HasMaxLength(255);
+            builder.Property(b => b.BookAuthor).HasMaxLength(255);
             builder.Property(b => b.Publisher).IsRequired().HasMaxLength(255);
             builder.Property(b => b.YearPublished).IsRequired().HasMaxLength(4);
             builder.Property(b => b.BookCategory).IsRequired();
@@ -29,6 +29,16 @@ namespace Knigosha.Persistence.EntityConfigurations
                 .WithOne(q => q.Book)
                 .HasForeignKey(q => q.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(b => b.Answers)
+                .WithOne(q => q.Book)
+                .HasForeignKey(q => q.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(b => b.BookRatings)
+                .WithOne(q => q.Book)
+                .HasForeignKey(q => q.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

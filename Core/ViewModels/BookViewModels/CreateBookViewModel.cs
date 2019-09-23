@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
 using Microsoft.AspNetCore.Http;
+using UoN.ExpressiveAnnotations.NetCore.Attributes;
 
 namespace Knigosha.Core.ViewModels.BookViewModels
 {
@@ -16,7 +17,7 @@ namespace Knigosha.Core.ViewModels.BookViewModels
         [Display(Name = "*Название:")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Пожалуйста, введите полное имя автора книги.")]
+        [RequiredIf("BookCategory == 1", ErrorMessage = "Пожалуйста, введите полное имя автора книги.")]
         [Display(Name = "*Автор:")]
         public string BookAuthor { get; set; }
 

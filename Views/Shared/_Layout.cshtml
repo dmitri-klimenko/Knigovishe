@@ -42,7 +42,13 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Help">Помощь</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Администрация</a>
+                            @*@if (User.Identity.IsAuthenticated)
+                            {
+                                @if (User.IsInRole("Admin"))
+                                {*@
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Администрация</a>
+                                @*}
+                            }*@
                         </li>
                     </ul>
                 </div>

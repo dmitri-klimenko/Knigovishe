@@ -32,7 +32,10 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-            var book = await _context.Books.Include(b=> b.Questions)
+            var book = await _context.Books
+                .Include(b=> b.Questions)
+                .Include(b => b.Answers)
+                .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null) return NotFound();
             return View(book);

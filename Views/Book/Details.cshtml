@@ -66,7 +66,7 @@
             Рейтинг:
         </dt>
         <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.CalculatedRating)
+            @Html.DisplayFor(model => model.AverageRating)
         </dd>
         <dt class = "col-sm-4">
             Класс:
@@ -81,21 +81,52 @@
             @Html.DisplayFor(model => model.AgeGroup)
         </dd>
         <dt class = "col-sm-4">
-           Вопросов о содержании:
+            Вопросов о содержании (должно быть):
         </dt>
         <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfContentQuestions)
+            @Html.DisplayFor(model => model.ContentQuestions)
+        </dd>
+        <dt class = "col-sm-4">
+           Вопросов о содержании (cоздано):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ContentQuestionsCreated)
         </dd>
         <dt class="col-sm-4">
-            Вопросов на понимание:
+            Вопросов на понимание (должно быть):
         </dt>
         <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfComprehensionQuestions)
-        </dd><dt class="col-sm-4">
-            Вопросов о мнении:
+            @Html.DisplayFor(model => model.ComprehensionQuestions)
+        </dd>
+        <dt class="col-sm-4">
+            Вопросов на понимание (cоздано):
         </dt>
         <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfOpinionQuestions)
+            @Html.DisplayFor(model => model.ComprehensionQuestionsCreated)
+        </dd>
+        <dt class="col-sm-4">
+            Вопросов о мнении (должно быть):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.OpinionQuestions)
+        </dd>
+        <dt class="col-sm-4">
+           Вопросов о мнении (cоздано):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.OpinionQuestionsCreated)
+        </dd>
+        <dt class="col-sm-4">
+            Очков за правильный ответ:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.PointsForRightAnswer)
+        </dd>
+        <dt class="col-sm-4">
+            Очков за неправильный ответ:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.PointsForWrongAnswer)
         </dd>
         <dt class = "col-sm-4">
             Краткая форма:

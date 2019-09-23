@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Knigosha.Core.ViewModels.UserViewModels.IndexUserViewModel>
+@{
+    ViewData["Title"] = "Ползователи";
+}
+<partial name="_DashboardPartial" />
+<table id="userTable" class="table table-bordered">
+    <thead>
+    <tr>
+        <th class="emailColumn">
+            Email
+        </th>
+        <th class="userAddedDateColumn">
+            Добавлен
+        </th>
+        <th class="userEditedColumn">
+            Редактирован
+        </th>
+        <th class="loginColumn">
+            Входил
+        </th>
+        <th class="userTypeColumn">
+            Тип
+        </th>
+        <th class="roleColumn">
+            Роль
+        </th>
+        <th class="deleteColumn"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Email)</a>
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.DateAdded)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateEdited)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLogin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleNames[0])
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+

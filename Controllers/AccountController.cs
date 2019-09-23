@@ -7,13 +7,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Knigosha.Controllers.Api;
+using Knigosha.Core.ViewModels;
+using Knigosha.Core.ViewModels.UserViewModels;
 using Knigosha.Persistence;
 using Knigosha.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Knigosha.Controllers
 {
@@ -67,6 +72,19 @@ namespace Knigosha.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // save last login date
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        return NotFound("Unable to load user for update last login.");
+                    }
+                    user.LastLogin = DateTime.Now.ToString("g");
+                    var lastLoginResult = await _userManager.UpdateAsync(user);
+                    if (!lastLoginResult.Succeeded)
+                    {
+                        throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                            $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                    }
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -130,6 +148,14 @@ namespace Knigosha.Controllers
 
             if (result.Succeeded)
             {
+                // save last login
+                user.LastLogin = DateTime.Now.ToString("g"); 
+                var lastLoginResult = await _userManager.UpdateAsync(user);
+                if (!lastLoginResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                        $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                }
                 _logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
                 return RedirectToLocal(returnUrl);
             }
@@ -184,6 +210,13 @@ namespace Knigosha.Controllers
 
             if (result.Succeeded)
             {
+                user.LastLogin = DateTime.Now.ToString("g");
+                var lastLoginResult = await _userManager.UpdateAsync(user);
+                if (!lastLoginResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                        $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                }
                 _logger.LogInformation("User with ID {UserId} logged in with a recovery code.", user.Id);
                 return RedirectToLocal(returnUrl);
             }
@@ -248,9 +281,9 @@ namespace Knigosha.Controllers
                         {
                             Name = model.Name,
                             Surname = model.Surname,
-                            Password = model.Password,
                             UserType = model.UserType,
                             UserName = model.UserName,
+                            Password = model.Password,
                             Email = model.Email ?? model.ParentEmail,
                             PhoneNumber = model.PhoneNumber,
                             City = model.MainCityRussia ?? model.CityInput,
@@ -258,13 +291,14 @@ namespace Knigosha.Controllers
                             Grade = model.Grade,
                             Parallel = model.Parallel,
                             Country = model.Country,
-
-
-
+                            SubscribedToNewsletter = model.SubscribedToNewsletter
                         };
+                     
                         var result = await _userManager.CreateAsync(student, model.Password);
+                        await _userManager.AddToRoleAsync(student, "User");
                         if (result.Succeeded)
                         {
+                            await new UserSubscriptionsController(_context).CreateFree(student);
                             await _signInManager.SignInAsync(student, isPersistent: false);
                             _logger.LogInformation("Student created a new account with password.");
                             return RedirectToLocal(returnUrl);
@@ -272,11 +306,79 @@ namespace Knigosha.Controllers
                         AddErrors(result);
                     }
                     break;
+
+                case (UserTypes.Parent):
+                    if (ModelState.IsValid)
+                    {
+                        var family = new Family
+                        {
+                            Name = model.Name,
+                            Surname = model.Surname,
+                            UserType = model.UserType,
+                            UserName = model.UserName,
+                            Password = model.Password,
+                            Email = model.RequiredEmail,
+                            PhoneNumber = model.PhoneNumber,
+                            City = model.MainCityRussia ?? model.CityInput,
+                            Grade = model.Grade,
+                            Country = model.Country,
+                            SubscribedToNewsletter = model.SubscribedToNewsletter
+                        };
+                     
+                        var result = await _userManager.CreateAsync(family, model.Password);
+                        await _userManager.AddToRoleAsync(family, "User");
+                        if (result.Succeeded)
+                        {
+                            // create free UserSubscription
+                            await new UserSubscriptionsController(_context).CreateFree(family);
+                            //add family to group
+                            var group = await _context.AllFamiliesGroup.FirstAsync();
+                            group.Families.Add(family);
+                            await _context.SaveChangesAsync();
+                            await _signInManager.SignInAsync(family, isPersistent: false);
+                            _logger.LogInformation("Family created a new account with password.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        AddErrors(result);
+                    }
+                    break;
+
+                case (UserTypes.Teacher):
+                    if (ModelState.IsValid)
+                    {
+                        var schoolClass = new Class
+                        {
+                            Name = model.Name,
+                            Surname = model.Surname,
+                            UserType = model.UserType,
+                            UserName = model.UserName,
+                            Password = model.Password,
+                            Email = model.RequiredEmail,
+                            PhoneNumber = model.PhoneNumber,
+                            City = model.MainCityRussia ?? model.CityInput,
+                            Grade = model.Grade,
+                            Country = model.Country,
+                            SubscribedToNewsletter = model.SubscribedToNewsletter
+                        };
+
+                        var result = await _userManager.CreateAsync(schoolClass, model.Password);
+                        await _userManager.AddToRoleAsync(schoolClass, "User");
+                        if (result.Succeeded)
+                        {
+                            // create free UserSubscription
+                            await new UserSubscriptionsController(_context).CreateFree(schoolClass);
+                            //add class to group
+                            var group = await _context.AllClassesGroup.FirstAsync();
+                            group.Classes.Add(schoolClass);
+                            await _context.SaveChangesAsync();
+                            await _signInManager.SignInAsync(schoolClass, isPersistent: false);
+                            _logger.LogInformation("Family created a new account with password.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        AddErrors(result);
+                    }
+                    break;
             }
-
-
-
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -320,6 +422,20 @@ namespace Knigosha.Controllers
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
+                // save last login 
+                var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+                if (user == null)
+                {
+                    return NotFound("Unable to load user for update last login.");
+                }
+                user.LastLogin = DateTime.Now.ToString("g");
+                var lastLoginResult = await _userManager.UpdateAsync(user);
+                if (!lastLoginResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                        $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                }
+                //
                 _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
                 return RedirectToLocal(returnUrl);
             }
@@ -477,8 +593,6 @@ namespace Knigosha.Controllers
             return View();
         }
 
-        #region Helpers
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -499,6 +613,6 @@ namespace Knigosha.Controllers
             }
         }
 
-        #endregion
     }
+
 }

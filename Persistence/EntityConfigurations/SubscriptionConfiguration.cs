@@ -15,7 +15,7 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.Property(st => st.SubscriptionType).IsRequired();
             builder.Property(st => st.Name).HasMaxLength(255).IsRequired();
             builder.Property(st => st.OldPrice).HasMaxLength(255);
-            builder.Property(st => st.Discount).HasMaxLength(3);
+            builder.Property(st => st.Discount).HasMaxLength(4);
             builder.Property(st => st.NumberOfStudentProfiles).HasMaxLength(2);
             builder.Property(st => st.MaxQuizzes).HasMaxLength(255).IsRequired();
             builder.Property(st => st.Text1).HasMaxLength(255);

@@ -20,8 +20,6 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.Property(a => a.Password).IsRequired().HasMaxLength(50);
             builder.Property(a => a.UserName).IsRequired().HasMaxLength(50);
 
-
-
             builder.HasMany(a => a.MarkedBooks)
                 .WithOne(mb => mb.User)
                 .HasForeignKey(mb => mb.UserId)

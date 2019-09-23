@@ -4,11 +4,15 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Knigosha.Core;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace Knigosha.Persistence
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
+        ApplicationUserRole, IdentityUserLogin<string>,
+        IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -30,9 +34,16 @@ namespace Knigosha.Persistence
         public DbSet<City> Cities { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<Text> Texts { get; set; }
+        public DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
+        public DbSet<AllClassesGroup> AllClassesGroup { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+            
+            builder.Entity<AllClassesGroup>().HasData(new AllClassesGroup { Id = 1});
+            builder.Entity<AllFamiliesGroup>().HasData(new AllFamiliesGroup { Id = 1});
+
             var jsonStateList = MyAppResources.CountriesJson;
             var states = JsonConvert.DeserializeObject<List<Country>>(jsonStateList);
             builder.Entity<Country>().HasData(states);
@@ -118,6 +129,8 @@ namespace Knigosha.Persistence
             builder.Entity<School>().HasData(schoolsVladivostok);
 
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.ApplyConfiguration(new ApplicationUserRoleConfiguration());
+            builder.ApplyConfiguration(new ApplicationRoleConfiguration());
             builder.ApplyConfiguration(new AnswerConfiguration());
             builder.ApplyConfiguration(new BookConfiguration());
             builder.ApplyConfiguration(new BookNoteConfiguration());
@@ -136,7 +149,8 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new CityConfiguration());
             builder.ApplyConfiguration(new SchoolConfiguration());
             builder.ApplyConfiguration(new TextConfiguration());
-            base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new AllFamiliesGroupConfiguration());
+            builder.ApplyConfiguration(new AllClassesGroupConfiguration());
         }
     }
 }

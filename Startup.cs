@@ -1,4 +1,6 @@
-﻿using Knigosha.Core.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Knigosha.Core.Models;
 using Knigosha.Persistence;
 using Knigosha.Utilities;
 using Microsoft.AspNetCore.Builder;
@@ -19,15 +21,24 @@ namespace Knigosha
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleCheck = await roleManager.RoleExistsAsync("Admin");
+            var roleCheck2 = await roleManager.RoleExistsAsync("User");
+            if (!roleCheck) await roleManager.CreateAsync(new ApplicationRole("Admin"));
+            if (!roleCheck2) await roleManager.CreateAsync(new ApplicationRole("User"));
+            var user = await userManager.FindByEmailAsync("a@a.com");
+            await userManager.AddToRoleAsync(user, "Admin");
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddExpressiveAnnotations();
-        
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -40,8 +51,7 @@ namespace Knigosha
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Stores.MaxLengthForKeys = 128;
                 options.Password.RequiredLength = 6;
@@ -50,14 +60,15 @@ namespace Knigosha
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
 
-            }).AddEntityFrameworkStores<ApplicationDbContext>()
+            }).AddErrorDescriber<CustomIdentityErrorDescriber>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -83,6 +94,8 @@ namespace Knigosha
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            CreateUserRoles(serviceProvider).Wait();
         }
     }
 }

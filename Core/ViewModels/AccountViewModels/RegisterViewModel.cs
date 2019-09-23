@@ -76,7 +76,7 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
         public string Password { get; set; }
 
         [Display(Name = "Я хочу получать электронную рассылку")]
-        public bool IsSubscribedToNewsletter { get; set; }
+        public bool SubscribedToNewsletter { get; set; }
 
         [Range(typeof(bool), "true", "true", ErrorMessage = "Пожалуйста, отметьте этот флажок")]
         public bool TermsOfUse { get; set; }

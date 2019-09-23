@@ -30,11 +30,21 @@ namespace Knigosha.Core.Models
 
         public QuizTypes QuizType { get; set; }
 
-        public int PercentageOfRightResponses { get; set; }
+        public int Points
+        {
+            get
+            {
+                var result = NumberOfWriteResponses * Book.PointsForRightAnswer -
+                             NumberOfWriteResponses * Book.PointsForWrongAnswer;
+                return result > 0 ? result : 0;
+            }
+        }
 
-        public int PercentageOfWrongResponses { get; set; }
+        public int PercentageOfRightResponses => (NumberOfWriteResponses / Book.NumberOfQuestionsForResponses) * 100;
 
-        public int PercentageOfSkippedQuestions { get; set; }
+        public int PercentageOfWrongResponses => (NumberOfWrongResponses / Book.NumberOfQuestionsForResponses) * 100;
+
+        public int PercentageOfSkippedQuestions => (NumberOfSkippedQuestions / Book.NumberOfQuestionsForResponses) * 100;
 
         protected Answer() { }
 

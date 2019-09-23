@@ -62,7 +62,7 @@ namespace Knigosha.Controllers
             {
                 var book = await _context.Books.SingleAsync(b => b.Id == question.BookId);
                 book.Questions.Add(question);
-                _context.Add(question);
+                _context.Add(question); // or enough _context.Update(book)
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Questions", new {id = question.BookId});
             }

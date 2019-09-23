@@ -25,6 +25,8 @@ namespace Knigosha.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ActivationKeyType");
+
                     b.Property<string>("Code");
 
                     b.Property<int>("UserSubscriptionId");
@@ -34,6 +36,40 @@ namespace Knigosha.Persistence.Migrations
                     b.HasIndex("UserSubscriptionId");
 
                     b.ToTable("ActivationKeys");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.AllClassesGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AllCLassesGroup");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        });
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.AllFamiliesGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AllFamiliesGroup");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1
+                        });
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
@@ -54,12 +90,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("NumberOfWrongResponses");
 
-                    b.Property<int>("PercentageOfRightResponses");
-
-                    b.Property<int>("PercentageOfSkippedQuestions");
-
-                    b.Property<int>("PercentageOfWrongResponses");
-
                     b.Property<int>("QuizType");
 
                     b.Property<string>("ReasonForRestart");
@@ -69,6 +99,30 @@ namespace Knigosha.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.ApplicationUser", b =>
@@ -89,6 +143,8 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("DateAdded");
 
+                    b.Property<string>("DateEdited");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
@@ -101,6 +157,8 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("FamilyId");
 
                     b.Property<int>("Grade");
+
+                    b.Property<string>("LastLogin");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -116,9 +174,7 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
-                    b.Property<int?>("NumberOfCreatedBooks");
-
-                    b.Property<int?>("NumberPointsForCreatedBooks");
+                    b.Property<int>("NumberOfCreatedBooks");
 
                     b.Property<string>("Parallel");
 
@@ -134,11 +190,15 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Photo");
 
+                    b.Property<int>("PointsForCreatedBooks");
+
+                    b.Property<string>("School");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<string>("StudentId");
 
-                    b.Property<bool?>("SubscribedToNewsletter");
+                    b.Property<bool>("SubscribedToNewsletter");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -148,7 +208,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(256);
+                        .HasMaxLength(50);
 
                     b.Property<int>("UserType");
 
@@ -173,6 +233,19 @@ namespace Knigosha.Persistence.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Knigosha.Core.Models.ApplicationUserRole", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
             modelBuilder.Entity("Knigosha.Core.Models.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -182,12 +255,9 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("AddedByAdmin");
 
                     b.Property<string>("BookAuthor")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.Property<int>("BookCategory");
-
-                    b.Property<float>("CalculatedRating");
 
                     b.Property<string>("CoverPhoto")
                         .IsRequired();
@@ -221,8 +291,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Tags")
                         .IsRequired();
-
-                    b.Property<int>("TimesCompleted");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1569,7 +1637,7 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("DateEdited");
 
                     b.Property<string>("Discount")
-                        .HasMaxLength(3);
+                        .HasMaxLength(4);
 
                     b.Property<string>("MaxQuizzes")
                         .IsRequired()
@@ -1650,7 +1718,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("PaymentType");
 
-                    b.Property<int>("Status");
+                    b.Property<int?>("Status");
 
                     b.Property<int>("SubscriptionId");
 
@@ -68197,30 +68265,6 @@ namespace Knigosha.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -68281,19 +68325,6 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId");
@@ -68315,29 +68346,9 @@ namespace Knigosha.Persistence.Migrations
                 {
                     b.HasBaseType("Knigosha.Core.Models.ApplicationUser");
 
-                    b.Property<int>("NumberOfClassesInAgeGroup");
+                    b.Property<int?>("AllClassesGroupId");
 
-                    b.Property<int>("NumberOfStudentsInClass");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalNumberOfAnswers");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalNumberOfRightResponses");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalPoints");
-
-                    b.Property<string>("School");
-
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalNumberOfAnswers");
-
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalNumberOfRightResponses");
-
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalPoints");
-
-                    b.Property<int>("TotalNumberOfAnswers");
-
-                    b.Property<int>("TotalPercentageOfRightResponses");
-
-                    b.Property<int>("TotalPoints");
+                    b.HasIndex("AllClassesGroupId");
 
                     b.ToTable("Classes");
 
@@ -68348,38 +68359,11 @@ namespace Knigosha.Persistence.Migrations
                 {
                     b.HasBaseType("Knigosha.Core.Models.ApplicationUser");
 
-                    b.Property<int>("NumberOfFamiliesInAgeGroup");
-
-                    b.Property<int>("NumberOfStudentsInFamily");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalNumberOfAnswers")
-                        .HasColumnName("Family_PositionInAgeGroupAccordingToTotalNumberOfAnswers");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalNumberOfRightResponses")
-                        .HasColumnName("Family_PositionInAgeGroupAccordingToTotalNumberOfRightResponses");
-
-                    b.Property<int>("PositionInAgeGroupAccordingToTotalPoints")
-                        .HasColumnName("Family_PositionInAgeGroupAccordingToTotalPoints");
+                    b.Property<int?>("AllFamiliesGroupId");
 
                     b.Property<bool>("ShowAchievements");
 
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalNumberOfAnswers")
-                        .HasColumnName("Family_TopPercentageInAgeGroupAccordingToTotalNumberOfAnswers");
-
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalNumberOfRightResponses")
-                        .HasColumnName("Family_TopPercentageInAgeGroupAccordingToTotalNumberOfRightResponses");
-
-                    b.Property<int>("TopPercentageInAgeGroupAccordingToTotalPoints")
-                        .HasColumnName("Family_TopPercentageInAgeGroupAccordingToTotalPoints");
-
-                    b.Property<int>("TotalNumberOfAnswers")
-                        .HasColumnName("Family_TotalNumberOfAnswers");
-
-                    b.Property<int>("TotalPercentageOfRightResponses")
-                        .HasColumnName("Family_TotalPercentageOfRightResponses");
-
-                    b.Property<int>("TotalPoints")
-                        .HasColumnName("Family_TotalPoints");
+                    b.HasIndex("AllFamiliesGroupId");
 
                     b.ToTable("Families");
 
@@ -68396,30 +68380,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("GreetingName");
 
-                    b.Property<string>("Level");
-
-                    b.Property<int>("NumberOfAnswers");
-
                     b.Property<string>("ParentEmail");
-
-                    b.Property<int>("PercentageOfRightResponses");
-
-                    b.Property<int>("Points");
-
-                    b.Property<int>("PositionInClassAccordingToNumberOfAnswers");
-
-                    b.Property<int>("PositionInClassAccordingToPercentageOfRightResponses");
-
-                    b.Property<int>("PositionInClassAccordingToPoints");
-
-                    b.Property<int>("PositionInFamilyAccordingToNumberOfAnswers");
-
-                    b.Property<int>("PositionInFamilyAccordingToPercentageOfRightResponses");
-
-                    b.Property<int>("PositionInFamilyAccordingToPoints");
-
-                    b.Property<string>("School")
-                        .HasColumnName("Student_School");
 
                     b.HasIndex("ClassStudentBelongsToId");
 
@@ -68441,9 +68402,9 @@ namespace Knigosha.Persistence.Migrations
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("Answers")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
                         .WithMany("Answers")
@@ -68466,6 +68427,19 @@ namespace Knigosha.Persistence.Migrations
                         .HasForeignKey("StudentId");
                 });
 
+            modelBuilder.Entity("Knigosha.Core.Models.ApplicationUserRole", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Knigosha.Core.Models.BookNote", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
@@ -68482,9 +68456,9 @@ namespace Knigosha.Persistence.Migrations
             modelBuilder.Entity("Knigosha.Core.Models.BookRating", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
-                        .WithMany()
+                        .WithMany("BookRatings")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
                         .WithMany("BookRatings")
@@ -68562,7 +68536,7 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Knigosha.Core.Models.ApplicationRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -68584,25 +68558,26 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.Class", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.AllClassesGroup", "AllClassesGroup")
+                        .WithMany("Classes")
+                        .HasForeignKey("AllClassesGroupId");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.Family", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.AllFamiliesGroup", "AllFamiliesGroup")
+                        .WithMany("Families")
+                        .HasForeignKey("AllFamiliesGroupId");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Student", b =>
