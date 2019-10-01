@@ -21,7 +21,9 @@ namespace Knigosha.Core.Models
 
         public string OrderedOn { get; set; }
 
-        public PaymentType PaymentType { get; set; }
+        public string ActivatedOn { get; set; }
+
+        public PaymentType? PaymentType { get; set; }
 
         public string Note { get; set; }
 
@@ -38,8 +40,6 @@ namespace Knigosha.Core.Models
                 return thisYear + '/' + nextYear;
             }
         }
-
-        public bool IsPaid { get; set; }
 
         public List<ActivationKey> ActivationKeys { get; set; }
 

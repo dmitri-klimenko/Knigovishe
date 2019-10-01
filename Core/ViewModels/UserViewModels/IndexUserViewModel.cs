@@ -20,5 +20,9 @@ namespace Knigosha.Core.ViewModels.UserViewModels
 
         public string LastLogin { get; set; }
 
+        public string UserName { get; set; }
+
+        public int LoginTimes { get; set; }
+
     }
 }

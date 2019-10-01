@@ -105,6 +105,8 @@ namespace Knigosha.Core.Models
 
         public string LastLogin { get; set; }
 
+        public int LoginTimes { get; set; }
+
         public ICollection<UserSubscription> UserSubscriptions { get; set; }
 
         public ICollection<Answer> Answers { get; set; }
@@ -118,6 +120,8 @@ namespace Knigosha.Core.Models
         public ICollection<SentMessage> SentMessages { get; set; }
 
         public ICollection<ReceivedMessage> ReceivedMessages { get; set; }
+
+
 
 
         public ApplicationUser()

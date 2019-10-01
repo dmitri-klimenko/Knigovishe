@@ -42,10 +42,9 @@ namespace Knigosha.Controllers
                 Email = au.Email,
                 DateAdded = au.DateAdded,
                 DateEdited = au.DateEdited,
-                RoleNames = au.UserRoles
-                    .Where(ur => ur.UserId == au.Id)
-                    .Select(r => r.Role.Name)
-                    .ToList()
+                LastLogin = au.LastLogin,
+                UserName = au.UserName,
+                LoginTimes = au.LoginTimes
             }).ToListAsync();
 
             return View(users);

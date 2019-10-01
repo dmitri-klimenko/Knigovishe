@@ -29,13 +29,22 @@ namespace Knigosha.Controllers
             return View(await _context.Books.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> DetailsAdmin(int? id)
         {
             if (id == null) return NotFound();
             var book = await _context.Books
                 .Include(b=> b.Questions)
                 .Include(b => b.Answers)
                 .Include(b => b.BookRatings)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null) return NotFound();
+            return View(book);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+            var book = await _context.Books
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null) return NotFound();
             return View(book);

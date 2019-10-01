@@ -40,9 +40,9 @@ namespace Knigosha.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
-            builder.Entity<AllClassesGroup>().HasData(new AllClassesGroup { Id = 1});
-            builder.Entity<AllFamiliesGroup>().HasData(new AllFamiliesGroup { Id = 1});
+
+            builder.Entity<AllClassesGroup>().HasData(new AllClassesGroup { Id = 1 });
+            builder.Entity<AllFamiliesGroup>().HasData(new AllFamiliesGroup { Id = 1 });
 
             var jsonStateList = MyAppResources.CountriesJson;
             var states = JsonConvert.DeserializeObject<List<Country>>(jsonStateList);

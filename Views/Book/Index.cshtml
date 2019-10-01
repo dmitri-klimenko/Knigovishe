@@ -4,7 +4,7 @@
 }
 <partial name="_DashboardPartial" />
 <a asp-controller="Book" asp-action="Create" class="btn btn btn-light adminButton">Новая книга</a>
-<table class="table table-bordered">
+<table class="table table-bordered adminTable">
     <thead>
         <tr>
             <th class="bookCoverColumn"></th>
@@ -28,10 +28,10 @@
         {
             <tr>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id"> <img src="~/uploads/@item.CoverPhoto" id="coverPhoto" alt="cover photo"></a>
+                    <a asp-action="DetailsAdmin" asp-route-id="@item.Id"> <img src="~/uploads/@item.CoverPhoto" id="coverPhoto" alt="cover photo"></a>
                 </td>
                 <td class="mainContentColumn">
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a> 
+                    <a asp-action="DetailsAdmin" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a> 
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateAdded)

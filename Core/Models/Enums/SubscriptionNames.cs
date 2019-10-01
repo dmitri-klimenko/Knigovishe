@@ -4,14 +4,13 @@ namespace Knigosha.Core.Models.Enums
 {
     public enum SubscriptionNames
     {
-        [Display(Name = "БЕСПЛАТНОЕ ДЕМО")]
-        Free,
-        [Display(Name = "ИНДИВИДУАЛЬНЫЙ")]
-        Student,
-        [Display(Name = "СЕМЕЙНЫЙ")]
-        Family,
-        [Display(Name = "КЛАССНЫЙ")]
-        Class
-
+        [Display(Name = "Бесплатное демо")]
+        Free = 1,
+        [Display(Name = "Индивидуальный")]
+        Student = 2,
+        [Display(Name = "Семейный")]
+        Family = 3,
+        [Display(Name = "Классный")]
+        Class = 4
     }
 }

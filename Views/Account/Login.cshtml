@@ -6,53 +6,47 @@
 @using Microsoft.AspNetCore.Identity
 @model Knigosha.Core.ViewModels.AccountViewModels.LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
-
 @{
     ViewData["Title"] = "Log in";
 }
-
-<h2>@ViewData["Title"]</h2>
-<div class="row">
-    <div class="col-md-4">
+<div style="text-align: center">
+    <div class="col-md-5" id="login">
         <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>Use a local account to log in.</h4>
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginForm">
+                <h5><strong>Вход в профиль</strong></h5>
+                <p>Пожалуйста, введите Ваши данные.</p>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control" />
+                <div class="form-group" id="loginEmailDiv">
+                    <label>Адрес почты</label>
+                    <input asp-for="Email" class="form-control"/>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" class="form-control" />
+                <div class="form-group" id="loginPasswordDiv">
+                    <label asp-for="Password">Пароль</label>
+                    <input asp-for="Password" class="form-control"/>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="remembermeDiv">
                     <div class="checkbox">
-                        <label asp-for="RememberMe">
-                            <input asp-for="RememberMe" />
-                            @Html.DisplayNameFor(m => m.RememberMe)
+                        <label >
+                            <input asp-for="RememberMe"/>
+                            Запомнить меня
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-outline-secondary">Log in</button>
+                    <button type="submit" class="green-flat-button">Войти</button>
                 </div>
-                <div class="form-group">
-                    <p>
-                        <a asp-action="ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                <div class="form-group" id="forgotPasswordDiv">
+                    <p id="forgotPassword">
+                        <a asp-action="ForgotPassword">Забыли пароль?</a>
                     </p>
                 </div>
             </form>
         </section>
     </div>
 </div>
-
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

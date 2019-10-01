@@ -1,5 +1,470 @@
 ﻿@{
     ViewData["Title"] = "Главная";
 }
+@using Knigosha.Core.Models.Enums
+@model Knigosha.Controllers.HomeViewModel
+
+<div id="home_banner" class="full-width">
+    <div class="inner container">
+        <div class="banner_content ">
+            <div class="text1">Онлайн игра</div>
+            <div style="height: 10px"></div>
+            <div class="text1">вопросы и ответы</div>
+            <div style="height: 20px;"></div>
+            <div class="text2">по прочтённым книгам</div>
+            <div style="height: 60px;"></div>
+            <a asp-controller="Home" asp-action="Index" class="button">
+                Играть
+            </a>
+            <div style="height: 90px"></div>
+            <div class="text2">* для детей</div>
+        </div>
+    </div>
+</div>
+<div id="bg1" class="full-width">
+    <div style="height: 80px;"></div>
+    <div class="inner container" id="books">
+        <h1 class="section_title" onclick="window.location='/Book/Search?sort_field=latest'">Новое в Книгоше</h1>
+        <div class="section_text">Новые викторины по книгам:</div>
+        <table style="width: 100%" class="sc">
+            <tbody>
+                <tr>
+                    <td style="vertical-align: top; width: 18%; width: 18%; display: table-cell;">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[0].Id'">
+                            <div class="wishlist" data-book="@Model.LatestAddedBooks[0].Id"
+                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            <img src="~/uploads/@Model.LatestAddedBooks[0].CoverPhoto" alt="coverphoto" />
+                            <div style="height: 15px"></div>
+                            <h3>@Model.LatestAddedBooks[0].Title</h3>
+                            <div class="bookAuthor">@Model.LatestAddedBooks[0].BookAuthor</div>
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.LatestAddedBooks[0].Id'">СМОТРЕТЬ КНИГУ</a>
+                        </div>
+                    </td>
+                    <td style="width: 2.5%;"></td>
+                    <td style="vertical-align: top; width: 18%">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[1].Id'">
+                            <div class="wishlist" data-book="@Model.LatestAddedBooks[1].Id"
+                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            <img src="~/uploads/@Model.LatestAddedBooks[1].CoverPhoto" alt="coverphoto" />
+                            <div style="height: 15px"></div>
+                            <h3>@Model.LatestAddedBooks[1].Title</h3>
+                            <div class="bookAuthor">@Model.LatestAddedBooks[1].BookAuthor</div>
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.LatestAddedBooks[1].Id'">СМОТРЕТЬ КНИГУ</a>
+                        </div>
+                    </td>
+                    <td style="width: 2.5%;"></td>
+                    <td style="vertical-align: top; width: 18%">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[2].Id'">
+                            <div class="wishlist" data-book="@Model.LatestAddedBooks[2].Id"
+                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            <img src="~/uploads/@Model.LatestAddedBooks[2].CoverPhoto" alt="coverphoto" />
+                            <div style="height: 15px"></div>
+                            <h3>@Model.LatestAddedBooks[2].Title</h3>
+                            <div class="bookAuthor">@Model.LatestAddedBooks[2].BookAuthor</div>
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.LatestAddedBooks[2].Id'">СМОТРЕТЬ КНИГУ</a>
+                        </div>
+                    </td>
+                    <td style="width: 2.5%;"></td>
+                    <td style="vertical-align: top; width: 18%">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[3].Id'">
+                            <div class="wishlist" data-book="@Model.LatestAddedBooks[3].Id"
+                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            <img src="~/uploads/@Model.LatestAddedBooks[3].CoverPhoto" alt="coverphoto" />
+                            <div style="height: 15px"></div>
+                            <h3>@Model.LatestAddedBooks[3].Title</h3>
+                            <div class="bookAuthor">@Model.LatestAddedBooks[3].BookAuthor</div>
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.LatestAddedBooks[3].Id'">СМОТРЕТЬ КНИГУ</a>
+                        </div>
+                    </td>
+                    <td style="width: 2.5%;"></td>
+                    <td style="vertical-align: top; width: 18%">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[4].Id'">
+                            <div class="wishlist" data-book="@Model.LatestAddedBooks[4].Id"
+                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            <img src="~/uploads/@Model.LatestAddedBooks[4].CoverPhoto" alt="coverphoto" />
+                            <div style="height: 15px"></div>
+                            <h3>@Model.LatestAddedBooks[4].Title</h3>
+                            <div class="bookAuthor">@Model.LatestAddedBooks[4].BookAuthor</div>
+                            <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.LatestAddedBooks[4].Id'">СМОТРЕТЬ КНИГУ</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="height: 80px;"></div>
+</div>
+<div class="full-width">
+    <div style="height: 80px;"></div>
+    <div class="inner container" id="quizes">
+        <h1 class="section_title" onclick="window.location='/Book/Search/?sort_field=views'">Что читают другие</h1>
+        <div class="section_text">Самые популярные книги с часто играемыми викторинами</div>
+        <table class="sc mc tc" style="width: 100%">
+            <tbody>
+                <tr>
+                    <td style="vertical-align: top; width: 49%;">
+                        <div class="quiz_bg" @*onclick="window.location='/Answer?BookId=@Model.MostPopularBooks[0].Id&UserId='"*@>
+                            <table class="sc mc tc" style="width: 100%">
+                                <tr>
+                                    <td rowspan="2" class="quiz_left">
+                                        <img src="uploads/@Model.MostPopularBooks[0].CoverPhoto" />
+                                    </td>
+                                    <td class="quiz_right">
+                                        <div class="quiz_inner class3">
+                                            <div class="rating">
+                                                <b>@Model.MostPopularBooks[0].AverageRating</b>/5&nbsp;
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[0].Answers.Count</b> раз</div>
+                                            <div class="bookTitle">@Model.MostPopularBooks[0].Title</div>
+                                            <div class="bookAuthor">@Model.MostPopularBooks[0].BookAuthor</div>
+                                            <div class="visible-desktop">
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m.MostPopularBooks[0].AgeGroup)</div>
+                                            </div>
+                                            <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m.MostPopularBooks[0].AgeGroup)</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="quiz_button">
+                                        <div class="quiz_line"></div>
+                                        <div class="quiz_button">ИГРАТЬ</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width: 2%"></td>
+                    <td style="vertical-align: top; width: 49%;">
+                        <div class="quiz_bg" @*onclick="window.location='/Answer?BookId=@Model.MostPopularBooks[0].Id&UserId='"*@>
+                            <table class="sc mc tc" style="width: 100%">
+                                <tr>
+                                    <td rowspan="2" class="quiz_left">
+                                        <img src="uploads/@Model.MostPopularBooks[1].CoverPhoto" />
+                                    </td>
+                                    <td class="quiz_right">
+                                        <div class="quiz_inner class3">
+                                            <div class="rating">
+                                                <b>@Model.MostPopularBooks[1].AverageRating</b>/5&nbsp;
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[1].Answers.Count</b> раз</div>
+                                            <div class="bookTitle">@Model.MostPopularBooks[1].Title</div>
+                                            <div class="bookAuthor">@Model.MostPopularBooks[1].BookAuthor</div>
+                                            <div class="visible-desktop">
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m.MostPopularBooks[1].AgeGroup)</div>
+                                            </div>
+                                            <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m.MostPopularBooks[1].AgeGroup)</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="quiz_button">
+                                        <div class="quiz_line"></div>
+                                        <div class="quiz_button">ИГРАТЬ</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" height="40">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 49%;">
+                        <div class="quiz_bg" @*onclick="window.location='/Answer?BookId=@Model.MostPopularBooks[0].Id&UserId='"*@>
+                            <table class="sc mc tc" style="width: 100%">
+                                <tr>
+                                    <td rowspan="2" class="quiz_left">
+                                        <img src="uploads/@Model.MostPopularBooks[2].CoverPhoto" />
+                                    </td>
+                                    <td class="quiz_right">
+                                        <div class="quiz_inner class3">
+                                            <div class="rating">
+                                                <b>@Model.MostPopularBooks[2].AverageRating</b>/5&nbsp;
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[2].Answers.Count</b> раз</div>
+                                            <div class="bookTitle">@Model.MostPopularBooks[2].Title</div>
+                                            <div class="bookAuthor">@Model.MostPopularBooks[2].BookAuthor</div>
+                                            <div class="visible-desktop">
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m.MostPopularBooks[2].AgeGroup)</div>
+                                            </div>
+                                            <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m.MostPopularBooks[2].AgeGroup)</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="quiz_button">
+                                        <div class="quiz_line"></div>
+                                        <div class="quiz_button">ИГРАТЬ</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width: 2%"></td>
+                    <td style="vertical-align: top; width: 49%;">
+                        <div class="quiz_bg" @*onclick="window.location='/Answer?BookId=@Model.MostPopularBooks[0].Id&UserId='"*@>
+                            <table class="sc mc tc" style="width: 100%">
+                                <tr>
+                                    <td rowspan="2" class="quiz_left">
+                                        <img src="uploads/@Model.MostPopularBooks[3].CoverPhoto" />
+                                    </td>
+                                    <td class="quiz_right">
+                                        <div class="quiz_inner class3">
+                                            <div class="rating">
+                                                <b>@Model.MostPopularBooks[3].AverageRating</b>/5&nbsp;
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[3].Answers.Count</b> раз</div>
+                                            <div class="bookTitle">@Model.MostPopularBooks[3].Title</div>
+                                            <div class="bookAuthor">@Model.MostPopularBooks[3].BookAuthor</div>
+                                            <div class="visible-desktop">
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m.MostPopularBooks[3].AgeGroup)</div>
+                                            </div>
+                                            <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m.MostPopularBooks[3].AgeGroup)</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="quiz_button">
+                                        <div class="quiz_line"></div>
+                                        <div class="quiz_button">ИГРАТЬ</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" height="40">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="height: 80px;"></div>
+</div>
+<div class="bg2 full-width">
+    <div style="height:80px;"></div>
+    <div class="inner" id="license_types">
+        <h1 class="section_title" onclick="window.location='/Subscriptions/Index'">Абонементи</h1>
+        <div class="section_text">
+            Выберите абонемент, который подходит Вам.
+            <br />
+            <br />
+            <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, напишите нам по адресу info@knigosha.ru</strong>
+        </div>
+        <table class="sc tc mc" style="width:100%;">
+            <tr>
+                <td style="vertical-align:top;width:23%;">
+                    <div class="license license1" style="cursor:pointer;" onclick="window.location='/Account/Register'">
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4>
+                                    @Html.DisplayFor(m => m.Subscriptions[0].Name)
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="license_center" style="height: 237px">
+                            <div class="license_text">
+                                <i>Ученических профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[0].NumberOfStudentProfiles</b>
+                                <div style="height: 10px;"></div>
+                                <i>Действителен до:</i>
+                                <br>
+                                <b>@Model.Subscriptions[0].ValidUntil</b>
+                                <div style="height: 10px;"></div>
+                                <i>Количество викторин:</i>
+                                <br>
+                                <b>@Model.Subscriptions[0].MaxQuizzes</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text" style="height: 171px;">
+                            <i>Цена:</i>
+                            <br>
+                            <b>@Model.Subscriptions[0].CurrentPrice</b>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a asp-controller="Account" asp-action="Register" class="button">НАЧАТЬ</a>
+                    </div>
+                </td>
+                <td style="width:2%"></td>
+                <td style="vertical-align:top;width:23%;">
+                    <div class="license license1" @*onclick="window.location='/user/order?id=10'"*@ style="cursor:pointer;">
+                        <div class="licenseLabel"></div>
+                        <div class="licensePrice">@Model.Subscriptions[1].Discount</div>
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4 style="font-size:22px; line-height:26px;"> @Html.DisplayFor(m => m.Subscriptions[1].Name)</h4>
+                            </div>
+                        </div>
+                        <div class="license_center" style="height: 237px">
+                            <div class="license_text">
+                                <i>Ученических профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[1].NumberOfStudentProfiles</b>
+                                <div style="height:10px;"></div>
+                                <i>Действителен до:</i>
+                                <br>
+                                <b>@Model.Subscriptions[1].ValidUntil</b>
+                                <div style="height:10px;"></div>
+                                <i>Количество викторин:</i>
+                                <br>
+                                <b>@Model.Subscriptions[1].MaxQuizzes</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text" style="height: 171px;">
+                            <i>Цена:</i>
+                            <br>
+                            <b>@Model.Subscriptions[1].CurrentPrice</b> <s>@Model.Subscriptions[1].OldPrice</s>
+                            <div style="height:10px;"></div>
+                            @Model.Subscriptions[1].Text1
+                        </div>
+                        <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup">
+                            </div>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a asp-controller="Account" asp-action="Register" class="button">ЗАКАЗАТЬ</a>
+                    </div>
+                </td>
+                <td style="width:2%"></td>
+                <td style="vertical-align:top;width:23%;">
+                    <div class="license license2" @*onclick="window.location='/user/order?id=6'"*@ style="cursor:pointer;">
+                        <div class="licenseLabel"></div>
+                        <div class="licensePrice">@Model.Subscriptions[2].Discount</div>
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[2].Name)</h4>
+                            </div>
+                        </div>
+                        <div class="license_center" style="height: 237px">
+                            <div class="license_text">
+                                <i>Родительских профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[2].NumberOfParentProfiles</b>
+                                <div style="height:10px;"></div>
+                                <i>Ученических профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[2].NumberOfStudentProfiles</b>
+                                <div style="height:10px;"></div>
+                                <i>Действителен до:</i>
+                                <br>
+                                <b>@Model.Subscriptions[2].ValidUntil</b>
+                                <div style="height:10px;"></div>
+                                <i>Количество викторин:</i>
+                                <br>
+                                <b>@Model.Subscriptions[2].MaxQuizzes</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text" style="height: 171px;">
+                            <i>Цена:</i>
+                            <br>
+                            <b>@Model.Subscriptions[2].CurrentPrice</b> <s>@Model.Subscriptions[2].OldPrice</s>
+                            <div style="height: 10px;"></div>
+                            @Model.Subscriptions[2].Text1
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a asp-controller="Account" asp-action="Register" class="button">ЗАКАЗАТЬ</a>
+                    </div>
+                </td>
+                <td style="width:2%"></td>
+                <td style="vertical-align:top;width:23%;">
+                    <div class="license license3" @*onclick="window.location='/user/order?id=1'"*@ style="cursor:pointer;">
+                        <div class="licenseLabel"></div>
+                        <div class="licensePrice">@Model.Subscriptions[3].Discount</div>
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[3].Name)</h4>
+                            </div>
+                        </div>
+                        <div class="license_center" style="height: 237px">
+                            <div class="license_text">
+                                <i>Учительских профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[3].NumberOfTeacherProfiles</b>
+                                <div style="height:10px;"></div>
+                                <i>Ученических профилей:</i>
+                                <br>
+                                <b>@Model.Subscriptions[3].NumberOfStudentProfiles</b>
+                                <div style="height:10px;"></div>
+                                <i>Действителен до:</i>
+                                <br>
+                                <b>@Model.Subscriptions[3].ValidUntil</b>
+                                <div style="height:10px;"></div>
+                                <i>Количество викторин:</i>
+                                <br>
+                                <b>@Model.Subscriptions[3].MaxQuizzes</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text" style="height: 171px;">
+                            <i>Цена:</i>
+                            <br>
+                            <b>@Model.Subscriptions[3].CurrentPrice</b> <s>@Model.Subscriptions[3].OldPrice</s>
+                            <div style="height:10px;"></div>@Model.Subscriptions[3].Text1 
+                            <br />
+                            <br />
+                            <a href="javascript:;" onclick="licensePopup(this); event.stopPropagation();">Дополнителные скидки</a>
+                        </div>
+                        <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup">
+                                Дополнительные скидки при покупке нескольких классных<br />
+                                абонементов одновременно:<br />
+                                <br />
+                                - от 3 до 5 классных абонаментов – скидка 5 % <br />
+                                - от 6 до 9 классных абонаментов – скидка 7 % <br />
+                                - от 10 до 14 классных абонаментов – скидка 10 % <br />
+                                - от 15 до 19 классных абонаментов – скидка 12 % <br />
+                                - от 20 до 24 классных абонаментов – скидка 15 % <br />
+                                - от 25 до 29 классных абонаментов – скидка 17 % <br />
+                                - от 30 до 34 классных абонаментов – скидка 20 % <br />
+                                - от 35 до 39 классных абонаментов – скидка 25 % <br />
+                                - от 40 абонаментов – скидка 30 % <br />
+                                <br />
+                                Для информации и заявок: info@knigosha.ru
+                            </div>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a asp-controller="Account" asp-action="Register" class="button">ЗАКАЗАТЬ</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="padding-top:40px;text-align:center;">
+            <a asp-controller="Subscriptions" asp-action="Index" class="button">СМОТРЕТЬ ВСЕ</a>
+        </div>
+    </div>
+    <div style="height:60px;"></div>
+</div>
+
+
+
 
 

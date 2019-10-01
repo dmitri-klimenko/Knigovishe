@@ -19,6 +19,7 @@ using Knigosha.Persistence;
 using Knigosha.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Knigosha.Controllers
 {
@@ -67,9 +68,17 @@ namespace Knigosha.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var signedUser = await _userManager.FindByEmailAsync(model.Email);
+                SignInResult result = null;
+                if (signedUser.Email != signedUser.UserName)
+                {
+                    result = await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                }
+                else
+                {
+                    result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                }
                 if (result.Succeeded)
                 {
                     // save last login date
@@ -79,6 +88,7 @@ namespace Knigosha.Controllers
                         return NotFound("Unable to load user for update last login.");
                     }
                     user.LastLogin = DateTime.Now.ToString("g");
+                    user.LoginTimes ++;
                     var lastLoginResult = await _userManager.UpdateAsync(user);
                     if (!lastLoginResult.Succeeded)
                     {
@@ -88,18 +98,9 @@ namespace Knigosha.Controllers
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToAction(nameof(Lockout));
-                }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
                     return View(model);
                 }
             }
@@ -329,9 +330,7 @@ namespace Knigosha.Controllers
                         await _userManager.AddToRoleAsync(family, "User");
                         if (result.Succeeded)
                         {
-                            // create free UserSubscription
                             await new UserSubscriptionsController(_context).CreateFree(family);
-                            //add family to group
                             var group = await _context.AllFamiliesGroup.FirstAsync();
                             group.Families.Add(family);
                             await _context.SaveChangesAsync();
@@ -365,9 +364,7 @@ namespace Knigosha.Controllers
                         await _userManager.AddToRoleAsync(schoolClass, "User");
                         if (result.Succeeded)
                         {
-                            // create free UserSubscription
                             await new UserSubscriptionsController(_context).CreateFree(schoolClass);
-                            //add class to group
                             var group = await _context.AllClassesGroup.FirstAsync();
                             group.Classes.Add(schoolClass);
                             await _context.SaveChangesAsync();

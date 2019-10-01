@@ -17,5 +17,7 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         public string PhoneNumber { get; set; }
 
         public string StatusMessage { get; set; }
+
+        public string  Photo { get; set; }
     }
 }

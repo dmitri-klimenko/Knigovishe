@@ -23,7 +23,7 @@ namespace Knigosha.Controllers
         {
             return View(await _context.Subscriptions.ToListAsync());
         }
-
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();

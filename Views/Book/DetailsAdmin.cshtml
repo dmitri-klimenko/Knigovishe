@@ -1,0 +1,184 @@
+﻿@model Knigosha.Core.Models.Book
+
+@{
+    ViewData["Title"] = "Детали книги";
+}
+    <partial name="_DashboardPartial" />
+<div>
+    <img src="~/uploads/@Model.CoverPhoto" id="detailsCoverPhoto" alt="cover photo">
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            Название:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-4">
+            Автор:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.BookAuthor)
+        </dd>
+        <dt class = "col-sm-4">
+           Издание:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+        <dt class = "col-sm-4">
+           Год издания:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.YearPublished)
+        </dd>
+        <dt class = "col-sm-4">
+         Автор превода:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Translator)
+        </dd>
+        <dt class = "col-sm-4">
+           Категория
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.BookCategory)
+        </dd>
+        <dt class="col-sm-4">
+            ISBN
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Isbn1)
+        </dd>
+        <dt class="col-sm-4">
+            ISBN (2)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Isbn2)
+        </dd>
+        <dt class = "col-sm-4">
+            Страниц: 
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.NumberOfPages)
+        </dd>
+        <dt class = "col-sm-4">
+            Рейтинг:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.AverageRating)
+        </dd>
+        <dt class = "col-sm-4">
+            Класс:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Grade)
+        </dd> 
+        <dt class = "col-sm-4">
+            Возрастная категория:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.AgeGroup)
+        </dd>
+        <dt class = "col-sm-4">
+            Вопросов о содержании (должно быть):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ContentQuestions)
+        </dd>
+        <dt class = "col-sm-4">
+           Вопросов о содержании (cоздано):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ContentQuestionsCreated)
+        </dd>
+        <dt class="col-sm-4">
+            Вопросов на понимание (должно быть):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ComprehensionQuestions)
+        </dd>
+        <dt class="col-sm-4">
+            Вопросов на понимание (cоздано):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.ComprehensionQuestionsCreated)
+        </dd>
+        <dt class="col-sm-4">
+            Вопросов о мнении (должно быть):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.OpinionQuestions)
+        </dd>
+        <dt class="col-sm-4">
+           Вопросов о мнении (cоздано):
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.OpinionQuestionsCreated)
+        </dd>
+        <dt class="col-sm-4">
+            Очков за правильный ответ:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.PointsForRightAnswer)
+        </dd>
+        <dt class="col-sm-4">
+            Очков за неправильный ответ:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.PointsForWrongAnswer)
+        </dd>
+        <dt class = "col-sm-4">
+            Краткая форма:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.IsShortForm)
+        </dd>
+        <dt class = "col-sm-4">
+            Тэги
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Tags)
+        </dd>
+        <dt class = "col-sm-4">
+            Добавлена:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.DateAdded)
+        </dd>
+        <dt class = "col-sm-4">
+           Описание: 
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-4">
+            Автор вопросов
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.QuestionsAuthor)
+        </dd>
+        <dt class = "col-sm-4">
+            Добавил/а:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.AddedByAdmin)
+        </dd>
+        <dt class="col-sm-4">
+            Включена в программу в классе:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.PartOfSchoolProgramAtGrade)
+        </dd>
+        <dt class = "col-sm-4">
+            Заполненных анкет:
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.TimesCompleted)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary" >Редактировать</a> 
+    <a style="margin-left: 20px" asp-action="Index" class="btn btn btn-light" >Назад</a>
+</div>

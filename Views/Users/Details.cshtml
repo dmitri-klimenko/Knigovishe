@@ -12,129 +12,129 @@
     }
     else
     {
-        <img src="~/uploads/avatar-1577909_1280.png" id="detailsCoverPhoto" alt="profile picture"/> 
-    } 
+        <img src="~/skin/avatar.png" id="detailsCoverPhoto" alt="profile picture"/>
+    }
     <hr />
     <dl class="row">
-           <dt class="col-sm-4">
+        <dt class="col-sm-4">
             Имя пользователя:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.UserName)
-            </dd>
-            <dt class="col-sm-4">
-                Имя:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-4">
-                Фамилия:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Surname)
-            </dd>
-            <dt class="col-sm-4">
-                Тип:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.UserType)
-            </dd>
-            <dt class="col-sm-4">
-                Email:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Email)
-            </dd>
-            <dt class="col-sm-4">
-                Телефон:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.PhoneNumber)
-            </dd>
-            <dt class="col-sm-4">
-                Страна:
-            </dt>
-            <dd class="col-sm-8">
-               @ViewData["Country"]
-            </dd>
-            <dt class="col-sm-4">
-                Город:
-            </dt>
-            <dd class="col-sm-8">
-                @ViewData["City"]
-            </dd>
-            <dt class="col-sm-4">
-                Школа
-            </dt>
-            <dd class="col-sm-8">
-                @if (Model.School != "Выберите город")
-                {
-                    @ViewData["School"]
-                }
-            </dd>
-            <dt class="col-sm-4">
-                Параллель
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Parallel)
-            </dd>
-            <dt class="col-sm-4">
-                Класс:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Grade)
-            </dd>
-            <dt class="col-sm-4">
-                Возрастная категория:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.AgeGroup)
-            </dd>
-            <dt class="col-sm-4">
-                Отвеченных анкет:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.NumberOfAnswers)
-            </dd>
-            <dt class="col-sm-4">
-                Созданных анкет:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.NumberOfCreatedBooks)
-            </dd>
-            <dt class="col-sm-4">
-                Очков за созданные анкеты:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.PointsForCreatedBooks)
-            </dd>
-            <dt class="col-sm-4">
-                Подписан на рассылку:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.SubscribedToNewsletter)
-            </dd>
-            <dt class="col-sm-4">
-                Добавлен:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.DateAdded)
-            </dd>
-            <dt class="col-sm-4">
-                Редактирован:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.DateEdited)
-            </dd>
-            <dt class="col-sm-4">
-                Входил:
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.LastLogin)
-            </dd>
-        </dl>
-    </div>
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-4">
+            Имя:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-4">
+            Фамилия:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+        <dt class="col-sm-4">
+            Тип:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.UserType)
+        </dd>
+        <dt class="col-sm-4">
+            Email:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-4">
+            Телефон:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-4">
+            Страна:
+        </dt>
+        <dd class="col-sm-8">
+            @ViewData["Country"]
+        </dd>
+        <dt class="col-sm-4">
+            Город:
+        </dt>
+        <dd class="col-sm-8">
+            @ViewData["City"]
+        </dd>
+        <dt class="col-sm-4">
+            Школа
+        </dt>
+        <dd class="col-sm-8">
+            @if (Model.School != "Выберите город")
+            {
+                @ViewData["School"]
+            }
+        </dd>
+        <dt class="col-sm-4">
+            Параллель
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Parallel)
+        </dd>
+        <dt class="col-sm-4">
+            Класс:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Grade)
+        </dd>
+        <dt class="col-sm-4">
+            Возрастная категория:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.AgeGroup)
+        </dd>
+        <dt class="col-sm-4">
+            Отвеченных анкет:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.NumberOfAnswers)
+        </dd>
+        <dt class="col-sm-4">
+            Созданных анкет:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.NumberOfCreatedBooks)
+        </dd>
+        <dt class="col-sm-4">
+            Очков за созданные анкеты:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.PointsForCreatedBooks)
+        </dd>
+        <dt class="col-sm-4">
+            Подписан на рассылку:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.SubscribedToNewsletter)
+        </dd>
+        <dt class="col-sm-4">
+            Добавлен:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DateAdded)
+        </dd>
+        <dt class="col-sm-4">
+            Редактирован:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.DateEdited)
+        </dd>
+        <dt class="col-sm-4">
+            Входил:
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.LastLogin)
+        </dd>
+    </dl>
+</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary">Редактировать</a>
     <a style="margin-left: 20px" asp-action="Index" class="btn btn btn-light">Назад</a>

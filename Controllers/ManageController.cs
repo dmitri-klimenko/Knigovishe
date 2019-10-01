@@ -59,7 +59,8 @@ namespace Knigosha.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                Photo = user.Photo
             };
 
             return View(model);

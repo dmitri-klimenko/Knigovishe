@@ -4,11 +4,11 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Пожалуйста, введите адрес почты")]
+        [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Пожалуйста, введите Ваш пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

@@ -27,15 +27,15 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
         [Display(Name = "Адрес электронной почты")]
         [RequiredIf("ParentEmail == null && UserType == 1", ErrorMessage = "Пожалуйста, введите адрес почты")]
 
-        [EmailAddress(ErrorMessage = "Адрес должен быть действительным.")]
+        [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string Email { get; set; }
 
         [RequiredIf("UserType == 2 || UserType == 3", ErrorMessage = "Пожалуйста, введите адрес почты")]
         [Display(Name = "*Адрес электронной почты")]
-        [EmailAddress(ErrorMessage = "Адрес должен быть действительным.")]
+        [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string RequiredEmail { get; set; }
 
-        [EmailAddress(ErrorMessage = "Адрес должен быть действительным.")]
+        [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         [Display(Name = "Адрес почты одного из родителей:")]
         public string ParentEmail { get; set; }
 
