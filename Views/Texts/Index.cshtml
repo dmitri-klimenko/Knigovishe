@@ -9,16 +9,19 @@
     <thead>
         <tr>
             <th >
-                @Html.DisplayNameFor(model => model.Namespace)
+                @Html.DisplayNameFor(model => model.Title)
             </th>
             <th >
-                @Html.DisplayNameFor(model => model.Key)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            <th style="width:11%">
                 @Html.DisplayNameFor(model => model.DateAdded)
             </th>
-            <th>
+            <th style="width:11%">
                 @Html.DisplayNameFor(model => model.DateEdited)
+            </th>
+            <th style="width:8%">
+                @Html.DisplayNameFor(model => model.TextType)
             </th>
             <th class="deleteEditColumn"></th>
         </tr>
@@ -28,16 +31,19 @@
         {
             <tr>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Namespace)</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Key)</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Description)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateAdded)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateEdited)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TextType)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a> 

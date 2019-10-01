@@ -5,26 +5,26 @@
 }
 <partial name="_DashboardPartial" />
 <div id="textDetail">
-    <h4>Детали текста</h4>
-    <hr/>
+    @if(Model.Photo != null){<img src="~/uploads/@Model.Photo" class="coverPhoto" alt="cover photo">}
+    <hr />
     <dl class="row">
         <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.Namespace)
+            @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Namespace)
+            @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.Key)
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Key)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.TextType)
+        </dt>
+        <dd class="break-word col-sm-8">
+            @Html.DisplayFor(model => model.TextType)
         </dd>
         <dt class="col-sm-4">
             @Html.DisplayNameFor(model => model.DateAdded)
