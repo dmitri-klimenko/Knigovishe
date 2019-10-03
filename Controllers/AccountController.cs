@@ -294,7 +294,6 @@ namespace Knigosha.Controllers
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter
                         };
-                     
                         var result = await _userManager.CreateAsync(student, model.Password);
                         await _userManager.AddToRoleAsync(student, "User");
                         if (result.Succeeded)
@@ -325,7 +324,6 @@ namespace Knigosha.Controllers
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter
                         };
-                     
                         var result = await _userManager.CreateAsync(family, model.Password);
                         await _userManager.AddToRoleAsync(family, "User");
                         if (result.Succeeded)
@@ -359,7 +357,6 @@ namespace Knigosha.Controllers
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter
                         };
-
                         var result = await _userManager.CreateAsync(schoolClass, model.Password);
                         await _userManager.AddToRoleAsync(schoolClass, "User");
                         if (result.Succeeded)

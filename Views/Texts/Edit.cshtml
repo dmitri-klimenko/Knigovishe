@@ -8,7 +8,7 @@
 <div>
 <div class="header">
     <h4>Редактировать текст</h4>
-    <a asp-action="Index" class="btn btn btn-light ">Назад к текстам</a>
+    <a asp-action="IndexAdmin" class="btn btn btn-light ">Назад к текстам</a>
 </div>
 <hr />
 <div class="adminForm row">
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea rows="5" asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">

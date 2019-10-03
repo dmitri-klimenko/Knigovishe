@@ -9,7 +9,7 @@
     <partial name="_DashboardPartial"/>
     <div class="header">
         <h4>Вопросы по книге "@ViewData["BookTitle"]"</h4>
-        <a asp-controller="Book" asp-action="Index" class="btn btn btn-light ">Назад к книгам</a>
+        <a asp-controller="Book" asp-action="IndexAdmin" class="btn btn btn-light ">Назад к книгам</a>
     </div>
     <hr/>
     <a asp-controller="Questions" asp-action="Create" asp-route-id=@ViewData["BookId"] class="btn btn btn-light" style="margin-bottom: 15px">Новый вопрос</a>

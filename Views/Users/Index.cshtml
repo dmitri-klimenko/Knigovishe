@@ -2,59 +2,60 @@
 @{
     ViewData["Title"] = "Ползователи";
 }
-<partial name="_DashboardPartial" />
-<table id="userTable" class="table table-bordered adminTable">
-    <thead>
-    <tr>
-        <th class="emailColumn">
-            Email
-        </th>
-        <th class="userNameColumn">
-            Username
-        </th>
-        <th class="userAddedDateColumn">
-            Добавлен
-        </th>
-        <th class="loginColumn">
-            Входил
-        </th>
-        <th>
-            Раз
-        </th>
-        <th class="userTypeColumn">
-            Тип
-        </th>
-    
-        <th class="deleteColumn"></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
+<div class="container"><partial name="_DashboardPartial" />
+    <table id="userTable" class="table table-bordered adminTable">
+        <thead>
         <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Email)</a>
-            </td>
-            <td> @Html.DisplayFor(modelItem => item.UserName)</td>
-            <td>
-               @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoginTimes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserType)
-            </td>
-            
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
-            </td>
+            <th class="emailColumn">
+                Email
+            </th>
+            <th class="userNameColumn">
+                Username
+            </th>
+            <th class="userAddedDateColumn">
+                Добавлен
+            </th>
+            <th class="loginColumn">
+                Входил
+            </th>
+            <th>
+                Раз
+            </th>
+            <th class="userTypeColumn">
+                Тип
+            </th>
+    
+            <th class="deleteColumn"></th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Email)</a>
+                </td>
+                <td> @Html.DisplayFor(modelItem => item.UserName)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateAdded)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastLogin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoginTimes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserType)
+                </td>
+            
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 
 
+</div>

@@ -1,52 +1,7 @@
-﻿@model IEnumerable<Knigosha.Core.Models.Book>
+﻿@model System.Collections.Generic.List<Knigosha.Core.Models.Book>
+
 @{
     ViewData["Title"] = "Книги";
+    Layout = "_Layout";
 }
-<partial name="_DashboardPartial" />
-<a asp-controller="Book" asp-action="Create" class="btn btn btn-light adminButton">Новая книга</a>
-<table class="table table-bordered adminTable">
-    <thead>
-        <tr>
-            <th class="bookCoverColumn"></th>
-            <th>
-                Название
-            </th>
-            <th class="addedDateColumn">
-               Добавлена
-            </th>
-            <th class="forColumn">
-               Для
-            </th>
-            <th class="toQuestionsColumn">
-                Вопросы
-            </th>
-            <th class="deleteEditColumn"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-action="DetailsAdmin" asp-route-id="@item.Id"> <img src="~/uploads/@item.CoverPhoto" id="coverPhoto" alt="cover photo"></a>
-                </td>
-                <td class="mainContentColumn">
-                    <a asp-action="DetailsAdmin" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a> 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateAdded)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AgeGroup)
-                </td>
-                <td>
-                    <a asp-controller="Questions" asp-action="Index" asp-route-id="@item.Id" class="btn btn-success btn-sm">К вопросам</a> 
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+

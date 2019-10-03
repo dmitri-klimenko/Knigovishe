@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.TextViewModels;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +27,23 @@ namespace Knigosha.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var news = _context.Texts.Where(t => t.TextType == TextTypes.Post);
+
+            return View(await news.ToListAsync());
+        }
+
+        public async Task<IActionResult> IndexAdmin()
+        {
             return View(await _context.Texts.ToListAsync());
+        }
+
+        public async Task<IActionResult> DetailsAdmin(int? id)
+        {
+            if (id == null) return NotFound();
+            var text = await _context.Texts
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (text == null) return NotFound();
+            return View(text);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -69,12 +86,13 @@ namespace Knigosha.Controllers
                     Title = createTextVm.Title,
                     Description = createTextVm.Description,
                     Photo = uniqueFileName,
-                    TextType = createTextVm.TextType
+                    TextType = createTextVm.TextType,
+                    DateAdded = DateTime.Now.ToString("dd.MM.yyyy")
                 };
                 _context.Texts.Add(newText);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Book");
+                return RedirectToAction("IndexAdmin", "Texts");
             }
             return View(createTextVm);
         }
@@ -114,7 +132,7 @@ namespace Knigosha.Controllers
                 text.Title = textVm.Title;
                 text.Description = textVm.Description;
                 text.TextType = textVm.TextType;
-                text.DateEdited = DateTime.Now.ToString("d");
+                text.DateEdited = DateTime.Now.ToString("dd.MM.yyyy");
                 try
                 {
                     _context.Update(text);
@@ -131,7 +149,7 @@ namespace Knigosha.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAdmin));
             }
             return View(textVm);
         }
@@ -152,7 +170,7 @@ namespace Knigosha.Controllers
             var text = await _context.Texts.FindAsync(id);
             _context.Texts.Remove(text);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexAdmin));
         }
 
         private bool TextExists(int id)

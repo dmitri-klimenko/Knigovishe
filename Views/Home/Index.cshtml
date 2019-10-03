@@ -2,10 +2,10 @@
     ViewData["Title"] = "Главная";
 }
 @using Knigosha.Core.Models.Enums
-@model Knigosha.Controllers.HomeViewModel
+@model Knigosha.Core.ViewModels.HomeViewModel
 
-<div id="home_banner" class="full-width">
-    <div class="inner container">
+<div id="home_banner" class="visible-desktop">
+    <div style="position: relative" class="container">
         <div class="banner_content ">
             <div class="text1">Онлайн игра</div>
             <div style="height: 10px"></div>
@@ -21,16 +21,94 @@
         </div>
     </div>
 </div>
-<div id="bg1" class="full-width">
+
+<div>
+    <div class="container">
+        <div style="height:50px;"></div>
+        <table style="margin:auto;" class="visible-desktop">
+            <tbody>
+                <tr>
+                    <td style="width:260px;"><img src="/skin/step1.png"></td>
+                    <td style="padding-right: 60px;"><img src="/skin/arrow.png"></td>
+                    <td style="width:260px;"><img src="~/skin/step2.png" /></td>
+                    <td style="padding-right:60px;"><img src="/skin/arrow.png"></td>
+                    <td style="width:260px;"><img src="~/skin/step3.png" /></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align:top;">
+                        <div style="height:20px;"></div>
+                        <h2>Войдите в свой аккаунт</h2>
+                        <div class="dark" style="line-height:150%;">Создайте мир Книгоши.</div>
+                        <div style="height:30px;"></div>
+                    </td>
+                    <td></td>
+                    <td style="vertical-align:top;">
+                        <div style="height:20px;"></div>
+                        <h2>Решайте викторины</h2>
+                        <div class="dark" style="line-height:150%;">Найдите анкету по прочитанной книге и заполните ее.</div>
+                        <div style="height:30px;"></div>
+                    </td>
+                    <td></td>
+                    <td style="vertical-align:top;">
+                        <div style="height:20px;"></div>
+                        <h2>Получайте очки</h2>
+                        <div class="dark" style="line-height:150%;">
+                            При правильных ответах вы накапливаете баллы и открываете уровни.</div>
+                        <div style="height:30px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a></td>
+                    <td></td>
+                    <td><a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a></td>
+                    <td></td>
+                    <td><a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="visible-mobile" style="text-align:center;">
+            <img src="/skin/step1.png">
+            <div style="height:10px;"></div>
+            <h2>Войдите в свой аккаунт</h2>
+            <div class="dark" style="line-height:150%;">Создайте мир Книгоши.</div>
+            <div style="height:30px;"></div>
+            <a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a>
+            <div style="height:30px;"></div>
+            <i class="fa fa-arrow-down" style="font-size:60px;"></i>
+            <div style="height:50px;"></div>
+
+            <img src="/skin/step2.png">
+            <div style="height:10px;"></div>
+            <h2>Решайте викторины</h2>
+            <div class="dark" style="line-height:150%;">Найдите анкету по прочитанной книге и заполните ее.</div>
+            <div style="height:30px;"></div>
+            <a asp-controller="Book" asp-action="Index"class="button small">СМОТРЕТЬ КНИГИ</a>
+            <div style="height:30px;"></div>
+            <i class="fa fa-arrow-down" style="font-size:60px;"></i>
+            <div style="height:50px;"></div>
+
+
+            <img src="/skin/step3.png">
+            <div style="height:10px;"></div>
+            <h2>Получайте очки</h2>
+            <div class="dark" style="line-height:150%;">При правильных ответах вы накапливаете баллы и открываете уровни.</div>
+            <div style="height:30px;"></div>
+            <a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a>
+        </div>
+        <div style="height:100px;"></div>
+    </div>
+</div>
+<div id="bg1">
     <div style="height: 80px;"></div>
-    <div class="inner container" id="books">
+    <div id="books">
         <h1 class="section_title" onclick="window.location='/Book/Search?sort_field=latest'">Новое в Книгоше</h1>
         <div class="section_text">Новые викторины по книгам:</div>
-        <table style="width: 100%" class="sc">
+        <table style="width: 100%" class="container sc">
             <tbody>
                 <tr>
                     <td style="vertical-align: top; width: 18%; width: 18%; display: table-cell;">
-                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[0].Id'">
+                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[0].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[0].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[0].CoverPhoto" alt="coverphoto" />
@@ -42,7 +120,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[1].Id'">
+                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[1].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[1].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[1].CoverPhoto" alt="coverphoto" />
@@ -54,7 +132,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[2].Id'">
+                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[2].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[2].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[2].CoverPhoto" alt="coverphoto" />
@@ -66,7 +144,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[3].Id'">
+                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[3].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[3].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[3].CoverPhoto" alt="coverphoto" />
@@ -78,7 +156,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[4].Id'">
+                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[4].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[4].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[4].CoverPhoto" alt="coverphoto" />
@@ -94,12 +172,12 @@
     </div>
     <div style="height: 80px;"></div>
 </div>
-<div class="full-width">
+<div>
     <div style="height: 80px;"></div>
-    <div class="inner container" id="quizes">
+    <div id="quizes">
         <h1 class="section_title" onclick="window.location='/Book/Search/?sort_field=views'">Что читают другие</h1>
         <div class="section_text">Самые популярные книги с часто играемыми викторинами</div>
-        <table class="sc mc tc" style="width: 100%">
+        <table class="container sc mc tc" style="width: 100%">
             <tbody>
                 <tr>
                     <td style="vertical-align: top; width: 49%;">
@@ -266,17 +344,17 @@
     </div>
     <div style="height: 80px;"></div>
 </div>
-<div class="bg2 full-width">
+<div class="bg2">
     <div style="height:80px;"></div>
-    <div class="inner" id="license_types">
-        <h1 class="section_title" onclick="window.location='/Subscriptions/Index'">Абонементи</h1>
+    <div id="license_types">
+        <h1 class="section_title" onclick="window.location='/Subscriptions/IndexAdminAdminAdmin'">Абонементы</h1>
         <div class="section_text">
             Выберите абонемент, который подходит Вам.
             <br />
             <br />
             <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, напишите нам по адресу info@knigosha.ru</strong>
         </div>
-        <table class="sc tc mc" style="width:100%;">
+        <table class="container sc tc mc" style="width:100%;">
             <tr>
                 <td style="vertical-align:top;width:23%;">
                     <div class="license license1" style="cursor:pointer;" onclick="window.location='/Account/Register'">
@@ -458,61 +536,47 @@
             </tr>
         </table>
         <div style="padding-top:40px;text-align:center;">
-            <a asp-controller="Subscriptions" asp-action="Index" class="button">СМОТРЕТЬ ВСЕ</a>
+            <a asp-controller="Subscriptions" asp-action="IndexAdmin" class="button">СМОТРЕТЬ ВСЕ</a>
         </div>
     </div>
     <div style="height:60px;"></div>
 </div>
-
-
-<div class="full-width">
-    <div class="inner" id="articles">
+<div>
+    <div id="articles" class="container">
         <div style="height:80px;"></div>
-        <h1 class="section_title" onclick="window.location='/news'">Новости от Книгоши</h1>
-
+        <h1 class="section_title" onclick="window.location='/Texts/IndexAdminAdminAdmin'">Новости от Книгоши</h1>
         <div class="row">
-            <a href="/article?id=32" class="post col col-md-4">
-                <div class="post-sync" style="height: 203px;">
-                    <i class="post-date">14.09.2019</i>
-                    <span class="post-title">Нови функции в Книговище</span>
-                    <span class="post-description">За първия учебен ден Книговище пуска нови функции на играта, така че тя да станеоще по-интерактивна....</span>
+            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
+                <div class="post-sync" style="height: 185px;">
+                    <i class="post-date">@Model.RecentNews[0].DateAdded</i>
+                    <span class="post-title">@Model.RecentNews[0].Title</span>
+                    <span class="post-description">@Model.RecentNews[0].Description.Substring(0, 99)...</span>
                 </div>
-
-                <div class="post-image" style="background-image: url(/uploads/Canva---Rear-View-of-Boy-Sitting-at-Home.jpg);"></div>
+                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[0].Photo)"></div>
             </a>
-
-
-            <a href="/article?id=24" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">01.08.2019</i>
-                    <span class="post-title">КНИГОВИЩЕ в помощ на родителя през лятната ваканция</span>
+            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
+                <div class="post-sync" style="height: 185px;">
+                    <i class="post-date">@Model.RecentNews[1].DateAdded</i>
+                    <span class="post-title">@Model.RecentNews[1].Title</span>
                     <span class="post-description">
-                        Попадали ли сте в следната ситуация?
-
-                        Идва лятната ваканция. Слънце е, радост! Децата с огромно уд...
+                        @Model.RecentNews[1].Description.Substring(0, 99)...
                     </span>
                 </div>
-
-                <div class="post-image" style="background-image: url(/uploads/IMG_20190801_113647.jpg);"></div>
+                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[1].Photo)"></div>
             </a>
-
-
-            <a href="/article?id=22" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">01.06.2019</i>
-                    <span class="post-title">За младите читатели от Пловдив и областта: лятно онлайн предизвикателство Книговище</span>
-                    <span class="post-description">Ако си на възраст до 14 години и си от Пловдив и областта, това лято можеш да участваш в новото пред...</span>
+            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
+                <div class="post-sync" style="height: 185px;">
+                    <i class="post-date">@Model.RecentNews[2].DateAdded</i>
+                    <span class="post-title">@Model.RecentNews[2].Title</span>
+                    <span class="post-description">@Model.RecentNews[2].Description.Substring(0, 99)...</span>
                 </div>
-
-                <div class="post-image" style="background-image: url(/uploads/400x300bannerWEB.JPG);"></div>
+                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[2].Photo);"></div>
             </a>
-
         </div>
         <div style="height:40px;"></div>
     </div>
 </div>
 <div style="height:50px;"></div>
-
 
 
 

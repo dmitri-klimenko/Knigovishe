@@ -24,10 +24,16 @@ namespace Knigosha.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> IndexAdmin()
+        {
+            return View(await _context.Books.ToListAsync());
+        }
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Books.ToListAsync());
         }
+
 
         public async Task<IActionResult> DetailsAdmin(int? id)
         {
@@ -91,7 +97,7 @@ namespace Knigosha.Controllers
                 _context.Books.Add(newBook);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Book");
+                return RedirectToAction("IndexAdmin", "Book");
             }
             return View(createBookVm);
         }
@@ -183,7 +189,7 @@ namespace Knigosha.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAdmin));
             }
             return View(editBookVm);
         }
@@ -204,12 +210,17 @@ namespace Knigosha.Controllers
             var book = await _context.Books.FindAsync(id);
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexAdmin));
         }
 
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.Id == id);
+        }
+
+        public IActionResult Search()
+        {
+            throw new NotImplementedException();
         }
     }
 }

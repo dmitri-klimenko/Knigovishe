@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
 using Knigosha.Persistence;
 
 namespace Knigosha.Controllers
@@ -19,11 +20,21 @@ namespace Knigosha.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAdmin()
         {
             return View(await _context.Subscriptions.ToListAsync());
         }
-        
+
+        public async Task<IActionResult> Index()
+        {
+            var notFreeSubscriptions = _context.Subscriptions
+                .Where(s => s.SubscriptionType != SubscriptionTypes.FreeStudent &&
+                            s.SubscriptionType != SubscriptionTypes.FreeFamily &&
+                            s.SubscriptionType != SubscriptionTypes.FreeClass);
+
+            return View(await notFreeSubscriptions.ToListAsync());
+        }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -47,7 +58,7 @@ namespace Knigosha.Controllers
             {
                 _context.Add(subscription);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAdmin));
             }
             return View(subscription);
         }
@@ -86,7 +97,7 @@ namespace Knigosha.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAdmin));
             }
             return View(subscription);
         }
@@ -107,7 +118,7 @@ namespace Knigosha.Controllers
             var subscription = await _context.Subscriptions.FindAsync(id);
             _context.Subscriptions.Remove(subscription);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexAdmin));
         }
 
         private bool SubscriptionExists(int id)

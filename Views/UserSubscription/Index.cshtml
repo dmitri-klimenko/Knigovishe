@@ -1,49 +1,48 @@
 ﻿@model IEnumerable<Knigosha.Core.Models.UserSubscription>
-
 @{
     ViewData["Title"] = "IndexAdmin";
 }
-
-<partial name="_DashboardPartial" />
-
-<table id="userSubscriptionTable" class="table table-bordered adminTable">
-    <thead>
-        <tr>
-            <th class="number">
-                Номер
-            </th>
-            <th class="addedDateColumn">
-            Заказан
-            </th>
-            <th>
-                Тип абонемента
-            </th>
-            <th>
-              Статус
-            </th>
-            <th class="deleteEditColumn"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <table id="userSubscriptionTable" class="table table-bordered adminTable">
+        <thead>
             <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a> 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderedOn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subscription.SubscriptionType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Изменить</a> 
-                </td>
+                <th class="number">
+                    Номер
+                </th>
+                <th class="addedDateColumn">
+                    Заказан
+                </th>
+                <th>
+                    Тип абонемента
+                </th>
+                <th>
+                    Статус
+                </th>
+                <th class="deleteEditColumn"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderedOn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subscription.SubscriptionType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Изменить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

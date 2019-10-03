@@ -7,7 +7,7 @@ namespace Knigosha.Core.ViewModels.TextViewModels
     public class CreateTextVewModel
     {
         [Required(ErrorMessage = "Пожалуйста, введите название")]
-        [MaxLength(50)]
+        [MaxLength(90)]
         [Display(Name = "*Название")]
         public string Title { get; set; }
 

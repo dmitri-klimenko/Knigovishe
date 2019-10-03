@@ -21,7 +21,6 @@
     <link href="~/lib/select2-4.0.8/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
-
 </head>
 <body>
     <header>
@@ -46,7 +45,7 @@
                             {
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Администрация</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="IndexAdmin">Администрация</a>
                                 }
                             }
                         </li>
@@ -55,16 +54,52 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div>
         <partial name="_CookieConsentPartial" />
         <main id="content" style="padding-top:0;">
             @RenderBody()
         </main>
     </div>
-
-   <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2019 - Knigosha.ru
+    <footer>
+        <div id="footer">
+            <div class="container">
+                <a asp-controller="Home" asp-action="Index">@*<img src="/skin/logo_text.png">*@</a>
+                <div class="row">
+                    <div class="col-md-3">
+                        <h5>Книгоша</h5>
+                        <a asp-controller="Home" asp-action="Team">О нас</a><div style="height:15px;"></div>
+                        <a asp-controller="Subscriptions" asp-action="Index">Типы абонементов</a><div style="height:15px;"></div>
+                        <a asp-controller="Texts" asp-action="Index">Блог</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="Partners">Партнёры</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="TermsOfUse">Условия пользования</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="Policy">Политика конфиденциальности</a><div style="height:15px;"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Помощь</h5>
+                        <a asp-controller="Home" asp-action="HowItWorks">Как это работает?</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="CreateClass">Как создать группу КЛАСС</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="UseClass">Как использовать группу КЛАСС</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="CreateFamily">Как создать группу СЕМЬЯ</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="UseFamily">Как использовать группу СЕМЬЯ</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="Activate">Активировать подписку с помощью ключа</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="FAQ">Часто задаваемые вопросы</a><div style="height:15px;"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Викторины</h5>
+                        <a asp-controller="Book" asp-action="Search">Художественная литература</a><div style="height:15px;"></div>
+                        <a asp-controller="Book" asp-action="Search">Научнопопулярная литература</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="CreateQuiz">Создать викторину</a><div style="height:15px;"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Связаться с нами</h5>
+                        <div class="contact"><span class="icon"><i class="fa fa-envelope"></i></span> <a href="mailto:info@knigovishte.bg">info@knigovishte.bg</a></div><div style="height:5px;"></div>
+                        <div class="contact" style="white-space:nowrap;"><span class="icon"><i class="fa fa-facebook-f"></i></span> <a href="https://www.facebook.com/Knigovishte/" target="_blank">www.facebook.com/Knigovishte</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 50px;" class="container">
+            <span style="line-height: 50px; ">&copy; 2019 - Knigosha.ru</span>
         </div>
     </footer>
 
@@ -89,14 +124,6 @@
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script>
-
-        $('#dropdown').on('hide.bs.dropdown', function (e) {
-            if (e.clickEvent) {
-                e.preventDefault();
-            }
-        })
-    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
