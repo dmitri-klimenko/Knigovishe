@@ -4,48 +4,50 @@
 @{
     ViewData["Title"] = "Редактировать вопрос";
 }
-<partial name="_DashboardPartial" />
-<div>
-    <div class="header">
-        <h4>Редактировать вопрос</h4>
-        <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
-    </div>
-    <hr />
-    <div class="adminForm row">
-        <div class="col-md-12">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <input asp-for="BookId" type="hidden" />
-                <div class="form-group">
-                    <label asp-for="QuestionType"></label>
-                    <select asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionTypes>()" , class="form-control"><option value=""> - Выберите категорию - </option></select>
-                    <span asp-validation-for="QuestionType" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Text"></label>
-                    <input asp-for="Text" class="form-control" />
-                    <span asp-validation-for="Text" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="RightAnswer"></label>
-                    <input asp-for="RightAnswer" class="form-control" />
-                    <span asp-validation-for="RightAnswer" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="WrongAnswer1"></label>
-                    <input asp-for="WrongAnswer1" class="form-control" />
-                    <span asp-validation-for="WrongAnswer1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="WrongAnswer2"></label>
-                    <input asp-for="WrongAnswer2" class="form-control" />
-                    <span asp-validation-for="WrongAnswer2" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Сохранить изменения" class="btn btn-success" />
-                </div>
-            </form>
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Редактировать вопрос</h4>
+            <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
+        </div>
+        <hr />
+        <div class="adminForm row">
+            <div class="col-md-12">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input asp-for="BookId" type="hidden" />
+                    <div class="form-group">
+                        <label asp-for="QuestionType"></label>
+                        <select asp-for="QuestionType" asp-items="Html.GetEnumSelectList<QuestionTypes>()" , class="form-control"><option value=""> - Выберите категорию - </option></select>
+                        <span asp-validation-for="QuestionType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text"></label>
+                        <input asp-for="Text" class="form-control" />
+                        <span asp-validation-for="Text" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RightAnswer"></label>
+                        <input asp-for="RightAnswer" class="form-control" />
+                        <span asp-validation-for="RightAnswer" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="WrongAnswer1"></label>
+                        <input asp-for="WrongAnswer1" class="form-control" />
+                        <span asp-validation-for="WrongAnswer1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="WrongAnswer2"></label>
+                        <input asp-for="WrongAnswer2" class="form-control" />
+                        <span asp-validation-for="WrongAnswer2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Сохранить изменения" class="btn btn-success" />
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -53,14 +55,14 @@
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
-        $(document).ready(function() {
-            $('#selectQuestionCategory').change(function() {
+        $(document).ready(function () {
+            $('#selectQuestionCategory').change(function () {
                 var questionCategoryVal = this.val();
                 if (questionCategoryVal === 3) {
                     $('#rightAnswerDiv').hide();
                     $('#wrongAnswer1Div').hide();
                     $('#wrongAnswer2Div').hide();
-                } 
+                }
             });
         })
 

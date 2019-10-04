@@ -4,92 +4,94 @@
 @{
     ViewData["Title"] = "Редактировать абонемент";
 }
-<partial name="_DashboardPartial" />
-<div>
-    <div class="header">
-        <h4>Редактировать абонемент</h4>
-        <a asp-action="IndexAdmin" class="btn btn btn-light ">Назад к абонементам</a>
-    </div>
-    <hr />
-    <div class="adminForm row">
-        <div class="col-md-12">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="Name"></label>
-                    <select asp-for="Name" asp-items="Html.GetEnumSelectList<SubscriptionNames>()" class="form-control"><option value=""> - Выберите имя абонемента - </option></select>
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="SubscriptionType"></label>
-                    <select asp-for="SubscriptionType" asp-items="Html.GetEnumSelectList<SubscriptionTypes>()" class="form-control"><option value=""> - Выберите тип абонемента - </option></select>
-                    <span asp-validation-for="SubscriptionType" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CurrentPrice"></label>
-                    <input asp-for="CurrentPrice" class="form-control" />
-                    <span asp-validation-for="CurrentPrice" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="OldPrice"></label>
-                    <input asp-for="OldPrice" class="form-control" />
-                    <span asp-validation-for="OldPrice" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Discount"></label>
-                    <input asp-for="Discount" class="form-control" />
-                    <span asp-validation-for="Discount" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MaxQuizzes"></label>
-                    <input asp-for="MaxQuizzes" class="form-control"/>
-                    <span asp-validation-for="MaxQuizzes" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NumberOfStudentProfiles"></label>
-                    <input asp-for="NumberOfStudentProfiles" class="form-control"/>
-                    <span asp-validation-for="NumberOfStudentProfiles" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NumberOfParentProfiles"></label>
-                    <input asp-for="NumberOfParentProfiles" class="form-control" />
-                    <span asp-validation-for="NumberOfParentProfiles" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NumberOfTeacherProfiles"></label>
-                    <input asp-for="NumberOfTeacherProfiles" class="form-control" />
-                    <span asp-validation-for="NumberOfTeacherProfiles" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ValidUntil"></label>
-                    <input asp-for="ValidUntil" class="form-control" />
-                    <span asp-validation-for="ValidUntil" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BankData"></label>
-                    <textarea rows="2" asp-for="BankData" class="form-control"></textarea>
-                    <span asp-validation-for="BankData" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Text1"></label>
-                    <textarea rows="2" asp-for="Text1" class="form-control"></textarea>
-                    <span asp-validation-for="Text1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Text2"></label>
-                    <textarea rows=2 asp-for="Text2" class="form-control"></textarea>
-                    <span asp-validation-for="Text2" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Text3"></label>
-                    <textarea rows="2" asp-for="Text3" class="form-control"></textarea>
-                    <span asp-validation-for="Text3" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Сохранить изменения" class="btn btn-success" />
-                </div>
-            </form>
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Редактировать абонемент</h4>
+            <a asp-action="IndexAdmin" class="btn btn btn-light ">Назад к абонементам</a>
+        </div>
+        <hr />
+        <div class="adminForm row">
+            <div class="col-md-12">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <select asp-for="Name" asp-items="Html.GetEnumSelectList<SubscriptionNames>()" class="form-control"><option value=""> - Выберите имя абонемента - </option></select>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SubscriptionType"></label>
+                        <select asp-for="SubscriptionType" asp-items="Html.GetEnumSelectList<SubscriptionTypes>()" class="form-control"><option value=""> - Выберите тип абонемента - </option></select>
+                        <span asp-validation-for="SubscriptionType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CurrentPrice"></label>
+                        <input asp-for="CurrentPrice" class="form-control" />
+                        <span asp-validation-for="CurrentPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="OldPrice"></label>
+                        <input asp-for="OldPrice" class="form-control" />
+                        <span asp-validation-for="OldPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Discount"></label>
+                        <input asp-for="Discount" class="form-control" />
+                        <span asp-validation-for="Discount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxQuizzes"></label>
+                        <input asp-for="MaxQuizzes" class="form-control" />
+                        <span asp-validation-for="MaxQuizzes" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumberOfStudentProfiles"></label>
+                        <input asp-for="NumberOfStudentProfiles" class="form-control" />
+                        <span asp-validation-for="NumberOfStudentProfiles" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumberOfParentProfiles"></label>
+                        <input asp-for="NumberOfParentProfiles" class="form-control" />
+                        <span asp-validation-for="NumberOfParentProfiles" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumberOfTeacherProfiles"></label>
+                        <input asp-for="NumberOfTeacherProfiles" class="form-control" />
+                        <span asp-validation-for="NumberOfTeacherProfiles" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ValidUntil"></label>
+                        <input asp-for="ValidUntil" class="form-control" />
+                        <span asp-validation-for="ValidUntil" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BankData"></label>
+                        <textarea rows="2" asp-for="BankData" class="form-control"></textarea>
+                        <span asp-validation-for="BankData" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text1"></label>
+                        <textarea rows="2" asp-for="Text1" class="form-control"></textarea>
+                        <span asp-validation-for="Text1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text2"></label>
+                        <textarea rows=2 asp-for="Text2" class="form-control"></textarea>
+                        <span asp-validation-for="Text2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text3"></label>
+                        <textarea rows="2" asp-for="Text3" class="form-control"></textarea>
+                        <span asp-validation-for="Text3" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Сохранить изменения" class="btn btn-success" />
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

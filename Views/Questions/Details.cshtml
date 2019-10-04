@@ -4,48 +4,50 @@
 @{
     ViewData["Title"] = "Детали вопроса";
 }
-<partial name="_DashboardPartial" />
-<div id="questionDetail">
-    <h4>Вопрос к книге @Html.DisplayFor(model => model.Book.Title)</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-4">
-            Текст вопроса:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-        @if (@Model.QuestionType != QuestionTypes.Opinion)
-        {
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div id="questionDetail">
+        <h4>Вопрос к книге @Html.DisplayFor(model => model.Book.Title)</h4>
+        <hr />
+        <dl class="row">
             <dt class="col-sm-4">
-                Правильный ответ:
+                Текст вопроса:
             </dt>
             <dd class="break-word col-sm-8">
-                @Html.DisplayFor(model => model.RightAnswer)
+                @Html.DisplayFor(model => model.Text)
             </dd>
+            @if (@Model.QuestionType != QuestionTypes.Opinion)
+            {
+                <dt class="col-sm-4">
+                    Правильный ответ:
+                </dt>
+                <dd class="break-word col-sm-8">
+                    @Html.DisplayFor(model => model.RightAnswer)
+                </dd>
+                <dt class="col-sm-4">
+                    Первый неправильный ответ:
+                </dt>
+                <dd class="break-word col-sm-8">
+                    @Html.DisplayFor(model => model.WrongAnswer1)
+                </dd>
+                <dt class="col-sm-4">
+                    Второй неправильный ответ:
+                </dt>
+                <dd class="break-word col-sm-8">
+                    @Html.DisplayFor(model => model.WrongAnswer2)
+                </dd>
+            }
             <dt class="col-sm-4">
-                Первый неправильный ответ:
+                Тип вопроса:
             </dt>
-            <dd class="break-word col-sm-8">
-                @Html.DisplayFor(model => model.WrongAnswer1)
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.QuestionType)
             </dd>
-            <dt class="col-sm-4">
-                Второй неправильный ответ:
-            </dt>
-            <dd class="break-word col-sm-8">
-                @Html.DisplayFor(model => model.WrongAnswer2)
-            </dd>
-        }
-        <dt class="col-sm-4">
-            Тип вопроса:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.QuestionType)
-        </dd>
 
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary">Редактировать</a>
-    <a style="margin-left: 20px" asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light">Назад</a>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary">Редактировать</a>
+        <a style="margin-left: 20px" asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light">Назад</a>
+    </div>
 </div>

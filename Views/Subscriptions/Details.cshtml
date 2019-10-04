@@ -3,99 +3,101 @@
 @{
     ViewData["Title"] = "Детали абонемента";
 }
-<partial name="_DashboardPartial" />
+<div class="container">
+    <partial name="_DashboardPartial" />
 
-<div id="questionDetail">
-    <h4>Детали абонемента</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-4">
-            Название:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-4">
-            Тип абонемента:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.SubscriptionType)
-        </dd>
-        <dt class="col-sm-4">
-            Цена:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.CurrentPrice)
-        </dd>
-        <dt class="col-sm-4">
-            Старая цена:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.OldPrice)
-        </dd>
-        <dt class="col-sm-4">
-            Скидка:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Discount)
-        </dd>
-        <dt class="col-sm-4">
-            Количество вопросников:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.MaxQuizzes)
-        </dd>
-        <dt class="col-sm-4">
-            Ученических профилей:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfStudentProfiles)
-        </dd>
-        <dt class="col-sm-4">
-            Родительских профилей:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfParentProfiles)
-        </dd>
-        <dt class="col-sm-4">
-            Учительских профилей:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.NumberOfTeacherProfiles)
-        </dd>
-        <dt class="col-sm-4">
-            Действителен до:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.ValidUntil)
-        </dd>
-        <dt class="col-sm-4">
-            Данные банка для перевода:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.BankData)
-        </dd>
-        <dt class="col-sm-4">
-            Текст 1:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Text1)
-        </dd>
-        <dt class="col-sm-4">
-            Текст 2:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Text2)
-        </dd>
-        <dt class="col-sm-4">
-            Текст 3:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Text3)
-        </dd>
-    </dl>
-</div>
-<div>
-   <a asp-action="Edit" asp-route-id="@Model.Id"class="btn btn btn-secondary">Редактировать</a>
-    <a style="margin-left: 20px" asp-action="IndexAdmin"class="btn btn btn-light">Назад</a>
+    <div id="questionDetail">
+        <h4>Детали абонемента</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                Название:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-4">
+                Тип абонемента:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.SubscriptionType)
+            </dd>
+            <dt class="col-sm-4">
+                Цена:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.CurrentPrice)
+            </dd>
+            <dt class="col-sm-4">
+                Старая цена:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.OldPrice)
+            </dd>
+            <dt class="col-sm-4">
+                Скидка:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Discount)
+            </dd>
+            <dt class="col-sm-4">
+                Количество вопросников:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.MaxQuizzes)
+            </dd>
+            <dt class="col-sm-4">
+                Ученических профилей:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NumberOfStudentProfiles)
+            </dd>
+            <dt class="col-sm-4">
+                Родительских профилей:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NumberOfParentProfiles)
+            </dd>
+            <dt class="col-sm-4">
+                Учительских профилей:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NumberOfTeacherProfiles)
+            </dd>
+            <dt class="col-sm-4">
+                Действителен до:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.ValidUntil)
+            </dd>
+            <dt class="col-sm-4">
+                Данные банка для перевода:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.BankData)
+            </dd>
+            <dt class="col-sm-4">
+                Текст 1:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Text1)
+            </dd>
+            <dt class="col-sm-4">
+                Текст 2:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Text2)
+            </dd>
+            <dt class="col-sm-4">
+                Текст 3:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Text3)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary">Редактировать</a>
+        <a style="margin-left: 20px" asp-action="IndexAdmin" class="btn btn btn-light">Назад</a>
+    </div>
 </div>

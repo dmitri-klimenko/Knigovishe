@@ -4,19 +4,20 @@
 @{
     ViewData["Title"] = "Новый вопрос";
 }
-<partial name="_DashboardPartial" />
-<div>
-    <div class="header">
-        <h4>Новый вопрос (№@Model.QuestionNumber)</h4>
-        <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
-    </div>
-    <hr/>
-    <div class="adminForm row">
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Новый вопрос (№@Model.QuestionNumber)</h4>
+            <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
+        </div>
+        <hr />
+        <div class="adminForm row">
             <div class="col-md-12">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <input asp-for="BookId" type="hidden"/>
+                        <input asp-for="BookId" type="hidden" />
                     </div>
                     <div class="form-group">
                         <label asp-for="QuestionType"></label>
@@ -43,21 +44,22 @@
                         <input asp-for="WrongAnswer2" class="form-control" />
                         <span asp-validation-for="WrongAnswer2" class="text-danger"></span>
                     </div>
-                   
+
                     <div class="form-group">
                         <input type="submit" value="Сохранить" class="btn btn-success" />
                     </div>
                 </form>
             </div>
         </div>
-</div>
+    </div>
 
+</div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
-        $(document).ready(function() {
-            $('#selectQuestionCategory').change(function() {
+        $(document).ready(function () {
+            $('#selectQuestionCategory').change(function () {
                 var questionCategoryVal = $(this).val();
                 console.log(questionCategoryVal);
 
@@ -66,7 +68,7 @@
                     $('#wrongAnswer1Div').hide();
                     $('#wrongAnswer2Div').hide();
                 } else {
-                    
+
                     $('#rightAnswerDiv').show();
                     $('#wrongAnswer1Div').show();
                     $('#wrongAnswer2Div').show();

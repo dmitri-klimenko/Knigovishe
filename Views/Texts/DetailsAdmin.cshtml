@@ -3,44 +3,47 @@
 @{
     ViewData["Title"] = "Детали текста";
 }
-<partial name="_DashboardPartial" />
-<div id="textDetail">
-    @if(Model.Photo != null){<img src="~/uploads/@Model.Photo" class="coverPhoto" alt="cover photo">}
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.TextType)
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.TextType)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-        <dt class="col-sm-4">
-            @Html.DisplayNameFor(model => model.DateEdited)
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.DateEdited)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary" >Редактировать</a> 
-    <a style="margin-left: 20px" asp-action="IndexAdmin" class="btn btn btn-light" >Назад</a>
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div id="textDetail">
+        @if (Model.Photo != null)
+        {<img src="~/uploads/@Model.Photo" class="coverPhoto" alt="cover photo">}
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TextType)
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.TextType)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DateAdded)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DateEdited)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DateEdited)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn btn-secondary">Редактировать</a>
+        <a style="margin-left: 20px" asp-action="IndexAdmin" class="btn btn btn-light">Назад</a>
+    </div>
 </div>

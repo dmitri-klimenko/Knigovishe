@@ -4,114 +4,116 @@
 @{
     ViewData["Title"] = "Новая книга";
 }
-<partial name="_DashboardPartial" />
-<div>
-    <div class="header">
-        <h4>Новая книга</h4>
-        <a asp-action="IndexAdmin" class="btn btn btn-light ">Назад к книгам</a>
-    </div>
-    <hr />
-    <form asp-action="Create" enctype="multipart/form-data">
-        <div class="adminForm row">
-            <div class="col-md-6">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="YearPublished"></label>
-                    <input asp-for="YearPublished" class="form-control" />
-                    <span asp-validation-for="YearPublished" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Isbn1"></label>
-                    <input asp-for="Isbn1" class="form-control" />
-                    <span asp-validation-for="Isbn1" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Grade"></label>
-                    <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" , class="form-control">
-                        <option value=""> - Выберите класс - </option>
-                    </select>
-                    <span asp-validation-for="Grade" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Tags"></label>
-                    <input asp-for="Tags" class="form-control" />
-                    <span asp-validation-for="Tags" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Translator"></label>
-                    <input asp-for="Translator" class="form-control" />
-                    <span asp-validation-for="Translator" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Description"></label>
-                    <textarea rows="3" asp-for="Description" class="form-control"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="IsShortForm" /> @Html.DisplayNameFor(model => model.IsShortForm)
-                    </label>
-                    <span asp-validation-for="IsShortForm" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UploadPhoto"></label>
-                    <input asp-for="UploadPhoto" accept="image/*" />
-                    <span asp-validation-for="UploadPhoto" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="AddedByAdmin"></label>
-                    <input asp-for="AddedByAdmin" class="form-control" />
-                    <span asp-validation-for="AddedByAdmin" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Сохранить книгу" class="btn btn-success" />
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="BookAuthor"></label>
-                    <input asp-for="BookAuthor" class="form-control" />
-                    <span asp-validation-for="BookAuthor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Publisher"></label>
-                    <input asp-for="Publisher" class="form-control" />
-                    <span asp-validation-for="Publisher" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Isbn2"></label>
-                    <input asp-for="Isbn2" class="form-control" />
-                    <span asp-validation-for="Isbn2" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BookCategory"></label>
-                    <select asp-for="BookCategory" asp-items="Html.GetEnumSelectList<BookCategories>()" class="form-control"></select>
-                    <span asp-validation-for="BookCategory" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="QuestionsAuthor"></label>
-                    <input asp-for="QuestionsAuthor" class="form-control" />
-                    <span asp-validation-for="QuestionsAuthor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PartOfSchoolProgramAtGrade"></label>
-                    <select asp-for="PartOfSchoolProgramAtGrade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"><option value=""> - Выберите класс - </option></select>
-                    <span asp-validation-for="PartOfSchoolProgramAtGrade" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NumberOfPages"></label>
-                    <input asp-for="NumberOfPages" class="form-control" />
-                    <span asp-validation-for="NumberOfPages" class="text-danger"></span>
-                </div>
-            </div>
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Новая книга</h4>
+            <a asp-action="IndexAdmin" class="btn btn btn-light ">Назад к книгам</a>
         </div>
-    </form>
+        <hr />
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div class="adminForm row">
+                <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="YearPublished"></label>
+                        <input asp-for="YearPublished" class="form-control" />
+                        <span asp-validation-for="YearPublished" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Isbn1"></label>
+                        <input asp-for="Isbn1" class="form-control" />
+                        <span asp-validation-for="Isbn1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Grade"></label>
+                        <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" , class="form-control">
+                            <option value=""> - Выберите класс - </option>
+                        </select>
+                        <span asp-validation-for="Grade" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Tags"></label>
+                        <input asp-for="Tags" class="form-control" />
+                        <span asp-validation-for="Tags" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Translator"></label>
+                        <input asp-for="Translator" class="form-control" />
+                        <span asp-validation-for="Translator" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <textarea rows="3" asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsShortForm" /> @Html.DisplayNameFor(model => model.IsShortForm)
+                        </label>
+                        <span asp-validation-for="IsShortForm" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UploadPhoto"></label>
+                        <input asp-for="UploadPhoto" accept="image/*" />
+                        <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AddedByAdmin"></label>
+                        <input asp-for="AddedByAdmin" class="form-control" />
+                        <span asp-validation-for="AddedByAdmin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Сохранить книгу" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="BookAuthor"></label>
+                        <input asp-for="BookAuthor" class="form-control" />
+                        <span asp-validation-for="BookAuthor" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Publisher"></label>
+                        <input asp-for="Publisher" class="form-control" />
+                        <span asp-validation-for="Publisher" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Isbn2"></label>
+                        <input asp-for="Isbn2" class="form-control" />
+                        <span asp-validation-for="Isbn2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BookCategory"></label>
+                        <select asp-for="BookCategory" asp-items="Html.GetEnumSelectList<BookCategories>()" class="form-control"></select>
+                        <span asp-validation-for="BookCategory" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="QuestionsAuthor"></label>
+                        <input asp-for="QuestionsAuthor" class="form-control" />
+                        <span asp-validation-for="QuestionsAuthor" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PartOfSchoolProgramAtGrade"></label>
+                        <select asp-for="PartOfSchoolProgramAtGrade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control"><option value=""> - Выберите класс - </option></select>
+                        <span asp-validation-for="PartOfSchoolProgramAtGrade" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumberOfPages"></label>
+                        <input asp-for="NumberOfPages" class="form-control" />
+                        <span asp-validation-for="NumberOfPages" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {

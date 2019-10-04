@@ -3,87 +3,89 @@
 @{
     ViewData["Title"] = "Детали абонемента пользователя";
 }
-<partial name="_DashboardPartial" />
+<div class="container">
+    <partial name="_DashboardPartial" />
 
-<div id="textDetail">
-    <h4>Детали абонемента пользователя @Html.DisplayFor(model => model.User.Name) @Html.DisplayFor(model => model.User.Surname)</h4>
-    <hr/>
-    <dl class="row">
-        <dt class="col-sm-4">
-            Тип абонемента:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Subscription.SubscriptionType)
-        </dd>
-        <dt class="col-sm-4">
-            Действителен до:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Subscription.ValidUntil)
-        </dd>
-        <dt class="col-sm-4">
-            Заказан:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.OrderedOn)
-        </dd>
-        <dt class="col-sm-4">
-            Статус:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.Status)  <a asp-controller="UserSubscription" asp-action="SendActivationKey" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Послать код активации</a>
-        </dd>
-        <dt class="col-sm-4">
-            Активирован:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.ActivatedOn)
-        </dd>
-        <dt class="col-sm-4">
-            Тип оплаты:
-        </dt>
-        <dd class="col-sm-8">
-            @Html.DisplayFor(model => model.PaymentType)
-        </dd>
-        <dt class="col-sm-4">
-            Заметка пользователя:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.Note)
-        </dd>
-        <dt class="col-sm-4">
-            Учебный год:
-        </dt>
-        <dd class="break-word col-sm-8">
-            @Html.DisplayFor(model => model.SchoolYear)
-        </dd>
-    </dl>
-</div>
-<div>
-    <hr/>
-    <h4>Коды активации</h4>
-    <table id="activationCodes" class="table table-bordered">
-        <thead>
-        <tr>
-            <th class="codeTypeColumn">Тип кода</th>
-            <th class="codeColumn">Код</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.ActivationKeys)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivationKeyType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Code)
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
-<div>
-    <a style="margin-left: 20px" asp-action="Index" class="btn btn btn-light" >Назад</a>
+    <div id="textDetail">
+        <h4>Детали абонемента пользователя @Html.DisplayFor(model => model.User.Name) @Html.DisplayFor(model => model.User.Surname)</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                Тип абонемента:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Subscription.SubscriptionType)
+            </dd>
+            <dt class="col-sm-4">
+                Действителен до:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Subscription.ValidUntil)
+            </dd>
+            <dt class="col-sm-4">
+                Заказан:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.OrderedOn)
+            </dd>
+            <dt class="col-sm-4">
+                Статус:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Status)  <a asp-controller="UserSubscription" asp-action="SendActivationKey" asp-route-id="@Model.Id" class="btn btn-danger btn-sm">Послать код активации</a>
+            </dd>
+            <dt class="col-sm-4">
+                Активирован:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.ActivatedOn)
+            </dd>
+            <dt class="col-sm-4">
+                Тип оплаты:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.PaymentType)
+            </dd>
+            <dt class="col-sm-4">
+                Заметка пользователя:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+            <dt class="col-sm-4">
+                Учебный год:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.SchoolYear)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <hr />
+        <h4>Коды активации</h4>
+        <table id="activationCodes" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="codeTypeColumn">Тип кода</th>
+                    <th class="codeColumn">Код</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ActivationKeys)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActivationKeyType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Code)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <a style="margin-left: 20px" asp-action="Index" class="btn btn btn-light">Назад</a>
+    </div>
 </div>

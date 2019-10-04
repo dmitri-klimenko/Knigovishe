@@ -48,7 +48,6 @@
     <Folder Include="Core\Dtos\" />
     <Folder Include="Core\Repositories\" />
     <Folder Include="Persistence\Repositories\" />
-    <Folder Include="Views\Shared\EditrorTemplates\" />
   </ItemGroup>
 
 

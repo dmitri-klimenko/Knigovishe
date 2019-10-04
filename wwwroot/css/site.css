@@ -10,49 +10,48 @@ a.navbar-brand {
 
 /* Sticky footer styles
 -------------------------------------------------- */
-
+html {
+    font-size: 14px;
+}
 @media (min-width: 768px) {
-  html {
-    font-size: 17px !important;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-    box-shadow: 0 .25rem .75rem #000000;
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  /*min-height: 100%;*/
+    position: relative;
+    min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
-    padding-bottom: 30px;
-}
+
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+    /*position: absolute;*/
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
 }
 
 body {
@@ -69,8 +68,6 @@ body {
 body, html {
     padding: 0;
     background: #fff;
-    
- 
 }
 
 body.home {
@@ -130,10 +127,7 @@ h5 {
     margin-bottom: 15px;
 }
 
-
-
-
-.inner {
+/*.inner {
     margin: auto;
     width: 1200px;
     position: relative;
@@ -141,7 +135,7 @@ h5 {
 
     .inner .row {
         margin: 0px;
-    }
+    }*/
 
 .error {
     margin-bottom: 10px;
@@ -775,7 +769,7 @@ body.scroll #header, body:not(.hero) #header {
     color: #232323;
     font-size: 16px;
     line-height: 1;
-
+    min-height: 360px;
 }
 
     #footer h5, #newsletter h5 {
@@ -1837,6 +1831,7 @@ input::placeholder {
     padding-bottom: 50px;
     line-height: 140%;
     font-weight: 100;
+    min-height: calc(100vh - 360px);
 }
 
 #banner {
@@ -3376,6 +3371,7 @@ nav a:-webkit-any-link:hover {
 
 #dashboard {
     background-color: #dc3545 !important;
+    margin-top: 15px;
 }
 
     #dashboard a {

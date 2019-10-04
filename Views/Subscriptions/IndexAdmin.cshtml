@@ -3,47 +3,47 @@
 @{
     ViewData["Title"] = "Абонементы";
 }
-<partial name="_DashboardPartial" />
-<a asp-controller="Subscriptions" asp-action="Create" class="btn btn btn-light adminButton">Новый абонемент</a>
-<table class="table table-bordered adminTable">
-    <thead>
-    <tr>
-        <th>
-            Тип абонемента
-        </th>
-        <th>
-            Цена
-        </th>
-        <th>
-            Старая цена
-        </th>
-        <th>
-            Действителен до
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
+<div class="container"><partial name="_DashboardPartial" />
+    <a asp-controller="Subscriptions" asp-action="Create" class="btn btn btn-light adminButton">Новый абонемент</a>
+    <table class="table table-bordered adminTable">
+        <thead>
         <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.SubscriptionType)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrentPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OldPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValidUntil)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
-            </td>
+            <th>
+                Тип абонемента
+            </th>
+            <th>
+                Цена
+            </th>
+            <th>
+                Старая цена
+            </th>
+            <th>
+                Действителен до
+            </th>
+            <th></th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.SubscriptionType)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OldPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidUntil)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table></div>

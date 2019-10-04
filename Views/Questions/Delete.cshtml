@@ -1,50 +1,52 @@
 ﻿@model Knigosha.Core.Models.Question
 
 @{
-ViewData["Title"] = "Удалить вопрос";
+    ViewData["Title"] = "Удалить вопрос";
 }
-<partial name="_DashboardPartial" />
-<div>
-    <div class="header">
-        <h4>Вы уверены, что хотите удалить этот вопрос?</h4>
-        <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Вы уверены, что хотите удалить этот вопрос?</h4>
+            <a asp-action="Index" asp-route-id="@Model.BookId" class="btn btn btn-light ">Назад к вопросам</a>
+        </div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                Текст вопроса:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.Text)
+            </dd>
+            <dt class="col-sm-4">
+                Правильный ответ:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.RightAnswer)
+            </dd>
+            <dt class="col-sm-4">
+                Первый неправильный ответ:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.WrongAnswer1)
+            </dd>
+            <dt class="col-sm-4">
+                Второй неправильный ответ:
+            </dt>
+            <dd class="break-word col-sm-8">
+                @Html.DisplayFor(model => model.WrongAnswer2)
+            </dd>
+            <dt class="col-sm-4">
+                Тип вопроса:
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.QuestionType)
+            </dd>
+
+        </dl>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+        </form>
     </div>
-    <hr/>
-    <dl class="row">
-        <dt class = "col-sm-4">
-            Текст вопроса:
-        </dt>
-        <dd class = "break-word col-sm-8">
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-        <dt class = "col-sm-4">
-            Правильный ответ: 
-        </dt>
-        <dd class = "break-word col-sm-8">
-            @Html.DisplayFor(model => model.RightAnswer)
-        </dd>
-        <dt class="col-sm-4">
-            Первый неправильный ответ:
-        </dt>
-        <dd class = "break-word col-sm-8">
-            @Html.DisplayFor(model => model.WrongAnswer1)
-        </dd>
-        <dt class = "col-sm-4">
-            Второй неправильный ответ:
-        </dt>
-        <dd class = "break-word col-sm-8">
-            @Html.DisplayFor(model => model.WrongAnswer2)
-        </dd>
-        <dt class = "col-sm-4">
-            Тип вопроса:
-        </dt>
-        <dd class = "col-sm-8">
-            @Html.DisplayFor(model => model.QuestionType)
-        </dd>
-   
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Удалить" class="btn btn-danger" />
-    </form>
 </div>
