@@ -13,9 +13,13 @@ namespace Knigosha.Core.ViewModels.TextViewModels
         [Display(Name = "*Название")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Пожалуйста, введите описание")]
-        [Display(Name = "*Описание")]
+        [Required(ErrorMessage = "Пожалуйста, введите описание/город")]
+        [Display(Name = "*Описание/город")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Пожалуйста, введите описание/профессию")]
+        [Display(Name = "*Описание/профессия")]
+        public string Description2 { get; set; }
 
         [Display(Name = "Фото:")]
         public IFormFile Photo { get; set; }

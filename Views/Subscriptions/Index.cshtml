@@ -4,3 +4,117 @@
     ViewData["Title"] = "Абонементы";
 }
 
+<div id="content">
+    <div class="bg2">
+        <div style="height:80px;"></div>
+        <div class="container" id="license_types">
+            <h1 class="section_title">АБОНАМЕНТ ЗА КНИГОВИЩЕ</h1>
+            <div class="section_text">
+                Избери абонамента, който ти приляга.<br />
+                <br />
+                С регистрирането на профил в Книговище автоматично се активира <strong>демо-период от три седмици</strong>. За да продължите да ползвате Книговище и след този срок, е необходимо да изберете своя абонамент.<br />
+                <br />
+                Всички абонаменти важат до 15.09.2020 г.<br />
+                <br />
+                <strong>При желание да поръчате повече от 1 абонамент наведнъж и за групови отстъпки ни пишете на info@knigovishte.bg</strong>
+            </div>
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="license license1" onclick="window.location = '/user/order?id=10'" style="cursor: pointer;">
+                        <div style="height: 60px;">
+                            <div class="license_text">
+                                <h4 style="font-size: 22px; line-height: 26px;">Индивидуален</h4>
+                            </div>
+                        </div>
+                        <div class="license_center ">
+                            <div class="license_text">
+                                <i>Ученически профили:</i><br><b>1</b>
+                                <div style="height: 10px;"></div>
+                                <i>Валиден до:</i><br><b>Септември 2020</b>
+                                <div style="height: 10px;"></div>
+                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                            </div>
+                        </div>
+                        <div style="height: 20px;"></div>
+                        <div class="license_text license_price "><i>Цена:</i><br><b>25 лв.</b> </div>
+                        <div class="vote_shadow" style="display: none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup"></div>
+                        </div>
+                        <div style="height: 40px;"></div>
+                        <a href="/user/order?id=10" class="button">Поръчай</a>
+                    </div>
+                    <div style="height: 50px;"></div>
+                </div>
+                <div class="col col-md-4">
+                    <div class="license license2" onclick="window.location='/user/order?id=6'" style="cursor:pointer;">
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4 style="font-size:22px;line-height:26px;">Семеен</h4>
+                            </div>
+                        </div>
+                        <div class="license_center ">
+                            <div class="license_text">
+                                <i>Родителски профили:</i><br><b>1</b><div style="height:10px;"></div>
+                                <i>Ученически профили:</i><br><b>4</b><div style="height:10px;"></div>
+                                <i>Валиден до:</i><br><b>Септември 2020</b><div style="height:10px;"></div>
+                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text license_price "><i>Цена:</i><br><b>40 лв.</b></div>
+                        <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup"></div>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a href="/user/order?id=6" class="button">Поръчай</a>
+                    </div>
+                    <div style="height:50px;"></div>
+                </div>
+                <div class="col col-md-4">
+                    <div class="license license3" onclick="window.location='/user/order?id=1'" style="cursor:pointer;">
+                        <div style="height:60px;">
+                            <div class="license_text">
+                                <h4 style="font-size:22px;line-height:26px;">Абонамент за клас</h4>
+                            </div>
+                        </div>
+                        <div class="license_center ">
+                            <div class="license_text">
+                                <i>Учителски профили:</i><br><b>1</b><div style="height:10px;"></div>
+                                <i>Ученически профили в клас:</i><br><b>30</b><div style="height:10px;"></div>
+                                <i>Валиден до:</i><br><b>Септември 2020</b><div style="height:10px;"></div>
+                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                            </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                        <div class="license_text license_price ">
+                            <i>Цена:</i><br><b>120 лв.</b>
+                            <div style="height:5px;"></div>
+                            <a href="javascript:;" onclick="licensePopup(this);event.stopPropagation();">Отстъпки при повече от три абонамента</a>
+                        </div>
+                        <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup">
+                                Отстъпки при закупуване на няколко абонамента за клас едновременно:<br />
+                                <br />
+                                - от 3 до 5 абонамента за клас – 5 % отстъпка<br />
+                                - от 6 до 9 абонамента за клас – 7 % отстъпка<br />
+                                - от 10 до 14 абонамента за клас – 10 % отстъпка<br />
+                                - от 15 до 19 абонамента за клас – 12 % отстъпка<br />
+                                - от 20 до 24 абонамента за клас – 15 % отстъпка<br />
+                                - от 25 до 29 абонамента за клас – 17 % отстъпка<br />
+                                - от 30 до 34 абонамента за клас – 20 % отстъпка<br />
+                                - от 35 до 39 абонамента за клас – 25 % отстъпка<br />
+                                - от 40 класа нагоре – 30 % отстъпка<br />
+                                <br />
+                                За информация и заявки: info@knigovishte.bg
+                            </div>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a href="/user/order?id=1" class="button">Поръчай</a>
+                    </div>
+                    <div style="height:50px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -218,9 +218,5 @@ namespace Knigosha.Controllers
             return _context.Books.Any(e => e.Id == id);
         }
 
-        public IActionResult Search()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -3,4 +3,72 @@
 @{
     ViewBag.Title = "Мы";
 }
+<div class="page_banner visible-desktop" style="background-image:url(/skin/header_about.png);">
+    <div class="container" style="position: relative">
+        <h1 style="position:absolute;top:130px;font-size:40px;left:100px;">Кои сме ние</h1>
+    </div>
+</div>
+<div class="visible-mobile">
+    <div style="padding-top:40px;text-align:center;font-size:22px;font-weight:bold;">Кто мы?</div>
+</div>
+<div id="content">
+    <div class="container">
+        <h2 style="text-align:center;">
+            Создатели Книгоши
+        </h2>
+        <table class="sc" style="margin:auto;margin-top:60px;">
+            <tr>
+                <td class="founder" style="text-align:center;">
+                    <div style="text-align:center;padding-bottom:20px;"><img src="~/uploads/75ab6c6cbef6ebc82592c9702a0b534ae2d02538.jpeg" /></div>
+                    <div class="name">Десислава Гаврилова</div>
+                    <div style="height:20px;"></div>
+                </td>
+                <td class="founder" style="text-align:center;">
+                    <div style="text-align:center;padding-bottom:20px;"><img src="~/uploads/743cc7eb0cab3f7e9f8756e162111507b62b93e5.jpeg" /></div>
+                    <div class="name">Искра Джанабетска</div>
+                    <div style="height:20px;"></div>
+                </td>
+                <td class="founder" style="text-align:center;">
+                    <div style="text-align:center;padding-bottom:20px;"><img src="~/uploads/df74db22b8bc337161953698d81f724079a6706f.jpeg" /></div>
+                    <div class="name">Яна Генова</div>
+                    <div style="height:20px;"></div>
+                </td>
+            </tr>
+        </table>
+        <div style="height:80px;"></div>
+        <h2 style="text-align:center;">
+            Авторы викторин
+        </h2>
+        <table class="sc" style="margin: auto; max-width: 80%; margin-top: 60px;">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var cells = 4;
+                var item = Model[i];
+                if ((i % cells) == 0)
+                {
+                    @:<tr>
+                }
+                <td class="author" style="text-align: center;">
+                    <div style="text-align: center; padding-bottom: 20px;"><img src="/uploads/@item."></div>
+                    <div class="name">@item.Title</div>
+                    <div class="text">@item.Description</div>
+                    <div class="text">@item.Description</div>
+                    <div style="height: 20px;"></div></td>
+                if (i == (ViewBag.MyItems.Count - 1))
+                    {
+                        while ((i % cells) != 0)
+                        {
+                            @:<td></td>
+                            i++;
+                        }
+                    }
+                if ((i % cells) == (cells - 1)) // aka: last row cell
+                    {
+                    @:</tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
 

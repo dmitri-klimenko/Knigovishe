@@ -19,8 +19,12 @@ namespace Knigosha.Core.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Пожалуйста, введите описание")]
-        [Display(Name = "Описание")]
+        [Display(Name = "Описание/Город")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Пожалуйста, введите описание")]
+        [Display(Name = "Описание/Профессия")]
+        public string Description2 { get; set; }
 
         [Display(Name = "Добавлен")] public string DateAdded { get; set; }
 

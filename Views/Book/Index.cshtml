@@ -5,3 +5,327 @@
     Layout = "_Layout";
 }
 
+<div class="visible-desktop">
+    <div class="page_banner" style="background-color:#ffdb60;">
+        <div class="container" style="position: relative">
+            <h1 style="position: absolute; top:130px;left:100px; font-size:40px">Книги</h1>
+        </div>
+    </div>
+</div>
+
+<a href="javascript:;" name="s" style="position:relative;top:-100px;"></a>
+
+<form name="form" class="container" action="/search#s" onsubmit="
+
+		if($('#ka').is(':visible')){
+			this.keywords.value=$('#ka').val();
+			return true;
+        }
+		this.keywords.value=$('#k').val();
+		return true;
+	">
+    <input type="hidden" name="page" value="1">
+    <input type="hidden" name="advanced" value="">
+    <input type="hidden" name="keywords" value="">
+
+    <div class="inner">
+
+        <div style="position:absolute;top:-20px;opacity:0;width:1px;height:1px;overflow:hidden;">
+            <input type="submit">
+        </div>
+
+    <div style="padding-top:20px;padding-bottom:20px;">
+        <table width="100%" class="sc">
+            <tr>
+                <td style="font-size:16px;">
+
+                    <div class="advanced" style="display:none;">
+                        <div style="height:40px;"></div>
+
+                        <select name="publisher" onchange="document.form.submit()">
+                            <option value="0">Всички издателства</option>
+                            @*  *@
+                        </select>
+
+                        <span class="mbr"></span>
+
+                        <div style="height:10px;"></div>
+
+                        Година на издаване
+
+                        <span class="mbr"></span>
+
+                        от:
+                        <input type="text" value="" class="short" name="year_from">
+
+                        до:
+                        <input type="text" value="" class="short" name="year_to">
+
+                        <div style="height:10px;"></div>
+
+                        Въведи заглавие, автор, издателство или ISBN:
+
+                        <input type="text" id="ka" value="" style="width:400px;">
+
+                        <div style="height:10px;"></div>
+
+                        <input type="submit" class="button" value="Търси">
+                        <input type="button" class="button" value="Изчисти" onclick="window.location='/search'">
+
+                        <div style="height:40px;"></div>
+                    </div>
+                    430 намерени книги
+                </td>
+                <td id="sa">
+                    <table class="search_right sc" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td style="white-space:nowrap;">
+                                <input type="text" placeholder="Въведи заглавие, автор, издателство или ISBN " id="k"
+                                       value="" class="search_input"><a href="javascript:;" style="border-top-left-radius:0px;border-bottom-left-radius:0px;padding-left:10px;padding-right:15px;"
+                                                                        class="button" value="Търси" onclick="document.form.keywords.value=$('#k').val();document.form.submit();"><i class="fa fa-search"></i></a>
+                            </td>
+                            <td style="padding-left:20px;">
+                                <a href="javascript:;" class="advanced_button" onclick="
+                                        $('#left').remove();
+                                        $('.advanced').show();
+                                        $('.advanced').parent().css('text-align','left');
+                                        document.form.advanced.value=1;
+                                        $('#sa').remove();">Разширено търсене <i class="fa fa-angle-down"></i></a>
+                                                                    </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+        <table width="100%" style="border-top:1px solid #ffdb60;" class="sc tc">
+            <tr>
+                <td style="vertical-align:top;width:280px;">
+                    <div style="background: #ffefc7; padding: 20px;">
+                        
+
+                        <table>
+                            <tr><td></td><td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Категория</td>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="category" value="1"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">Художествена литература</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="category" value="2"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">Научнопопулярна литература</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="category" value="0"
+                                           checked onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Всички</td>
+                            </tr>
+                        </table>
+
+                        <div style="height: 30px;"></div>
+
+                        <table>
+                            <tr><td></td><td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Възраст</td>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="class" value="1"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">6+</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="class" value="2-4"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">8+</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="class" value="5-7"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">11+</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="class" value="8-12"
+                                           onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">14+</td>
+                            </tr>
+                            <tr class="check">
+                                <td style="vertical-align: top; width: 30px;">
+                                    <input type="radio" name="class" value="0"
+                                           checked onclick="document.form.submit()">
+                                </td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Всички</td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td style="vertical-align:top;">
+                    <div style="padding-top:20px;padding-left:40px;">
+                        <div style="text-align:right;padding-bottom:40px;">
+                            Подреди по:
+
+                            <div style="display:inline-block;position:relative;">
+                                <select style="width:200px;" name="sort_field" id="sort" onchange="document.form.submit()" class="s1">
+                                    <option value="latest">Най-нови</option>
+                                    <option value="rating">Най-харесвани</option>
+                                    <option value="views">Най-четени</option>
+                                    <option value="class">Възраст</option>
+                                    <option value="year">Година на издаване</option>
+                                    <option value="title">Заглавие</option>
+                                    <option value="author">Автор</option>
+                                </select>
+                            </div>
+                        </div>
+                    <table class="sc tc">
+                    <tr>
+
+                        @*/4 times - last without   <td width="30">&nbsp;</td> at the end*@
+                        <td style="vertical-align: top; width: 200px;" class="book_quiz">
+                            <div class="cover class4"
+                                 style="background-image: url(/uploads/5c06b83612f67dcc5efca1c46c85a158.jpg);"
+                                 onclick="window.location = '/book?id=510'">
+                                <div class="hover bg class4"></div>
+                                <div class="details">
+                                    <div style="display: table; width: 100%;">
+                                        <div style="display: table-row">
+                                            <div class="in">
+                                                <div style="font-size: 18px; padding-bottom: 5px; font-weight: bold;">Домашни духчета</div>
+                                                <div style="font-size: 14px;">Дубравка Угрешич</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="quizLabel"></div>
+                                <div class="quizYear">8+</div>
+                            </div>
+                            <div class="rating">
+                                <b>5.0</b>/5 &nbsp;
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="bl"></div>
+                            <a href="/user/quiz?id=522" class="ba">РЕШИ ВЪПРОСНИК<i class="fa fa-angle-right"></i></a>
+                        </td>
+                        <td width="30">&nbsp;</td>
+                    </tr>
+
+                    <tr><td colspan="7" style="height:40px;">&nbsp;</td></tr>
+                    
+                    <tr>
+                            @* 4 times last without  <td width="30">&nbsp;</td> *@
+
+                    </tr>
+                    <tr><td colspan="7" style="height:40px;">&nbsp;</td></tr>
+
+                    <tr>
+                        @* 4 times last without  <td width="30">&nbsp;</td> *@
+                        </tr>
+                    <tr><td colspan="7" style="height:40px;">&nbsp;</td></tr>
+                       
+                    <tr>
+                        @* 4 times last without  <td width="30">&nbsp;</td> *@
+                   
+                    </tr>
+                            <tr><td colspan="7" style="height:40px;">&nbsp;</td></tr>
+
+                            <tr>
+                                @*  4 times last without <td width="30">&nbsp;</td> *@
+                            </tr>
+                            <tr><td colspan="7" style="height:40px;">&nbsp;</td></tr>
+                        </table>
+
+
+
+
+                        <div class="pagination">
+
+                            <a href="javascript:;" onclick="go_to_page(1)" class="page_link first-page disabled">
+                                <i class="fa fa-angle-double-left"></i>
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(1)" class="page_link prev-page disabled">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(1)" class="page_link page active">
+                                1
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(2)" class="page_link page">
+                                2
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(3)" class="page_link page">
+                                3
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(4)" class="page_link page">
+                                4
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(5)" class="page_link page">
+                                5
+                            </a>
+
+
+                            <span class="space">...</span>
+
+
+                            <a href="javascript:;" onclick="go_to_page(17)" class="page_link page">
+                                17
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(18)" class="page_link page">
+                                18
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(2)" class="page_link next-page">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+
+                            <a href="javascript:;" onclick="go_to_page(18)" class="page_link last-page">
+                                <i class="fa fa-angle-double-right"></i>
+                            </a>
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+</form>

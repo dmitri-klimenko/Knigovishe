@@ -34,8 +34,7 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @*  later - Home  / Search *@
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Книги</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Книги</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Help">Помощь</a>
@@ -76,18 +75,18 @@
                     </div>
                     <div class="col-md-3">
                         <h5>Помощь</h5>
-                        <a asp-controller="Home" asp-action="HowItWorks">Как это работает?</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="Help">Как это работает?</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="CreateClass">Как создать группу КЛАСС</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="UseClass">Как использовать группу КЛАСС</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="CreateFamily">Как создать группу СЕМЬЯ</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="UseFamily">Как использовать группу СЕМЬЯ</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="Activate">Активировать подписку с помощью ключа</a><div style="height:15px;"></div>
-                        <a asp-controller="Home" asp-action="FAQ">Часто задаваемые вопросы</a><div style="height:15px;"></div>
+                        <a asp-controller="Home" asp-action="Faq">Часто задаваемые вопросы</a><div style="height:15px;"></div>
                     </div>
                     <div class="col-md-3">
                         <h5>Викторины</h5>
-                        <a asp-controller="Book" asp-action="Search">Художественная литература</a><div style="height:15px;"></div>
-                        <a asp-controller="Book" asp-action="Search">Научнопопулярная литература</a><div style="height:15px;"></div>
+                        <a @*asp-controller="Book" asp-action="GetBooks"*@>Художественная литература</a><div style="height:15px;"></div>
+                        <a @*asp-controller="Book" asp-action="GetBooks"*@>Научнопопулярная литература</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="CreateQuiz">Создать викторину</a><div style="height:15px;"></div>
                     </div>
                     <div class="col-md-3">

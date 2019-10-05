@@ -67,52 +67,47 @@ namespace Knigosha.Controllers
 
         public IActionResult TermsOfUse()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult Policy()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public IActionResult HowItWorks()
-        {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult CreateClass()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult UseClass()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult CreateFamily()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult UseFamily()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult Activate()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
-        public IActionResult Faq()
+        public IActionResult FAQ()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
 
         public IActionResult CreateQuiz()
         {
-            throw new System.NotImplementedException();
+            return View();
         }
     }
 }
