@@ -85,6 +85,7 @@ namespace Knigosha.Controllers
                 {
                     Title = createTextVm.Title,
                     Description = createTextVm.Description,
+                    Description2 = createTextVm.Description2,
                     Photo = uniqueFileName,
                     TextType = createTextVm.TextType,
                     DateAdded = DateTime.Now.ToString("dd.MM.yyyy")
@@ -107,6 +108,7 @@ namespace Knigosha.Controllers
                 Id = text.Id,
                 Title = text.Title,
                 Description = text.Description,
+                Description2 = text.Description2,
                 TextType = text.TextType
             };
 
@@ -131,6 +133,7 @@ namespace Knigosha.Controllers
                 }
                 text.Title = textVm.Title;
                 text.Description = textVm.Description;
+                text.Description2 = textVm.Description2;
                 text.TextType = textVm.TextType;
                 text.DateEdited = DateTime.Now.ToString("dd.MM.yyyy");
                 try

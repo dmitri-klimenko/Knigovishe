@@ -1924,11 +1924,11 @@ input::placeholder {
 
     .founder .name {
         font-weight: 600;
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .founder .text {
-        font-size: 14px;
+        font-size: 16px;
         padding-top: 10px;
         color: rgb(55, 55, 55);
     }
@@ -1950,11 +1950,11 @@ input::placeholder {
 
     .author .name {
         font-weight: 600;
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .author .text {
-        font-size: 14px;
+        font-size: 16px;
         padding-top: 5px;
         color: rgb(55, 55, 55);
     }

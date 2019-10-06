@@ -5,7 +5,7 @@
 }
 <div class="page_banner visible-desktop" style="background-image:url(/skin/header_about.png);">
     <div class="container" style="position: relative">
-        <h1 style="position:absolute;top:130px;font-size:40px;left:100px;">Кои сме ние</h1>
+        <h1 style="position:absolute;top:130px;font-size:40px;left:100px;">Кто мы?</h1>
     </div>
 </div>
 <div class="visible-mobile">
@@ -49,23 +49,15 @@
                     @:<tr>
                 }
                 <td class="author" style="text-align: center;">
-                    <div style="text-align: center; padding-bottom: 20px;"><img src="/uploads/@item."></div>
+                    <div style="text-align: center; padding-bottom: 20px;"><img src="/uploads/@item.Photo"></div>
                     <div class="name">@item.Title</div>
                     <div class="text">@item.Description</div>
-                    <div class="text">@item.Description</div>
+                    <div class="text">@item.Description2</div>
                     <div style="height: 20px;"></div></td>
-                if (i == (ViewBag.MyItems.Count - 1))
-                    {
-                        while ((i % cells) != 0)
-                        {
-                            @:<td></td>
-                            i++;
-                        }
-                    }
-                if ((i % cells) == (cells - 1)) // aka: last row cell
+                if ((i % cells) == (cells - 1)) 
                     {
                     @:</tr>
-                }
+                    }
             }
         </table>
     </div>

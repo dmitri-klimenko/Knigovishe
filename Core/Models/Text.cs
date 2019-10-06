@@ -22,7 +22,6 @@ namespace Knigosha.Core.Models
         [Display(Name = "Описание/Город")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Пожалуйста, введите описание")]
         [Display(Name = "Описание/Профессия")]
         public string Description2 { get; set; }
 
