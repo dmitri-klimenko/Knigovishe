@@ -1,96 +1,66 @@
-﻿@model System.Collections.Generic.List<Knigosha.Core.Models.Text>
+﻿@model Knigosha.Core.ViewModels.TextViewModels.IndexTextViewModel
 
 @{
-    ViewData["Title"] = "title";
+    ViewData["Title"] = "Статьи";
 }
-
 <div class="page_banner visible-desktop" style="height:347px;">
     <div class="container" style="position: relative">
         <h1 style="position:absolute;top:130px;font-size:40px;left:100px;">Блог</h1>
     </div>
 </div>
-<div id="content">
-    <div class="container" id="articles">
-
-        <table class="paragraph">
-            <tr>
-
-                <td class="image_col image_mobile"><a href="/article?id=32"><img src="/uploads/326744-P9JGDC-467-small.jpg"></a></td>
-                <td class="image_col"><a href="/article?id=32"><img src="/uploads/Canva---Rear-View-of-Boy-Sitting-at-Home.jpg"></a></td>
-                <td class="text_col with_image">
-
-                    <a href="/article?id=32" class="at">Нови функции в Книговище</a>
-                    <i class="post-date">14.09.2019</i>
-                    <div style="height:20px;"></div>
-
-                    За първия учебен ден Книговище пуска нови функции на играта, така че тя да стане&nbsp;<strong>още по-интерактивна</strong>.<br />
-                    &nbsp;
-
-                    <div style="height:20px;"></div>
-                    <a href="/article?id=32" class="at" style="font-size:16px;">ПРОЧЕТИ ПОВЕЧЕ</а>
-                </td>
-            </tr>
-        </table>
-
-        <div style="height:40px;"></div>
-
-
-        <div class="row">
-            <a href="/article?id=22" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">01.06.2019</i>
-                    <span class="post-title">За младите читатели от Пловдив и областта: лятно онлайн предизвикателство Книговище</span>
-                    <span class="post-description">Ако си на възраст до 14 години и си от Пловдив и областта, това лято можеш да участваш в новото пред...</span>
-                </div>
-
-                <div class="post-image" style="background-image:url(/uploads/400x300bannerWEB.JPG);"></div>
-            </a>
-            <a href="/article?id=21" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">25.05.2019</i>
-                    <span class="post-title">Приключи Националното 24-часово състезание по четене с разбиране КНИГОВИЩЕ</span>
-                    <span class="post-description">Общо 110 български деца деца от 39 населени места в страната и чужбина се включиха в Националното съ...</span>
-                </div>
-
-                <div class="post-image" style="background-image:url(/uploads/RP-photo1.jpg);"></div>
-            </a>
-            <a href="/article?id=20" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">24.05.2019</i>
-                    <span class="post-title">Табло за резултати от Първото национално онлайн състезание за четене с разбиране</span>
-                    <span class="post-description">
-                        Честит празник на българската просвета и култура и на славянската писменост, 24 май!
-
-                        На 24 май24...
-                    </span>
-                </div>
-
-                <div class="post-image" style="background-image:url(/uploads/Knigovishte_diamond_img-only.png);"></div>
-            </a>
-        </div>					<div class="row">
-            <a href="/article?id=18" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">21.05.2019</i>
-                    <span class="post-title">Книговище стартира пълната си версия с национално състезание по четене</span>
-                    <span class="post-description">На 24 май тази година &quot;Книговище.бг&quot; кани българските деца да премерят сили с връстниците си в стран...</span>
-                </div>
-
-                <div class="post-image" style="background-image:url(/uploads/IMG_20190523_163210.jpg);"></div>
-            </a>
-            <a href="/article?id=19" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">21.05.2019</i>
-                    <span class="post-title">100 безплатни годишни абонамента раздава „Книговище“</span>
-                    <span class="post-description">
-                        &quot;Който играй, пичели, който ни играй, ни пичели&quot; (Христо Стоичков)
-
-                        Въпреки, че едва ли ползватели...
-                    </span>
-                </div>
-
-                <div class="post-image" style="background-image:url(/uploads/blog-photo.jpeg);"></div>
-            </a>
+@if (Model.LastAddedText != null)
+{
+    <div id="content">
+        <div class="container" id="articles">
+            <table class="paragraph">
+                <tr>
+                    <td class="image_col image_mobile">
+                        <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.LastAddedText.Id" >
+                            <img src="/uploads/@Model.LastAddedText.Photo">
+                        </a>
+                    </td>
+                    <td class="image_col">
+                        <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.LastAddedText.Id">
+                            <img src="/uploads/@Model.LastAddedText.Photo">
+                        </a>
+                    </td>
+                    <td class="text_col with_image">
+                        <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.LastAddedText.Id"class="at">@Model.LastAddedText.Title</a>
+                        <i class="post-date">@Model.LastAddedText.DateAdded</i>
+                        <div style="height:20px;"></div>
+                        @Model.LastAddedText.Paragraph1.Substring(0, 69)...<br />
+                        &nbsp;
+                        <div style="height:20px;"></div>
+                        <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.LastAddedText.Id"  class="at" style="font-size:16px;">ЧИТАТЬ ДАЛЬШЕ</a>
+                    </td>
+                </tr>
+            </table>
+            <div style="height:40px;"></div>
+            @if (Model.LastAddedTexts.Count > 0)
+            {
+                @for (int i = 0; i < Model.LastAddedTexts.Count; i++)
+                {
+                    var cells = 3;
+                    var item = Model.LastAddedTexts[i];
+                    if ((i % cells) == 0)
+                    {
+                        @:<div class="row">
+                        }
+                        <a asp-controller="Texts" asp-action="Details" asp-route-id="@item.Id"  class="post col col-md-4">
+                            <div class="post-sync">
+                                <i class="post-date">@Model.LastAddedTexts[i].DateAdded</i>
+                                <span class="post-title">@Model.LastAddedTexts[i].Title</span>
+                                <span class="post-description">@Model.LastAddedTexts[i].Paragraph1.Substring(0, 99)...</span>
+                            </div>
+                            <div class="post-image" style="background-image:url(/uploads/@Model.LastAddedTexts[i].Photo);"></div>
+                        </a>
+                        if ((i % cells) == (cells - 1))
+                        {
+                        @:</div>
+                    }
+                }
+                <div style="height:80px;"></div>
+            }
         </div>
-        <div style="height:80px;"></div>
     </div>
-</div>
+}

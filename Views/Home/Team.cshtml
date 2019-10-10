@@ -14,7 +14,7 @@
 <div id="content">
     <div class="container">
         <h2 style="text-align:center;">
-            Создатели Книгоши
+            Создатели Книговища
         </h2>
         <table class="sc" style="margin:auto;margin-top:60px;">
             <tr>
@@ -36,30 +36,34 @@
             </tr>
         </table>
         <div style="height:80px;"></div>
-        <h2 style="text-align:center;">
-            Авторы викторин
-        </h2>
-        <table class="sc" style="margin: auto; max-width: 80%; margin-top: 60px;">
-            @for (int i = 0; i < Model.Count; i++)
-            {
-                var cells = 4;
-                var item = Model[i];
-                if ((i % cells) == 0)
+        @if (Model.Count > 0)
+        {
+            <h2 style="text-align:center;">
+                Авторы викторин
+            </h2>
+            <table class="sc" style="margin: auto; max-width: 80%; margin-top: 60px;">
+                @for (int i = 0; i < Model.Count; i++)
                 {
-                    @:<tr>
-                }
-                <td class="author" style="text-align: center;">
-                    <div style="text-align: center; padding-bottom: 20px;"><img src="/uploads/@item.Photo"></div>
-                    <div class="name">@item.Title</div>
-                    <div class="text">@item.Description</div>
-                    <div class="text">@item.Description2</div>
-                    <div style="height: 20px;"></div></td>
-                if ((i % cells) == (cells - 1)) 
+                    var cells = 4;
+                    var item = Model[i];
+                    if ((i % cells) == 0)
                     {
-                    @:</tr>
+                        @:<tr>
                     }
-            }
-        </table>
+                    <td class="author" style="text-align: center;">
+                        <div style="text-align: center; padding-bottom: 20px;"><img src="/uploads/@item.Photo"></div>
+                        <div class="name">@item.Title</div>
+                        <div class="text">@item.Paragraph1</div>
+                        <div class="text">@item.Paragraph2</div>
+                        <div style="height: 20px;"></div></td>
+                    if ((i % cells) == (cells - 1)) 
+                    {
+                        @:</tr>
+                    }
+                }
+            </table>
+        }
+        
     </div>
 </div>
 

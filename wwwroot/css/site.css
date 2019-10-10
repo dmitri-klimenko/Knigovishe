@@ -3254,9 +3254,9 @@ body.mobile .invisible-mobile{display:none !important;}
     font-weight: bold;
 }
 
-p:nth-child(1) {
+/*p:nth-child(1) {
     text-align: center;
-}
+}*/
 
 form > h5 {
     text-align: center;

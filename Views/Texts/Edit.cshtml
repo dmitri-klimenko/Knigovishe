@@ -18,21 +18,6 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="form-group">
-                        <label asp-for="Title"></label>
-                        <input asp-for="Title" class="form-control" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Description"></label>
-                        <textarea rows="5" asp-for="Description" class="form-control"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Description2"></label>
-                        <textarea rows="5" asp-for="Description2" class="form-control"></textarea>
-                        <span asp-validation-for="Description2" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
                         <label asp-for="TextType"></label>
                         <select asp-for="TextType" asp-items="Html.GetEnumSelectList<TextTypes>()" , class="form-control">
                             <option value=""> - Выберите тип - </option>
@@ -44,6 +29,62 @@
                         <input asp-for="Photo" accept="image/*" />
                         <span asp-validation-for="Photo" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="Title"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph1"></label>
+                        <textarea rows="2" asp-for="Paragraph1" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph2"></label>
+                        <textarea rows="2" asp-for="Paragraph2" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph3"></label>
+                        <textarea rows="2" asp-for="Paragraph3" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph3" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph4"></label>
+                        <textarea rows="2" asp-for="Paragraph4" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph4" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph5"></label>
+                        <textarea rows="2" asp-for="Paragraph5" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph5" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph6"></label>
+                        <textarea rows="2" asp-for="Paragraph6" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph6" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph7"></label>
+                        <textarea rows="2" asp-for="Paragraph7" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph7" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph8"></label>
+                        <textarea rows="2" asp-for="Paragraph8" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph8" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph9"></label>
+                        <textarea rows="2" asp-for="Paragraph9" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph9" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Paragraph10"></label>
+                        <textarea rows="2" asp-for="Paragraph10" class="form-control"></textarea>
+                        <span asp-validation-for="Paragraph10" class="text-danger"></span>
+                    </div>
+                   
                     <div class="form-group">
                         <input type="submit" value="Сохранить изменения" class="btn btn-success" />
                     </div>

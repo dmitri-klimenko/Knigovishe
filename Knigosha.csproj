@@ -33,6 +33,14 @@
     <Compile Remove="Persistence\Migrations\20190923182315_Checking.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191002181552_ReduceTitlePropertyTo120Char.cs" />
     <Compile Remove="Persistence\Migrations\20191002181552_ReduceTitlePropertyTo120Char.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191007065801_Checking.cs" />
+    <Compile Remove="Persistence\Migrations\20191007065801_Checking.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191007220221_Add10ParagraphsToTextModel.cs" />
+    <Compile Remove="Persistence\Migrations\20191007220221_Add10ParagraphsToTextModel.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191007225109_ParagraphsInText.cs" />
+    <Compile Remove="Persistence\Migrations\20191007225109_ParagraphsInText.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191007232156_Change2to9inText.cs" />
+    <Compile Remove="Persistence\Migrations\20191007232156_Change2to9inText.Designer.cs" />
   </ItemGroup>
 
 

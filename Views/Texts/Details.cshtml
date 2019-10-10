@@ -1,6 +1,85 @@
-﻿@model Knigosha.Core.Models.Text
+﻿@model Knigosha.Core.ViewModels.TextViewModels.IndexTextViewModel
 
 @{
     ViewBag.Title = "Новость";
 }
+<div id="content">
+    <div class="container">
+        <h2 style="text-align:center;">@Model.LastAddedText.Title</h2>
+        <div style="margin-bottom:40px;text-align:center;font-size:18px;"><i class="fa fa-calendar"></i> @Model.LastAddedText.DateAdded</div>
+        <div class="page_content">
+            <table class="paragraph ">
+                <tr>
+                    <td class="text_col">
+                        <span style="font-size: 20px">@Model.LastAddedText.Paragraph1</span>
+                        <br/>
+                        <br/>
+                        @if(Model.LastAddedText.Paragraph2 != null) {@Model.LastAddedText.Paragraph2
+                            <br />
+                            <br />}
+                        @if(Model.LastAddedText.Paragraph3 != null) {@Model.LastAddedText.Paragraph3
+                            <br />
+                            <br />}    
+                        @if(Model.LastAddedText.Paragraph4 != null) {@Model.LastAddedText.Paragraph4
+                            <br />
+                            <br />}  
+                        @if(Model.LastAddedText.Paragraph5 != null) {@Model.LastAddedText.Paragraph5
+                            <br />
+                            <br />}   
+                        @if(Model.LastAddedText.Paragraph6 != null) {@Model.LastAddedText.Paragraph6
+                            <br />
+                            <br />}  
+                        @if(Model.LastAddedText.Paragraph7 != null) {@Model.LastAddedText.Paragraph7
+                            <br />
+                            <br />}
+                        @if(Model.LastAddedText.Paragraph8 != null) {@Model.LastAddedText.Paragraph8
+                            <br />
+                            <br />}
+                        @if(Model.LastAddedText.Paragraph9 != null) {@Model.LastAddedText.Paragraph9
+                            <br />
+                            <br />}
+                        @if(Model.LastAddedText.Paragraph10 != null) {@Model.LastAddedText.Paragraph10
+                            <br />
+                            <br />}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="articles">
+            <div style="height:80px;"></div>
+            <h1 style="text-align:center;margin-bottom:80px;">Последние новости</h1>
+
+            @if (Model.LastAddedTexts.Count > 0)
+            {
+                @for (int i = 0; i < Model.LastAddedTexts.Count; i++)
+                {
+                    var cells = 3;
+                    var item = Model.LastAddedTexts[i];
+                    if ((i % cells) == 0)
+                    {
+                        @:<div class="row">
+                    }
+                    <a asp-controller="Texts" asp-action="Details" asp-route-id="@item.Id"  class="post col col-md-4">
+                        <div class="post-sync">
+                            <i class="post-date">@Model.LastAddedTexts[i].DateAdded</i>
+                            <span class="post-title">@Model.LastAddedTexts[i].Title</span>
+                            <span class="post-description">@Model.LastAddedTexts[i].Paragraph1.Substring(0, 69)...</span>
+                        </div>
+                        <div class="post-image" style="background-image:url(/uploads/@Model.LastAddedTexts[i].Photo);"></div>
+                    </a>
+                    if ((i % cells) == (cells - 1))
+                    {
+                        @:</div>
+                    }
+                }
+                <div style="height:80px;"></div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
 

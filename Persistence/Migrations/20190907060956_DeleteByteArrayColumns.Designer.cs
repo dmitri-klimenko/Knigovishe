@@ -189,7 +189,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("DateAdded");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Paragraph1")
                         .IsRequired();
 
                     b.Property<int>("Grade");

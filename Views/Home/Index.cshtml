@@ -20,7 +20,7 @@
             <div class="text2">* для детей</div>
         </div>
     </div>
-</div
+</div>
 <div>
     <div class="container">
         <div style="height:50px;"></div>
@@ -52,7 +52,8 @@
                         <div style="height:20px;"></div>
                         <h2>Получайте очки</h2>
                         <div class="dark" style="line-height:150%;">
-                            При правильных ответах вы накапливаете баллы и открываете уровни.</div>
+                            При правильных ответах вы накапливаете баллы и открываете уровни.
+                        </div>
                         <div style="height:30px;"></div>
                     </td>
                 </tr>
@@ -82,7 +83,7 @@
             <h2>Решайте викторины</h2>
             <div class="dark" style="line-height:150%;">Найдите анкету по прочитанной книге и заполните ее.</div>
             <div style="height:30px;"></div>
-            <a asp-controller="Book" asp-action="Index"class="button small">СМОТРЕТЬ КНИГИ</a>
+            <a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a>
             <div style="height:30px;"></div>
             <i class="fa fa-arrow-down" style="font-size:60px;"></i>
             <div style="height:50px;"></div>
@@ -107,7 +108,7 @@
             <tbody>
                 <tr>
                     <td style="vertical-align: top; width: 18%; width: 18%; display: table-cell;">
-                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[0].Id'">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[0].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[0].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[0].CoverPhoto" alt="coverphoto" />
@@ -119,7 +120,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[1].Id'">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[1].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[1].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[1].CoverPhoto" alt="coverphoto" />
@@ -131,7 +132,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[2].Id'">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[2].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[2].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[2].CoverPhoto" alt="coverphoto" />
@@ -143,7 +144,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[3].Id'">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[3].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[3].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[3].CoverPhoto" alt="coverphoto" />
@@ -155,7 +156,7 @@
                     </td>
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
-                        <div class="book_div" onclick="window.location='/Book/DetailsAdminAdmin?id=@Model.LatestAddedBooks[4].Id'">
+                        <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[4].Id'">
                             <div class="wishlist" data-book="@Model.LatestAddedBooks[4].Id"
                                  onclick="setMarkedlist(this); event.stopPropagation();"></div>
                             <img src="~/uploads/@Model.LatestAddedBooks[4].CoverPhoto" alt="coverphoto" />
@@ -346,12 +347,12 @@
 <div class="bg2">
     <div style="height:80px;"></div>
     <div id="license_types">
-        <h1 class="section_title" onclick="window.location='/Subscriptions/IndexAdminAdminAdmin'">Абонементы</h1>
+        <h1 class="section_title" onclick="window.location='/Subscriptions/Index'">Абонементы</h1>
         <div class="section_text">
-            Выберите абонемент, который подходит Вам.
+            Выберите подходящий абонемент.
             <br />
             <br />
-            <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, напишите нам по адресу info@knigosha.ru</strong>
+            <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, пишите нам по адресу info@knigosha.ru</strong>
         </div>
         <table class="container sc tc mc" style="width:100%;">
             <tr>
@@ -515,15 +516,15 @@
                                 Дополнительные скидки при покупке нескольких классных<br />
                                 абонементов одновременно:<br />
                                 <br />
-                                - от 3 до 5 классных абонаментов – скидка 5 % <br />
-                                - от 6 до 9 классных абонаментов – скидка 7 % <br />
-                                - от 10 до 14 классных абонаментов – скидка 10 % <br />
-                                - от 15 до 19 классных абонаментов – скидка 12 % <br />
-                                - от 20 до 24 классных абонаментов – скидка 15 % <br />
-                                - от 25 до 29 классных абонаментов – скидка 17 % <br />
-                                - от 30 до 34 классных абонаментов – скидка 20 % <br />
-                                - от 35 до 39 классных абонаментов – скидка 25 % <br />
-                                - от 40 абонаментов – скидка 30 % <br />
+                                - от 3 до 5 классных абонементов – скидка 5 % <br />
+                                - от 6 до 9 классных абонементов – скидка 7 % <br />
+                                - от 10 до 14 классных абонементов – скидка 10 % <br />
+                                - от 15 до 19 классных абонементов – скидка 12 % <br />
+                                - от 20 до 24 классных абонементов – скидка 15 % <br />
+                                - от 25 до 29 классных абонементов – скидка 17 % <br />
+                                - от 30 до 34 классных абонементов – скидка 20 % <br />
+                                - от 35 до 39 классных абонементов – скидка 25 % <br />
+                                - от 40 абонементов – скидка 30 % <br />
                                 <br />
                                 Для информации и заявок: info@knigosha.ru
                             </div>
@@ -535,46 +536,41 @@
             </tr>
         </table>
         <div style="padding-top:40px;text-align:center;">
-            <a asp-controller="Subscriptions" asp-action="IndexAdmin" class="button">СМОТРЕТЬ ВСЕ</a>
+            <a asp-controller="Subscriptions" asp-action="Index" class="button">СМОТРЕТЬ ВСЕ</a>
         </div>
     </div>
     <div style="height:60px;"></div>
 </div>
-<div>
+@if(Model.RecentNews.Count > 0)
+{
     <div id="articles" class="container">
         <div style="height:80px;"></div>
-        <h1 class="section_title" onclick="window.location='/Texts/IndexAdminAdminAdmin'">Новости от Книгоши</h1>
-        <div class="row">
-            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
-                <div class="post-sync" style="height: 185px;">
-                    <i class="post-date">@Model.RecentNews[0].DateAdded</i>
-                    <span class="post-title">@Model.RecentNews[0].Title</span>
-                    <span class="post-description">@Model.RecentNews[0].Description.Substring(0, 99)...</span>
+        <h2 class="section_title" onclick="window.location='/Texts/Index'">Новости Книгоши</h2>
+        
+        @for (int i = 0; i < Model.RecentNews.Count; i++)
+        {
+            var cells = 3;
+            var item = Model.RecentNews[i];
+            if ((i % cells) == 0)
+            {
+                @:<div class="row">
+            }
+            <a asp-controller="Texts" asp-action="Details" asp-route-id="@item.Id" class="post col col-md-4">
+                <div class="post-sync">
+                    <i class="post-date">@Model.RecentNews[i].DateAdded</i>
+                    <span class="post-title">@Model.RecentNews[i].Title</span>
+                    <span class="post-description">@Model.RecentNews[i].Paragraph1.Substring(0, 69)...</span>
                 </div>
-                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[0].Photo)"></div>
+                <div class="post-image" style="background-image:url(/uploads/@Model.RecentNews[i].Photo);"></div>
             </a>
-            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
-                <div class="post-sync" style="height: 185px;">
-                    <i class="post-date">@Model.RecentNews[1].DateAdded</i>
-                    <span class="post-title">@Model.RecentNews[1].Title</span>
-                    <span class="post-description">
-                        @Model.RecentNews[1].Description.Substring(0, 99)...
-                    </span>
-                </div>
-                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[1].Photo)"></div>
-            </a>
-            <a asp-controller="Texts" asp-action="Details" asp-route-id="@Model.RecentNews[0].Id" class="post col-md-4">
-                <div class="post-sync" style="height: 185px;">
-                    <i class="post-date">@Model.RecentNews[2].DateAdded</i>
-                    <span class="post-title">@Model.RecentNews[2].Title</span>
-                    <span class="post-description">@Model.RecentNews[2].Description.Substring(0, 99)...</span>
-                </div>
-                <div class="post-image" style="background-image: url(/uploads/@Model.RecentNews[2].Photo);"></div>
-            </a>
-        </div>
+            if ((i % cells) == (cells - 1))
+            {
+                @:</div>
+            }
+        }
         <div style="height:40px;"></div>
     </div>
-</div>
+}
 <div style="height:50px;"></div>
 
 

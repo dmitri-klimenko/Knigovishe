@@ -29,12 +29,12 @@ namespace Knigosha.Core.Models
 
         public int NumberOfPages { get; set; }
 
-        public decimal AverageRating {
+        public double AverageRating {
             get
             {
                 var numberOfBookRatings = BookRatings.Count;
                 var sumOfBookRatings = BookRatings.Sum(bookRating => bookRating.Rating);
-                var averageRating = (numberOfBookRatings != 0) ? ((decimal)sumOfBookRatings / numberOfBookRatings) : 0;
+                var averageRating = (numberOfBookRatings != 0) ? ((double)sumOfBookRatings / numberOfBookRatings) : 0;
                 return Math.Round(averageRating, 1);
             }
         }

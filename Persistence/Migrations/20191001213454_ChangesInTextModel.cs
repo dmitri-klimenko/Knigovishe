@@ -18,7 +18,7 @@ namespace Knigosha.Persistence.Migrations
             migrationBuilder.RenameColumn(
                 name: "Content",
                 table: "Texts",
-                newName: "Description");
+                newName: "Paragraph1");
 
             migrationBuilder.AddColumn<string>(
                 name: "Photo",
@@ -47,7 +47,7 @@ namespace Knigosha.Persistence.Migrations
                 newName: "Namespace");
 
             migrationBuilder.RenameColumn(
-                name: "Description",
+                name: "Paragraph1",
                 table: "Texts",
                 newName: "Content");
 

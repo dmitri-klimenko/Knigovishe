@@ -776,6 +776,7 @@ function toggleSearch(el) {
 }
 
 
+// +
 function licensePopup(el) {
     $(el).closest('.license').find('.vote_shadow').show();
 }

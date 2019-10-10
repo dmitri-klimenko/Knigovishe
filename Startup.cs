@@ -90,9 +90,12 @@ namespace Knigosha
 
             app.UseMvc(routes =>
             {
+               
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+             
             });
 
             CreateUserRoles(serviceProvider).Wait();

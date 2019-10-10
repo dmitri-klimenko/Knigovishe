@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,9 +26,15 @@ namespace Knigosha.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var news = _context.Texts.Where(t => t.TextType == TextTypes.Post);
+            var news = await _context.Texts.Where(t => t.TextType == TextTypes.Post).OrderByDescending(t => t.DateAdded).ToListAsync();
 
-            return View(await news.ToListAsync());
+            var vm = new IndexTextViewModel()
+            {
+                LastAddedText = news.Count > 0 ? news[0] : null,
+                LastAddedTexts = news.Count > 1 ? news.Skip(1).ToList() : null
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> IndexAdmin()
@@ -52,7 +57,15 @@ namespace Knigosha.Controllers
             var text = await _context.Texts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (text == null) return NotFound();
-            return View(text);
+
+            var otherTexts = await _context.Texts.Where(t => t.Id != id).ToListAsync();
+
+            var vm = new IndexTextViewModel()
+            {
+                LastAddedText = text,
+                LastAddedTexts = otherTexts
+            };
+            return View(vm);
         }
 
         public IActionResult Create()
@@ -76,16 +89,29 @@ namespace Knigosha.Controllers
         {
             if (ModelState.IsValid)
             {
-                var uniqueFileName = GetUniqueFileName(createTextVm.Photo.FileName);
-                var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                var filePath = Path.Combine(uploads, uniqueFileName);
-                createTextVm.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
-
+                string uniqueFileName = null;
+                 
+                if (createTextVm.Photo != null)
+                {
+                    uniqueFileName = GetUniqueFileName(createTextVm.Photo.FileName);
+                    var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                    var filePath = Path.Combine(uploads, uniqueFileName);
+                    createTextVm.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+                
                 var newText = new Text()
                 {
                     Title = createTextVm.Title,
-                    Description = createTextVm.Description,
-                    Description2 = createTextVm.Description2,
+                    Paragraph1 = createTextVm.Paragraph1,
+                    Paragraph2 = createTextVm.Paragraph2,
+                    Paragraph3 = createTextVm.Paragraph3,
+                    Paragraph4 = createTextVm.Paragraph4,
+                    Paragraph5 = createTextVm.Paragraph5,
+                    Paragraph6 = createTextVm.Paragraph6,
+                    Paragraph7 = createTextVm.Paragraph7,
+                    Paragraph8 = createTextVm.Paragraph8,
+                    Paragraph9 = createTextVm.Paragraph9,
+                    Paragraph10 = createTextVm.Paragraph10,
                     Photo = uniqueFileName,
                     TextType = createTextVm.TextType,
                     DateAdded = DateTime.Now.ToString("dd.MM.yyyy")
@@ -107,8 +133,16 @@ namespace Knigosha.Controllers
             {
                 Id = text.Id,
                 Title = text.Title,
-                Description = text.Description,
-                Description2 = text.Description2,
+                Paragraph1 = text.Paragraph1,
+                Paragraph2 = text.Paragraph2,
+                Paragraph3 = text.Paragraph3,
+                Paragraph4 = text.Paragraph4,
+                Paragraph5 = text.Paragraph5,
+                Paragraph6 = text.Paragraph6,
+                Paragraph7 = text.Paragraph7,
+                Paragraph8 = text.Paragraph8,
+                Paragraph9 = text.Paragraph9,
+                Paragraph10 = text.Paragraph10,
                 TextType = text.TextType
             };
 
@@ -132,8 +166,16 @@ namespace Knigosha.Controllers
                     text.Photo = uniqueFileName;
                 }
                 text.Title = textVm.Title;
-                text.Description = textVm.Description;
-                text.Description2 = textVm.Description2;
+                text.Paragraph1 = textVm.Paragraph1;
+                text.Paragraph2 = textVm.Paragraph2;
+                text.Paragraph3 = textVm.Paragraph3;
+                text.Paragraph4 = textVm.Paragraph4;
+                text.Paragraph5 = textVm.Paragraph5;
+                text.Paragraph6 = textVm.Paragraph6;
+                text.Paragraph7 = textVm.Paragraph7;
+                text.Paragraph8 = textVm.Paragraph8;
+                text.Paragraph9 = textVm.Paragraph9;
+                text.Paragraph10 = textVm.Paragraph10;
                 text.TextType = textVm.TextType;
                 text.DateEdited = DateTime.Now.ToString("dd.MM.yyyy");
                 try

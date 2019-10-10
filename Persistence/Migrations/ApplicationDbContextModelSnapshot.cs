@@ -1690,10 +1690,26 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("DateEdited");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Paragraph1")
                         .IsRequired();
 
-                    b.Property<string>("Description2");
+                    b.Property<string>("Paragraph10");
+
+                    b.Property<string>("Paragraph2");
+
+                    b.Property<string>("Paragraph3");
+
+                    b.Property<string>("Paragraph4");
+
+                    b.Property<string>("Paragraph5");
+
+                    b.Property<string>("Paragraph6");
+
+                    b.Property<string>("Paragraph7");
+
+                    b.Property<string>("Paragraph8");
+
+                    b.Property<string>("Paragraph9");
 
                     b.Property<string>("Photo");
 

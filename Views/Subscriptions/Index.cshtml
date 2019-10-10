@@ -8,108 +8,107 @@
     <div class="bg2">
         <div style="height:80px;"></div>
         <div class="container" id="license_types">
-            <h1 class="section_title">АБОНАМЕНТ ЗА КНИГОВИЩЕ</h1>
+            <h1 class="section_title">АБОНЕМЕНТЫ</h1>
             <div class="section_text">
-                Избери абонамента, който ти приляга.<br />
+                Выберите подходящий абонемент.<br />
                 <br />
-                С регистрирането на профил в Книговище автоматично се активира <strong>демо-период от три седмици</strong>. За да продължите да ползвате Книговище и след този срок, е необходимо да изберете своя абонамент.<br />
+                При регистрации Вашего профиля, автоматически начинается <span style="font-weight: bold">трёхнедельный демо-период</span>. Чтобы продолжить пользование после этого периода, Вам нужно выбрать Ваш абонемент.<br />
                 <br />
-                Всички абонаменти важат до 15.09.2020 г.<br />
+                Все подписки действительны до @Model[0].ValidUntil.<br />
                 <br />
-                <strong>При желание да поръчате повече от 1 абонамент наведнъж и за групови отстъпки ни пишете на info@knigovishte.bg</strong>
+                <span style="font-weight: bold ">Если Вы хотите заказать более 1 абонемента одновременно и со скидкой, пишите нам по адресу info@knigovishe.ru</span>
             </div>
             <div class="row">
                 <div class="col col-md-4">
-                    <div class="license license1" onclick="window.location = '/user/order?id=10'" style="cursor: pointer;">
+                    <div class="license license1" @*onclick="window.location = '/Manage/Order'"*@ style="cursor: pointer;">
                         <div style="height: 60px;">
                             <div class="license_text">
-                                <h4 style="font-size: 22px; line-height: 26px;">Индивидуален</h4>
+                                <h4 style="font-size: 22px; line-height: 26px;">@Html.DisplayFor(m => m[0].Name)</h4>
                             </div>
                         </div>
                         <div class="license_center ">
                             <div class="license_text">
-                                <i>Ученически профили:</i><br><b>1</b>
-                                <div style="height: 10px;"></div>
-                                <i>Валиден до:</i><br><b>Септември 2020</b>
-                                <div style="height: 10px;"></div>
-                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                                <i>Ученических профилей:</i><br><b>@Model[0].NumberOfStudentProfiles</b><div style="height: 10px;"></div>
+                                <i>Действителен до:</i><br><b>@Model[0].ValidUntil</b><div style="height: 10px;"></div>
+                                <i>Количество викторин:</i><br><b>@Model[0].MaxQuizzes</b>
                             </div>
                         </div>
                         <div style="height: 20px;"></div>
-                        <div class="license_text license_price "><i>Цена:</i><br><b>25 лв.</b> </div>
+                        <div class="license_text license_price "><i>Цена:</i><br><b>@Model[0].CurrentPrice</b> </div>
                         <div class="vote_shadow" style="display: none;" onclick="$(this).hide();event.stopPropagation();">
                             <div class="vote_popup license_popup"></div>
                         </div>
                         <div style="height: 40px;"></div>
-                        <a href="/user/order?id=10" class="button">Поръчай</a>
+                        <a @*asp-controller="Manage" asp-action="Order"*@  class="button">Заказать</a>
                     </div>
                     <div style="height: 50px;"></div>
                 </div>
                 <div class="col col-md-4">
-                    <div class="license license2" onclick="window.location='/user/order?id=6'" style="cursor:pointer;">
+                    <div class="license license2" @*onclick="window.location = '/Manage/Order'"*@  style="cursor:pointer;">
                         <div style="height:60px;">
                             <div class="license_text">
-                                <h4 style="font-size:22px;line-height:26px;">Семеен</h4>
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m[1].Name)</h4>
                             </div>
                         </div>
                         <div class="license_center ">
                             <div class="license_text">
-                                <i>Родителски профили:</i><br><b>1</b><div style="height:10px;"></div>
-                                <i>Ученически профили:</i><br><b>4</b><div style="height:10px;"></div>
-                                <i>Валиден до:</i><br><b>Септември 2020</b><div style="height:10px;"></div>
-                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                                <i>Родителских профилей:</i><br><b>@Model[1].NumberOfParentProfiles</b><div style="height:10px;"></div>
+                                <i>Ученических профилей:</i><br><b>@Model[1].NumberOfStudentProfiles</b><div style="height:10px;"></div>
+                                <i>Действителен до:</i><br><b>@Model[1].ValidUntil</b><div style="height:10px;"></div>
+                                <i>Количество викторин:</i><br><b>@Model[1].MaxQuizzes</b>
                             </div>
                         </div>
                         <div style="height:20px;"></div>
-                        <div class="license_text license_price "><i>Цена:</i><br><b>40 лв.</b></div>
+                        <div class="license_text license_price "><i>Цена:</i><br><b>@Model[1].CurrentPrice</b></div>
                         <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
                             <div class="vote_popup license_popup"></div>
                         </div>
                         <div style="height:40px;"></div>
-                        <a href="/user/order?id=6" class="button">Поръчай</a>
+                        <a @*asp-controller="Manage" asp-action="Order"*@ class="button">Заказать</a>
                     </div>
                     <div style="height:50px;"></div>
                 </div>
                 <div class="col col-md-4">
-                    <div class="license license3" onclick="window.location='/user/order?id=1'" style="cursor:pointer;">
+                    <div class="license license3"  @*onclick="window.location = '/Manage/Order'"*@ style="cursor:pointer;">
                         <div style="height:60px;">
                             <div class="license_text">
-                                <h4 style="font-size:22px;line-height:26px;">Абонамент за клас</h4>
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m[2].Name)</h4>
                             </div>
                         </div>
                         <div class="license_center ">
                             <div class="license_text">
-                                <i>Учителски профили:</i><br><b>1</b><div style="height:10px;"></div>
-                                <i>Ученически профили в клас:</i><br><b>30</b><div style="height:10px;"></div>
-                                <i>Валиден до:</i><br><b>Септември 2020</b><div style="height:10px;"></div>
-                                <i>Максимум въпросници:</i><br><b>Неограничени</b>
+                                <i>Учительских профилей:</i><br><b>@Model[2].NumberOfTeacherProfiles</b><div style="height:10px;"></div>
+                                <i>Ученических профилей:</i><br><b>@Model[2].NumberOfStudentProfiles</b><div style="height:10px;"></div>
+                                <i>Действителен до:</i><br><b>@Model[2].ValidUntil</b><div style="height:10px;"></div>
+                                <i>Количество викторин:</i><br><b>@Model[2].MaxQuizzes</b>
                             </div>
                         </div>
                         <div style="height:20px;"></div>
                         <div class="license_text license_price ">
-                            <i>Цена:</i><br><b>120 лв.</b>
-                            <div style="height:5px;"></div>
-                            <a href="javascript:;" onclick="licensePopup(this);event.stopPropagation();">Отстъпки при повече от три абонамента</a>
+                            <i>Цена:</i><br><b>@Model[2].CurrentPrice</b>
+                            <div style="height:20px;"></div>
+                            <a href="javascript:;" onclick="licensePopup(this);event.stopPropagation();">Скидки при покупке от трёх абонементов</a>
                         </div>
                         <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
                             <div class="vote_popup license_popup">
-                                Отстъпки при закупуване на няколко абонамента за клас едновременно:<br />
+                                Дополнительные скидки при покупке нескольких классных<br />
+                                абонементов одновременно:<br />
                                 <br />
-                                - от 3 до 5 абонамента за клас – 5 % отстъпка<br />
-                                - от 6 до 9 абонамента за клас – 7 % отстъпка<br />
-                                - от 10 до 14 абонамента за клас – 10 % отстъпка<br />
-                                - от 15 до 19 абонамента за клас – 12 % отстъпка<br />
-                                - от 20 до 24 абонамента за клас – 15 % отстъпка<br />
-                                - от 25 до 29 абонамента за клас – 17 % отстъпка<br />
-                                - от 30 до 34 абонамента за клас – 20 % отстъпка<br />
-                                - от 35 до 39 абонамента за клас – 25 % отстъпка<br />
-                                - от 40 класа нагоре – 30 % отстъпка<br />
+                                - от 3 до 5 классных абонементов – скидка 5 % <br />
+                                - от 6 до 9 классных абонементов – скидка 7 % <br />
+                                - от 10 до 14 классных абонементов – скидка 10 % <br />
+                                - от 15 до 19 классных абонементов – скидка 12 % <br />
+                                - от 20 до 24 классных абонементов – скидка 15 % <br />
+                                - от 25 до 29 классных абонементов – скидка 17 % <br />
+                                - от 30 до 34 классных абонементов – скидка 20 % <br />
+                                - от 35 до 39 классных абонементов – скидка 25 % <br />
+                                - от 40 абонементов – скидка 30 % <br />
                                 <br />
-                                За информация и заявки: info@knigovishte.bg
+                                Для информации и заявок: info@knigovishe.ru
                             </div>
                         </div>
                         <div style="height:40px;"></div>
-                        <a href="/user/order?id=1" class="button">Поръчай</a>
+                        <a @*asp-controller="Manage" asp-action="Order"*@ class="button">Заказать</a>
                     </div>
                     <div style="height:50px;"></div>
                 </div>
