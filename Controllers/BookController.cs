@@ -2,14 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Knigosha.Core.Models;
 using Knigosha.Core.ViewModels.BookViewModels;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Knigosha.Controllers
 {
@@ -31,9 +31,10 @@ namespace Knigosha.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            var books = await _context.Books.ToListAsync();
+            ViewBag.Publishers = books.Select(book => new SelectListItem() { Text = book.Publisher, Value = book.Publisher }).ToList();
+            return View(books);
         }
-
 
         public async Task<IActionResult> DetailsAdmin(int? id)
         {
@@ -51,9 +52,18 @@ namespace Knigosha.Controllers
         {
             if (id == null) return NotFound();
             var book = await _context.Books
+                .Include(b => b.Answers)
+                .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null) return NotFound();
-            return View(book);
+
+            var recommended = _context.Books.Take(4).ToList();
+            var vm = new DetailsViewModel() 
+            {
+                Book = book,
+                Recommended = recommended
+            };
+            return View(vm);
         }
 
         public IActionResult Create()

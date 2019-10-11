@@ -1,100 +1,101 @@
-﻿@model Knigosha.Core.Models.Book
+﻿@model Knigosha.Core.ViewModels.BookViewModels.DetailsViewModel
 
 @{
     ViewBag.Title = "Книга";
 }
 <div class="visible-desktop">
     <div class="bookMain bg class4">
-        <div class="inner">
+        <div class="container">
             <div style="padding:20px;">
-                <div style="font-size:30px;font-weight:bold;padding-bottom:10px;">Домашни духчета</div>
-                <div style="font-size:25px;padding-bottom:40px;">Дубравка Угрешич</div>
-                <a href="/user/quiz?id=522" class="button">РЕШИ ВЪПРОСНИК</a>
+                <div style="font-size:30px;font-weight:bold;padding-bottom:10px;">@Model.Book.Title</div>
+                <div style="font-size:25px;padding-bottom:40px;">@Model.Book.BookAuthor</div>
+                <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
             </div>
         </div>
     </div>
 </div>
 <div class="visible-mobile" style="height:50px;"></div>
 <div id="content" style="padding-top:0px;">
-    <div class="inner">
+    <div class="container">
         <table class="tc sc">
             <tr>
                 <td valign="top" style="width:300px;">
                     <div class="book_div bg class4" style="padding:20px;padding-top:0px;position:relative;">
                         <div class="visible-mobile" style="height:20px;"></div>
-                        <div class="bookLabel bg class4">8+</div>
-                        <img src="/uploads/5c06b83612f67dcc5efca1c46c85a158.jpg" style="width:100%;">
+                        <div class="bookLabel bg class4">@Html.DisplayFor(m => m.Book.AgeGroup)</div>
+                        <img src="/uploads/@Model.Book.CoverPhoto" style="width:100%;">
                     </div>
                     <div style="height:20px"></div>
                     <div class="border class4" style="padding:20px;">
-                        <div style="font-weight:bold;font-size:18px;padding-bottom:5px;">Домашни духчета</div>
-                        <div style="padding-bottom:10px;">Дубравка Угрешич</div>
-                        <div style="padding-bottom:10px;">Категория: <b>Художествена литература</b></div>
-                        <div style="padding-bottom:10px;">Година на издаване: <b>2018</b></div>
-                        <div style="padding-bottom:10px;">Издателство: <b>Издателска група АГАТА-А</b></div>
-                        <div style="padding-bottom:10px;">Преводач: <b>Русанка Ляпова</b></div>
-                        <div style="padding-bottom:10px;">Трудност на въпросника: <b>8+</b></div>
-                        <div style="padding-bottom:10px;">Изготвен от: <b>Десислава Боева</b></div>
+                        <div style="font-weight:bold;font-size:18px;padding-bottom:5px;">@Model.Book.Title</div>
+                        <div style="padding-bottom:10px;">@Model.Book.BookAuthor</div>
+                        <div style="padding-bottom:10px;">Категория: <b>@Html.DisplayFor(m => m.Book.BookCategory)</b></div>
+                        <div style="padding-bottom:10px;">Год издания: <b>@Model.Book.YearPublished</b></div>
+                        <div style="padding-bottom:10px;">Издателство: <b>@Model.Book.Publisher</b></div>
+                        @if (Model.Book.Translator != null)
+                        {<div style="padding-bottom:10px;">Переводчик: <b>@Model.Book.Translator</b></div>}
+                        <div style="padding-bottom:10px;">Сложность викторины: <b>@Html.DisplayFor(m => m.Book.AgeGroup)</b></div>
+                        <div style="padding-bottom:10px;">Автор викторины: <b>@Model.Book.QuestionsAuthor</b></div>
                         <br><br>
                         <div class="rating">
-                            <b>5.0</b>/5  &nbsp;
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+                            <b>@Model.Book.AverageRating</b>/5  &nbsp;
+                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                         </div>
-                        <div class="yellow">Въпросникът е попълнен <b>3</b> пъти</div>
+                        <div class="yellow">Викторина решена <b>@Model.Book.Answers.Count</b> раз</div>
                     </div>
                 </td>
                 <td valign="top" style="padding-left:50px;padding-top:30px;">
-                    <h2>Анотация</h2>
-                    Да сте се спъвали често напоследък? И то все в един и същи праг? Ами вратата на гардероба да ви е хлопвала по главата просто така, от чиста проклетия? А често ли ви се случва млякото да изкипи? Или пък да не успеете да намерите нещо, за което сте готови да се закълнете, че само преди секунда е било под носа ви? Забелязали ли сте напоследък у дома си нещо постоянно да шумоли, да скърца, да потраква? Да сте намирали стаята си в пълен хаос, макар да сте сигурни, че сте я оставили подредена? – „Това жилище май стана твърде тясно“ – изсумтявате ядно. Нали? Щом е така, имате всички основания да предположите, че в къщата ви са се заселили домашни духчета.
+                    <h2>Аннотация</h2>
+                    @Model.Book.Description
                     <div style="height:40px;"></div>
-                    <a href="/user/quiz?id=522" class="button">РЕШИ ВЪПРОСНИК</a>
+                    <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
                     <div style="height:40px;"></div>
                     <div style="height:80px;"></div>
                     <div id="books">
-                        <h1 class="section_title">Препоръчано за теб</h1>
-                        <table cellspacing="0" cellpadding="0" style="width:100%;" class="tc sc">
+                        <h1 class="section_title">Рекомендовано для Вас</h1>
+                        <table style="width:100%;" class="tc sc">
                             <tr>
                                 <td style="vertical-align:top;width:23%;">
-                                    <div onclick="window.location='/book?id=462'" class="book_div">
-                                        <img src="/uploads/e5d76608e1aaf4e40b13ee8de5ea8eae.jpg">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[0].Id'" class="book_div">
+                                        <img src="/uploads/@Model.Recommended[0].CoverPhoto">
                                         <div style="height:15px;"></div>
-                                        <h3>Малкият моряк</h3>
-                                        <div class="bookAuthor">Хектор Мало</div>
-                                        <a href="/book?id=462">ВИЖ ПОВЕЧЕ</a>
+                                        <h3>@Model.Recommended[0].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[0].BookAuthor</div>
+                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                                 <td style="width:2.7%"></td>
                                 <td style="vertical-align:top;width:23%;">
-                                    <div onclick="window.location='/book?id=468'" class="book_div">
-                                        <img src="/uploads/31e3af6064953524a30707c9908282cd.jpg">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[1].Id'" class="book_div">
+                                        <img src="/uploads/@Model.Recommended[1].CoverPhoto">
                                         <div style="height:15px;"></div>
-                                        <h3>Ручейче омайно: Най-хубавите български приказки</h3>
-                                        <div class="bookAuthor">преработка и адаптация: Ивета Кючукова и Благовеста Цветкова</div>
-                                        <a href="/book?id=468">ВИЖ ПОВЕЧЕ</a>
+                                        <h3>@Model.Recommended[1].Title</h3>
+                                        <div class="bookAuthor">/@Model.Recommended[1].BookAuthor</div>
+                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                                 <td style="width:2.7%"></td>
                                 <td style="vertical-align:top;width:23%;">
-                                    <div onclick="window.location='/book?id=460'" class="book_div">
-                                        <img src="/uploads/87e99ead252f5b6c9a506e923e76472b.jpg">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[2].Id'" class="book_div">
+                                        <img src="/uploads/@Model.Recommended[2].CoverPhoto">
                                         <div style="height:15px;"></div>
-                                        <h3>Момичетата от филма</h3>
-                                        <div class="bookAuthor">Зоуи Дийн</div>
-                                        <a href="/book?id=460">ВИЖ ПОВЕЧЕ</a>
+                                        <h3>@Model.Recommended[2].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[2].BookAuthor</div>
+                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                                 <td style="width:2.7%"></td>
                                 <td style="vertical-align:top;width:23%;">
-                                    <div onclick="window.location='/book?id=281'" class="book_div">
-                                        <img src="/uploads/afe5f5b7706fa605dc22d5c307c71216.jpg">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[3].Id'" class="book_div">
+                                        <img src="/uploads/@Model.Recommended[3].CoverPhoto">
                                         <div style="height:15px;"></div>
-                                        <h3>Мили бате!... Писма на един дакел</h3>
-                                        <div class="bookAuthor">Станка Пенчева</div>
-                                        <a href="/book?id=281">ВИЖ ПОВЕЧЕ</a>
+                                        <h3>@Model.Recommended[3].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[3].BookAuthor</div>
+                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                             </tr>

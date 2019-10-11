@@ -903,7 +903,7 @@ body.scroll #header, body:not(.hero) #header {
 
 
 
-/*select, input[type=text], input[type=password] {
+select, input[type=text], input[type=password] {
     border-radius: 20px;
     border: 1px solid #D3502D;
     height: 36px;
@@ -911,7 +911,7 @@ body.scroll #header, body:not(.hero) #header {
     padding-left: 15px;
     padding-right: 15px;
     vertical-align: middle;
-}*/
+}
 
 .short {
     width: 80px;
