@@ -1,0 +1,154 @@
+﻿@model List<Knigosha.Core.Models.Answer>
+@functions{
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
+        {
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
+        }
+        return returnVal;
+    }
+}
+
+
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    <div id="profile_answers">
+        <table style="width:100%;" class="sc tc" id="quiz_results">
+            <tr><td colspan="3"><h3>2019/2020 учебна година</h3></td></tr>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var cells = 2;
+                var item = Model[i];
+                if ((i % cells) == 0)
+                {
+                    @:<tr>
+                    }
+                    if ((i % cells) == (cells - 1))
+                    {
+                        <td style="vertical-align: top; width: 23%;">
+                            <div class="quiz_bg" onclick="window.location =''">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td style="width: 120px;">
+                                            <img src="/uploads/@Model[i].Book.CoverPhoto"
+                                                 style="width: 120px; height: 200px; margin: 0; display: block;">
+                                        </td>
+                                        <td style="vertical-align: top;">
+                                            <div class="quiz_inner @(GetClassFromGrade((int)Model[i].Book.Grade))">
+                                                <div class="quiz_inner_right">
+                                                    <div class="answers" style="margin-bottom: 20px;">
+                                                        Викторина решена
+                                                        <span style="font-weight: bold">@Model[i].Book.Answers.Count</span> раз
+                                                    </div>
+                                                </div>
+                                                <div class="bookTitle">@Model[i].Book.Title</div>
+                                                <div class="bookAuthor">@Model[i].Book.BookAuthor</div>
+                                                <div class="visible-desktop">
+                                                    <div class="quizLabel"></div>
+                                                    <div class="quizYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
+                                                </div>
+                                                <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="bg @(GetClassFromGrade((int)Model[i].Book.Grade))" style="padding: 20px; vertical-align: top;">
+                                            <table style="width: 100%; font-size: 20px;">
+                                                <tr>
+                                                    <td>Процент: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
+                                                    <td style="text-align: right;">Очки: <span style="font-weight: bold">@Model[i].Points</span></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    @:</tr>
+                    <tr><td colspan="3" height="40">&nbsp;</td></tr>
+                }
+                else
+                {
+                    <td style="vertical-align: top; width: 23%;">
+                        <div class="quiz_bg" onclick="window.location =''">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="width: 120px;">
+                                        <img src="/uploads/@Model[i].Book.CoverPhoto" style="width: 120px; height: 200px; margin: 0; display: block;">
+                                    </td>
+                                    <td style="vertical-align: top;">
+                                        <div class="quiz_inner @(GetClassFromGrade((int)Model[i].Book.Grade))">
+                                            <div class="quiz_inner_right">
+                                                <div class="answers" style="margin-bottom: 20px;">
+                                                    Викторина решена
+                                                    <span style="font-weight: bold">@Model[i].Book.Answers.Count</span> раз
+                                                </div>
+                                            </div>
+                                            <div class="bookTitle">">@Model[i].Book.Title</div>
+                                            <div class="bookAuthor">@Model[i].Book.BookAuthor</div>
+                                            <div class="visible-desktop">
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
+                                            </div>
+                                            <div class="visible-mobile quizMobileYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="bg @(GetClassFromGrade((int)Model[i].Book.Grade))" style="padding: 20px; vertical-align: top;">
+                                        <table style="width: 100%; font-size: 20px;">
+                                            <tr>
+                                                <td>Процент: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
+                                                <td style="text-align: right;">Очки: <span style="font-weight: bold">@Model[i].Points</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width: 2%"></td>
+                }
+            }
+
+        </table>
+    </div>
+
+
+</td>
+
+

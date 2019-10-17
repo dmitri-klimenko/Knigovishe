@@ -1,32 +1,68 @@
-﻿@model System.Collections.Generic.List<Knigosha.Core.Models.Book>
-
+﻿@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.ViewModels.BookViewModels.IndexBookViewModel
 @{
     ViewData["Title"] = "Книги";
     Layout = "_Layout";
 }
 
+@functions{ 
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
+        {
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
+        }
+        return returnVal;
+    }
+}
+
 <div class="visible-desktop">
-    <div class="page_banner" style="background-color:#ffdb60;">
+    <div class="page_banner" style="background-color:#ffdb60; background-image: url(/skin/header_search.png);">
         <div class="container" style="position: relative">
-            <h1 style="position: absolute; top:130px;left:100px; font-size:40px">Книги</h1>
+            <h1 style="position: absolute; top:190px;left:100px; font-size:40px">Книги</h1>
         </div>
     </div>
 </div>
 
 <a href="javascript:;" name="s" style="position:relative;top:-100px;"></a>
 
-<form name="form" class="container" asp-controller="Book" asp-action="Search"
-      onsubmit="
-        if($('#ka').is(':visible')){
-			this.keywords.value=$('#ka').val();
-			return true;
-        }
-		this.keywords.value=$('#k').val();
-		return true;
-	">
-    <input type="hidden" name="page" value="1">
-    <input type="hidden" name="advanced" value="">
-    <input type="hidden" name="keywords" value="">
+<form name="form" class="container" asp-controller="Book" asp-action="Index" method="get">
+    <input type="hidden" name="page">
+    <input type="hidden" name="advanced">
+   
 
     <div class="container">
 
@@ -41,48 +77,36 @@
 
                         <div class="advanced" style="display:none;">
                             <div style="height:40px;"></div>
-
-                            <select name="publisher" asp-items="@ViewBag.Publishers" onchange="document.form.submit()">
-                                <option value="0">Все издателства</option>
-                               
+                            <select asp-for="BookPublisher" asp-items="@Model.Publishers" onchange="document.form.submit()">
+                                <option value="">Все издателства</option>
                             </select>
-
                             <span class="mbr"></span>
-
                             <div style="height:10px;"></div>
-
                             Год издания
-
                             <span class="mbr"></span>
-
                             от:
-                            <input type="text" value="" class="short" name="year_from">
-
+                            <input asp-for="YearFrom" class="short" >
                             до:
-                            <input type="text" value="" class="short" name="year_to">
-
+                            <input asp-for="YearTo" class="short" />
                             <div style="height:10px;"></div>
-
-                            Введите название, автора, издателство или ISBN:
-
-                            <input type="text" id="ka" value="" style="width:400px;">
-
                             <div style="height:10px;"></div>
-
                             <input type="submit" class="button" value="Поиск">
-                            <input type="button" class="button" value="Очистить" onclick="window.location='/Search'">
-
+                            <input type="button" class="button" value="Очистить" onclick="window.location='/Book/Index'">
                             <div style="height:40px;"></div>
                         </div>
-                        Найдено @Model.Count() книг
+                         @{
+                             if (Model.Books.Count == 1) {<span>Найдена 1 книга</span>}
+                             else if(Model.Books.Count == 2 || Model.Books.Count == 3) {<span>Найдено @Model.Books.Count книги</span>}
+                             else {<span>Найдено @Model.Books.Count книг</span>}
+                         }
                     </td>
                     <td id="sa">
                         <table class="search_right sc">
                             <tr>
                                 <td style="white-space:nowrap;">
-                                    <input type="text" placeholder="Введите название, автора, издателство или ISBN " id="k"
-                                           value="" class="search_input"><a href="javascript:;" style="border-top-left-radius:0;border-bottom-left-radius:0;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  padding-left:10px;padding-right:15px;"class="button" value="Поиск" onclick="document.form.keywords.value=$('#k').val(); document.form.submit();"><i class="fa fa-search"></i></a>
+                                    <input asp-for="Keywords" placeholder="Введите название, автора, издателство или ISBN" id="k"
+                                           class="search_input"><button 
+                                                                   style="border-top-left-radius:0;border-bottom-left-radius:0;padding-left:10px;padding-right:15px;" class="button" type="submit" value=""><i class="fa fa-search"></i></button>
                                 </td>
                                 <td style="padding-left:20px;">
                                     <a href="javascript:;" class="advanced_button" 
@@ -90,7 +114,7 @@
                                                 $('.advanced').show();
                                                 $('.advanced').parent().css('text-align', 'left');
                                                 document.form.advanced.value = 1; $('#sa').remove();">
-                                        Разширеный поиск <i class="fa fa-angle-down"></i>
+                                        Раcширенный поиск <i class="fa fa-angle-down"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -106,10 +130,12 @@
                 <td style="vertical-align:top;width:280px;">
                     <div style="background: #ffefc7; padding: 20px;">
                         <table>
-                            <tr><td></td><td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Категория</td>
+                            <tr>
+                            <td></td>
+                            <td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Категория</td>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="category" value="1"
+                                    <input type="radio" asp-for="Category"  value="1"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px;vertical-align: top; font-size: 16px;">
@@ -118,7 +144,7 @@
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="category" value="2"
+                                    <input type="radio" asp-for="Category"  value="2"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">
@@ -127,8 +153,8 @@
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="category" value="0"
-                                           checked onclick="document.form.submit()">
+                                    <input type="radio" asp-for="Category" value="0"
+                                           onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Все</td>
                             </tr>
@@ -140,49 +166,50 @@
                             <tr><td></td><td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Возраст</td>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="class" value="1"
+                                    <input type="radio" asp-for="AgeGroup" value="1"
                                            onclick="document.form.submit()">
                                 </td>
-                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">6+</td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      vertical-align: top; font-size: 16px;">6+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="class" value="2-4"
+                                    <input type="radio"  asp-for="AgeGroup" value="2"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">8+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="class" value="5-7"
+                                    <input type="radio"  asp-for="AgeGroup" value="3"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">11+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="class" value="8-12"
+                                    <input type="radio"  asp-for="AgeGroup" value="4"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">14+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" name="class" value="0"
-                                           checked onclick="document.form.submit()">
+                                    <input type="radio"  asp-for="AgeGroup" value="0"
+                                           onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this); document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Все</td>
                             </tr>
                         </table>
                     </div>
                 </td>
+
                 <td style="vertical-align:top;">
                     <div style="padding-top:20px;padding-left:40px;">
                         <div style="text-align:right;padding-bottom:40px;">
-                            Подреди по:
-
+                            Вверху:
                             <div style="display:inline-block;position:relative;">
-                                <select style="width:200px;" name="sort_field" id="sort" onchange="document.form.submit()" class="s1">
+                                <select style="width:211px;" asp-for="SortField" id="sort" onchange="document.form.submit()" class="s1">
                                     <option value="latest">Самые новые</option>
                                     <option value="rating">Самые рейтинговые</option>
                                     <option value="views">Самые читаемые</option>
@@ -193,11 +220,18 @@
                                 </select>
                             </div>
                         </div>
-                        <table class="sc tc">
-                            @for (int i = 0; i < Model.Count; i++)
+                        @if (Model.Books.Count == 0)
+                        {
+                            <text>К сожалению, у нас пока нет викторины по этой книге.</text><br />
+                            <text>Это Ваш шанс стать автором викторины в Книговище.</text><br />
+                            <text>Что нужно для этого сделать Вы можете прочитать</text><a asp-controller="Home" asp-action="CreateQuiz"> здесь.</a>
+                        }
+                        else
+                        {<table class="sc tc">
+                                @for (int i = 0; i < Model.Books.Count; i++)
                                 {
                                     var cells = 4;
-                                    var item = Model[i];
+                                    var item = Model.Books[i];
                                     if ((i % cells) == 0)
                                     {
                                         @:<tr>
@@ -205,33 +239,32 @@
                                         if ((i % cells) == (cells - 1))
                                         {
                                             <td style="vertical-align: top; width: 200px;" class="book_quiz">
-                                                <div class="cover class4"
-                                                     style="background-image: url(/uploads/@Model[i].CoverPhoto);"
-                                                     onclick="window.location = '/Book/Details?id=@Model[i].Id'">
-                                                    <div class="hover bg class4"></div>
+                                                <div class="cover @(GetClassFromGrade((int)item.Grade))"
+                                                     style="background-image: url(/uploads/@Model.Books[i].CoverPhoto);"
+                                                     onclick="window.location = '/Book/Details?id=@Model.Books[i].Id'">
+                                                    <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
                                                     <div class="details">
                                                         <div style="display: table; width: 100%;">
                                                             <div style="display: table-row">
                                                                 <div class="in">
                                                                     <div style="font-size: 18px; padding-bottom: 5px; font-weight: bold;">
-                                                                        @Model[i].Title
-                                                                        <div style="font-size: 14px;">@Model[i].BookAuthor</div>
+                                                                        @Model.Books[i].Title
+                                                                        <div style="font-size: 14px;">@Model.Books[i].BookAuthor</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="quizLabel"></div>
-                                                        <div class="quizYear">@Html.DisplayFor(m =>m[i].AgeGroup)</div>
                                                     </div>
+                                                    <div class="quizLabel"></div>
+                                                    <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                                 </div>
                                                 <div class="rating">
-                                                    <b>@Model[i].AverageRating</b>/5 &nbsp;
-                                                    <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                    <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                    <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                    <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                    <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-
+                                                    <span style="font-weight: bold">@Model.Books[i].AverageRating</span>/5 &nbsp;
+                                                    <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                    <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                    <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                    <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                    <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                 </div>
                                                 <div class="bl"></div>
                                                 <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
@@ -242,32 +275,32 @@
                                     else
                                     {
                                         <td style="vertical-align: top; width: 200px;" class="book_quiz">
-                                            <div class="cover class4"
-                                                 style="background-image: url(/uploads/@Model[i].CoverPhoto);"
-                                                 onclick="window.location = '/Book/Details?id=@Model[i].Id'">
-                                                <div class="hover bg class4"></div>
+                                            <div class="cover @(GetClassFromGrade((int)item.Grade))"
+                                                 style="background-image: url(/uploads/@Model.Books[i].CoverPhoto);"
+                                                 onclick="window.location = '/Book/Details?id=@Model.Books[i].Id'">
+                                                <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
                                                 <div class="details">
                                                     <div style="display: table; width: 100%;">
                                                         <div style="display: table-row">
                                                             <div class="in">
                                                                 <div style="font-size: 18px; padding-bottom: 5px; font-weight: bold;">
-                                                                    @Model[i].Title
-                                                                    <div style="font-size: 14px;">@Model[i].BookAuthor</div>
+                                                                    @Model.Books[i].Title
+                                                                    <div style="font-size: 14px;">@Model.Books[i].BookAuthor</div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="quizLabel"></div>
-                                                    <div class="quizYear">@Html.DisplayFor(m =>m[i].AgeGroup)</div>
                                                 </div>
+                                                <div class="quizLabel"></div>
+                                                <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                             </div>
                                             <div class="rating">
-                                                <b>@Model[i].AverageRating</b>/5 &nbsp;
-                                                <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                                                <i class="@(Model[i].AverageRating == 0? "fa fa-star-o" : (Model[i].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <b>@Model.Books[i].AverageRating</b>/5 &nbsp;
+                                                <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                             </div>
                                             <div class="bl"></div>
                                             <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
@@ -276,8 +309,9 @@
                                     }
 
                                 }
-                                
+
                             </table>
+                        }
                     </div>
                 </td>
             </tr>

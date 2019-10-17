@@ -1,0 +1,20 @@
+﻿@using Knigosha.Core.Models
+@model Knigosha.Core.ViewModels.ManageViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Мои достижения";
+}
+
+
+@*@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)*@
+
+<td colspan="2" valign="top" class="desktop-top-border">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    @if (!Model.HasPaidSubscriptions)
+    {
+<div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+    Чтобы продолжить использовать функции Книговища, Вы должны активировать Ваш абонемент.
+    Вы можете приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонамент".</a>
+</div>
+    }
+    else { }
+</td>

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.BookViewModels;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -29,11 +30,83 @@ namespace Knigosha.Controllers
             return View(await _context.Books.ToListAsync());
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(string keywords, string bookPublisher, BookCategories category, AgeGroups ageGroup, string yearFrom, string yearTo, string sortField)
         {
-            var books = await _context.Books.ToListAsync();
-            ViewBag.Publishers = books.Select(book => new SelectListItem() { Text = book.Publisher, Value = book.Publisher }).ToList();
-            return View(books);
+            var books = _context.Books.Include(b => b.Answers).AsQueryable();
+
+            var publishers = books.Select(b => b.Publisher);
+
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                books = books.Where(b => b.Title.Contains(keywords) ||
+                                         b.BookAuthor.Contains(keywords)
+                                         || b.Isbn1.Contains(keywords) ||
+                                         b.Isbn2.Contains(keywords));
+            }
+
+            if (!string.IsNullOrEmpty(bookPublisher))
+            {
+                books = books.Where(b => b.Publisher == bookPublisher);
+            }
+
+            if (category != 0)
+            {
+                books = books.Where(b => b.BookCategory == category);
+            }
+
+            if (ageGroup != 0)
+            {
+                books = books.Where(b => b.AgeGroup == ageGroup);
+
+            }
+            if (!string.IsNullOrEmpty(yearFrom))
+            {
+                books = books.Where(b => int.Parse(b.YearPublished) >= int.Parse(yearFrom));
+            }
+
+            if (!string.IsNullOrEmpty(yearTo))
+            {
+                books = books.Where(b => int.Parse(b.YearPublished) <= int.Parse(yearTo));
+            }
+
+            switch (sortField)
+            {
+                case "latest":
+                    books = books.OrderByDescending(b => b.DateAdded);
+                    break;
+                case "rating":
+                    books = books.OrderByDescending(b => b.AverageRating);
+                    break;
+                case "views":
+                    books = books.OrderByDescending(b => b.Answers.Count);
+                    break;
+                case "class":
+                    books = books.OrderBy(b => b.Grade);
+                    break;
+                case "year":
+                    books = books.OrderBy(b => b.YearPublished);
+                    break;
+                case "title":
+                    books = books.OrderBy(b => b.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(b => b.BookAuthor);
+                    break;
+                default:
+                    books = books.OrderByDescending(b => b.DateAdded);
+                    break;
+            }
+
+            var indexVm = new IndexBookViewModel()
+            {
+                Books = await books.ToListAsync(),
+                Publishers = new SelectList(await publishers.Distinct().ToListAsync()),
+            };
+
+            return View(indexVm);
+
         }
 
         public async Task<IActionResult> DetailsAdmin(int? id)

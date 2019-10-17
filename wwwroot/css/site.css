@@ -904,7 +904,7 @@ body.scroll #header, body:not(.hero) #header {
 
 
 select, input[type=text], input[type=password] {
-    border-radius: 20px;
+    border-radius: 30px;
     border: 1px solid #D3502D;
     height: 36px;
     line-height: 36px;
@@ -1040,7 +1040,7 @@ input::placeholder {
 
 
 .page_banner {
-    height: 347px;
+    height: 450px;
     background-color: #ffdb60;
     background-position: center center;
     background-repeat: no-repeat;
@@ -1155,7 +1155,7 @@ input::placeholder {
 .rating {
     color: #f8ae00;
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 17px;
 }
 
     .rating i {
@@ -1187,18 +1187,18 @@ input::placeholder {
     color: #f8ae00;
     font-style: italic;
     margin-bottom: 40px;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .quiz_bg .bookTitle {
-    font-size: 18px;
+    font-size: 21px;
     line-height: 22px;
     margin-bottom: 5px;
 }
 
 .quiz_bg .bookAuthor {
     font-style: italic;
-    font-size: 16px;
+    font-size: 19px;
 }
 
 .quiz_bg .quizLabel {
@@ -1408,51 +1408,51 @@ input::placeholder {
 }
 
 .class1.border {
-    border: 2px solid #e7f794;
+    border: 2px solid #e7f794 !important;
 }
 
 .class2.border {
-    border: 2px solid #bbca6a;
+    border: 2px solid #bbca6a !important;
 }
 
 .class3.border {
-    border: 2px solid #9daa5a;
+    border: 2px solid #9daa5a !important;
 }
 
 .class4.border {
-    border: 2px solid #ffba82;
+    border: 2px solid #ffba82 !important;
 }
 
 .class5.border {
-    border: 2px solid #fca16f;
+    border: 2px solid #fca16f !important;
 }
 
 .class6.border {
-    border: 2px solid #ffb64f
+    border: 2px solid #ffb64f !important
 }
 
 .class7.border {
-    border: 2px solid #fa9f1d;
+    border: 2px solid #fa9f1d !important;
 }
 
 .class8.border {
-    border: 2px solid #fc97aa;
+    border: 2px solid #fc97aa !important;
 }
 
 .class9.border {
-    border: 2px solid #fd5e80;
+    border: 2px solid #fd5e80 !important;
 }
 
 .class10.border {
-    border: 2px solid #ee144c;
+    border: 2px solid #ee144c !important;
 }
 
 .class11.border {
-    border: 2px solid #ee144c;
+    border: 2px solid #ee144c !important;
 }
 
 .class12.border {
-    border: 2px solid #ee144c;
+    border: 2px solid #ee144c !important;
 }
 
 .class1.txt, .cover:hover .quizYear {
@@ -1510,7 +1510,7 @@ input::placeholder {
 
 
 .bookMain {
-    padding-top: 150px;
+    padding-top: 100px;
     padding-bottom: 50px;
 }
 
@@ -1594,7 +1594,8 @@ input::placeholder {
 
 .logged_menu {
     background: #ffefc7;
-    padding: 20px
+    padding: 20px;
+    font-size: 16px;
 }
 
     .logged_menu a {
@@ -1641,7 +1642,7 @@ input::placeholder {
     line-height: 80px;
     vertical-align: middle;
     padding-left: 40px;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: bold;
     background-image: url('../skin/quiz_arrow.png');
     background-repeat: no-repeat;
@@ -3146,41 +3147,22 @@ body.mobile .invisible-mobile{display:none !important;}
     border-radius: 15px;
 }
 
-.green-flat-button {
-    margin: 0 auto;
-    display: block;
-    position: relative;
-    vertical-align: top;
-    width: 60%;
-    height: 40px;
-    padding: 0;
-    font-size: 20px;
-    color: white;
-    text-align: center;
-    text-shadow: 0 1px 2px #000000;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    background: #009400;
-    /*border: 0;*/
-    -ms-border-radius: 30px;
-    border-radius: 30px;
-    border-bottom: 2px solid #009400;
-    cursor: pointer;
-    -webkit-box-shadow: inset 0 -2px #009400;
-    box-shadow: inset 0 -2px #009400;
-}
 
-
-
-    .green-flat-button:active {
-        top: 1px;
-        outline: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
 
 #registrationButton {
     width: 50%;
     margin-top: 10px;
+
+}
+
+#loginButton {
+    margin: 0 auto;
+    display: block;
+}
+
+.centerButton {
+    margin: 0 auto;
+    display: block;
 }
 
 #registration .form-control, #forgot .form-control, #login .form-control {
@@ -3195,15 +3177,16 @@ body.mobile .invisible-mobile{display:none !important;}
     background-color: #fff;
     background-clip: padding-box;
     margin-bottom: 0;
-    border: white;
+    border: solid 1px #D3502D;
     border-radius: 30px;
+    
 }
 
-    #registration .form-control:focus, #forgot .form-control:focus, #login .form-control:focus {
-        border-color: #009400;
-        box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
-    }
+
+
+.form-control:focus {
+    box-shadow: none;
+}
 
 #cityDiv {
     display: none;
@@ -3231,7 +3214,7 @@ body.mobile .invisible-mobile{display:none !important;}
 }
 
 .text-danger {
-    color: #009400 !important;
+    color: #D3502D !important;
 }
 
 #registration label {
@@ -3262,11 +3245,6 @@ form > h5 {
     text-align: center;
 }
 
-#registration select, #registration div > input {
-    -ms-border-radius: 30px !important;
-    border-radius: 30px !important;
-}
-
 .select2-container .select2-selection--single .select2-selection__rendered {
     padding-left: 14px !important;
 }
@@ -3279,48 +3257,8 @@ form > h5 {
     border-color: darkgray;
 }
 
-/* dropdown ligon form */
-.dropdown-menu {
-    width: 320px;
-    position: absolute;
-    z-index: 1000;
-    display: none;
-    left: -75px;
-    top: 51px;
-    min-width: 10rem;
-    padding: 1.5em;
-    margin: 0;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: left;
-    list-style: none;
-    background-color: #fff;
-    -ms-background-clip: padding-box;
-    background-clip: padding-box;
-    -ms-border-bottom-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    -ms-border-bottom-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    -ms-border-top-right-radius: 0;
-    border-top-right-radius: 0;
-    -ms-border-top-left-radius: 0;
-    border-top-left-radius: 0;
-    border-top: none;
-    box-shadow: 0 6px 8px -1px #000000;
-    box-shadow: 0 6px 8px -1px rgba(0,0,0,.2);
-    background: #ffffff;
-    background: rgba(255,255,255,0.9);
-    padding: 15px;
-    padding-bottom: 5px;
-}
+/* dropdown login form */
 
-#loginButton {
-    width: 40%
-}
-
-#parent {
-    position: relative;
-}
 
 .form_label {
     padding-left: 10px;
@@ -3344,15 +3282,13 @@ form > h5 {
     font-size: 19px;
     display: block;
     text-align: center;
-    color: #009400;
+    color: #D3502D;
     text-decoration: underline;
     margin-top: 8px;
 }
 
 #loginEmail:focus, #loginPassword:focus {
-    border-color: #009400;
-    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
+    border-color: #D3502D;
 }
 
 #registration #registerPassword input {
@@ -3364,7 +3300,7 @@ form > h5 {
 
 /* nav link */
 nav a:-webkit-any-link:hover {
-    color: #009400 !important;
+    color: #D3502D !important;
 }
 
 /*dashboard*/
@@ -3393,9 +3329,7 @@ nav a:-webkit-any-link:hover {
 /* Create book form*/
 
 .adminForm .form-control:focus {
-    border-color: #009400;
-    box-shadow: 0 1px 1px #000000 inset, 0 0 8px #008000;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 128, 0, 0.5);
+    border-color: #D3502D;
 }
 
 #questionDetail {
@@ -3502,6 +3436,10 @@ dt {
     width: 16%
 }
 
+.loginTimes {
+    width: 7%
+}
+
 #activationCodes {
     width: 30%
 }
@@ -3598,7 +3536,7 @@ dt {
     }
 
         .menuLogin a:hover {
-            color: #009400;
+            color: #D3502D;
             text-decoration: none
         }
 
@@ -3611,7 +3549,7 @@ dt {
 }
 
     .green-border li:first-child {
-        color: #009400;
+        color: #D3502D;
         font-size: 18px;
         padding-bottom: 8px;
         font-weight: bold;

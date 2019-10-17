@@ -4,6 +4,50 @@
 @using Knigosha.Core.Models.Enums
 @model Knigosha.Core.ViewModels.HomeViewModel
 
+@functions{
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
+        {
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
+        }
+        return returnVal;
+    }
+}
+
 <div id="home_banner" class="visible-desktop">
     <div style="position: relative" class="container">
         <div class="banner_content ">
@@ -37,14 +81,14 @@
                     <td style="vertical-align:top;">
                         <div style="height:20px;"></div>
                         <h2>Войдите в свой аккаунт</h2>
-                        <div class="dark" style="line-height:150%;">Создайте мир Книгоши.</div>
+                        <div class="dark" style="line-height:150%;">Создайте мир Книговища.</div>
                         <div style="height:30px;"></div>
                     </td>
                     <td></td>
                     <td style="vertical-align:top;">
                         <div style="height:20px;"></div>
                         <h2>Решайте викторины</h2>
-                        <div class="dark" style="line-height:150%;">Найдите анкету по прочитанной книге и заполните ее.</div>
+                        <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
                         <div style="height:30px;"></div>
                     </td>
                     <td></td>
@@ -52,7 +96,7 @@
                         <div style="height:20px;"></div>
                         <h2>Получайте очки</h2>
                         <div class="dark" style="line-height:150%;">
-                            При правильных ответах вы накапливаете баллы и открываете уровни.
+                            При правильных ответах вы накапливаете очки и открываете уровни.
                         </div>
                         <div style="height:30px;"></div>
                     </td>
@@ -62,7 +106,7 @@
                     <td></td>
                     <td><a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a></td>
                     <td></td>
-                    <td><a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a></td>
+                    <td><a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ ВИКТОРИНУ</a></td>
                 </tr>
             </tbody>
         </table>
@@ -81,7 +125,7 @@
             <img src="/skin/step2.png">
             <div style="height:10px;"></div>
             <h2>Решайте викторины</h2>
-            <div class="dark" style="line-height:150%;">Найдите анкету по прочитанной книге и заполните ее.</div>
+            <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
             <div style="height:30px;"></div>
             <a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a>
             <div style="height:30px;"></div>
@@ -92,17 +136,17 @@
             <img src="/skin/step3.png">
             <div style="height:10px;"></div>
             <h2>Получайте очки</h2>
-            <div class="dark" style="line-height:150%;">При правильных ответах вы накапливаете баллы и открываете уровни.</div>
+            <div class="dark" style="line-height:150%;">При правильных ответах вы накапливаете очки и открываете уровни.</div>
             <div style="height:30px;"></div>
             <a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a>
         </div>
-        <div style="height:100px;"></div>
+        <div style="height:80px;"></div>
     </div>
 </div>
 <div id="bg1">
     <div style="height: 80px;"></div>
     <div id="books">
-        <h1 class="section_title" onclick="window.location='/Book/Search?sort_field=latest'">Новое в Книгоше</h1>
+        <h1 class="section_title" onclick="window.location='/Book/Search?sort_field=latest'">Новое в Книговище</h1>
         <div class="section_text">Новые викторины по книгам:</div>
         <table style="width: 100%" class="container sc">
             <tbody>
@@ -188,16 +232,16 @@
                                         <img src="uploads/@Model.MostPopularBooks[0].CoverPhoto" />
                                     </td>
                                     <td class="quiz_right">
-                                        <div class="quiz_inner class3">
+                                        <div class="quiz_inner @(GetClassFromGrade((int)Model.MostPopularBooks[0].Grade))">
                                             <div class="rating">
-                                                <b>@Model.MostPopularBooks[0].AverageRating</b>/5&nbsp;
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                <span style="font-weight: bold">@Model.MostPopularBooks[0].AverageRating</span>/5&nbsp;
+                                                <i class="@(Model.MostPopularBooks[0].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[0].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[0].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[0].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[0].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[0].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[0].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[0].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[0].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[0].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                             </div>
-                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[0].Answers.Count</b> раз</div>
+                                            <div class="answers">Викторина решена <span style="font-weight: bold">@Model.MostPopularBooks[0].Answers.Count</span> раз</div>
                                             <div class="bookTitle">@Model.MostPopularBooks[0].Title</div>
                                             <div class="bookAuthor">@Model.MostPopularBooks[0].BookAuthor</div>
                                             <div class="visible-desktop">
@@ -211,7 +255,7 @@
                                 <tr>
                                     <td class="quiz_button">
                                         <div class="quiz_line"></div>
-                                        <div class="quiz_button">ИГРАТЬ</div>
+                                        <div class="quiz_button">РЕШИТЬ ВИКТОРИНУ</div>
                                     </td>
                                 </tr>
                             </table>
@@ -226,16 +270,16 @@
                                         <img src="uploads/@Model.MostPopularBooks[1].CoverPhoto" />
                                     </td>
                                     <td class="quiz_right">
-                                        <div class="quiz_inner class3">
+                                        <div class="quiz_inner @(GetClassFromGrade((int)Model.MostPopularBooks[1].Grade))">
                                             <div class="rating">
-                                                <b>@Model.MostPopularBooks[1].AverageRating</b>/5&nbsp;
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                <span style="font-weight: bold">@Model.MostPopularBooks[1].AverageRating</span>/5&nbsp;
+                                                <i class="@(Model.MostPopularBooks[1].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[1].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[1].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[1].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[1].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[1].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[1].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[1].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[1].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[1].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                             </div>
-                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[1].Answers.Count</b> раз</div>
+                                            <div class="answers">Викторина решена <span style="font-weight: bold">@Model.MostPopularBooks[1].Answers.Count</span> раз</div>
                                             <div class="bookTitle">@Model.MostPopularBooks[1].Title</div>
                                             <div class="bookAuthor">@Model.MostPopularBooks[1].BookAuthor</div>
                                             <div class="visible-desktop">
@@ -249,7 +293,7 @@
                                 <tr>
                                     <td class="quiz_button">
                                         <div class="quiz_line"></div>
-                                        <div class="quiz_button">ИГРАТЬ</div>
+                                        <div class="quiz_button">РЕШИТЬ ВИКТОРИНУ</div>
                                     </td>
                                 </tr>
                             </table>
@@ -268,16 +312,16 @@
                                         <img src="uploads/@Model.MostPopularBooks[2].CoverPhoto" />
                                     </td>
                                     <td class="quiz_right">
-                                        <div class="quiz_inner class3">
+                                        <div class="quiz_inner @(GetClassFromGrade((int)Model.MostPopularBooks[2].Grade))">
                                             <div class="rating">
-                                                <b>@Model.MostPopularBooks[2].AverageRating</b>/5&nbsp;
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                <span style="font-weight:bold">@Model.MostPopularBooks[2].AverageRating</span>/5&nbsp;
+                                                <i class="@(Model.MostPopularBooks[2].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[2].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[2].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[2].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[2].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[2].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[2].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[2].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[2].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[2].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                             </div>
-                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[2].Answers.Count</b> раз</div>
+                                            <div class="answers">Викторина решена <span style="font-weight: bold">@Model.MostPopularBooks[2].Answers.Count</span> раз</div>
                                             <div class="bookTitle">@Model.MostPopularBooks[2].Title</div>
                                             <div class="bookAuthor">@Model.MostPopularBooks[2].BookAuthor</div>
                                             <div class="visible-desktop">
@@ -291,7 +335,7 @@
                                 <tr>
                                     <td class="quiz_button">
                                         <div class="quiz_line"></div>
-                                        <div class="quiz_button">ИГРАТЬ</div>
+                                        <div class="quiz_button">РЕШИТЬ ВИКТОРИНУ</div>
                                     </td>
                                 </tr>
                             </table>
@@ -306,16 +350,16 @@
                                         <img src="uploads/@Model.MostPopularBooks[3].CoverPhoto" />
                                     </td>
                                     <td class="quiz_right">
-                                        <div class="quiz_inner class3">
+                                        <div class="quiz_inner @(GetClassFromGrade((int)Model.MostPopularBooks[3].Grade))">
                                             <div class="rating">
-                                                <b>@Model.MostPopularBooks[3].AverageRating</b>/5&nbsp;
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                                <span style="font-weight: bold">@Model.MostPopularBooks[3].AverageRating</span>/5&nbsp;
+                                                <i class="@(Model.MostPopularBooks[3].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[3].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[3].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[3].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[3].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[3].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[3].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[3].AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                                <i class="@(Model.MostPopularBooks[3].AverageRating == 0? "fa fa-star-o" : (Model.MostPopularBooks[3].AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                             </div>
-                                            <div class="answers">Викторина решена <b>@Model.MostPopularBooks[3].Answers.Count</b> раз</div>
+                                            <div class="answers">Викторина решена <span style="font-weight: bold">@Model.MostPopularBooks[3].Answers.Count</span> раз</div>
                                             <div class="bookTitle">@Model.MostPopularBooks[3].Title</div>
                                             <div class="bookAuthor">@Model.MostPopularBooks[3].BookAuthor</div>
                                             <div class="visible-desktop">
@@ -329,7 +373,7 @@
                                 <tr>
                                     <td class="quiz_button">
                                         <div class="quiz_line"></div>
-                                        <div class="quiz_button">ИГРАТЬ</div>
+                                        <div class="quiz_button">РЕШИТЬ ВИКТОРИНУ</div>
                                     </td>
                                 </tr>
                             </table>
@@ -352,7 +396,7 @@
             Выберите подходящий абонемент.
             <br />
             <br />
-            <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, пишите нам по адресу info@knigosha.ru</strong>
+            <strong>Если вы хотите заказать более 1 абонемента одновременно и со скидкой, пишите нам по адресу info@knigovishe.ru</strong>
         </div>
         <table class="container sc tc mc" style="width:100%;">
             <tr>
@@ -541,12 +585,12 @@
     </div>
     <div style="height:60px;"></div>
 </div>
-@if(Model.RecentNews.Count > 0)
+@if (Model.RecentNews.Count > 0)
 {
     <div id="articles" class="container">
         <div style="height:80px;"></div>
-        <h2 class="section_title" onclick="window.location='/Texts/Index'">Новости Книгоши</h2>
-        
+        <h2 class="section_title" onclick="window.location='/Texts/Index'">Новости Книговища</h2>
+
         @for (int i = 0; i < Model.RecentNews.Count; i++)
         {
             var cells = 3;
@@ -554,17 +598,17 @@
             if ((i % cells) == 0)
             {
                 @:<div class="row">
-            }
-            <a asp-controller="Texts" asp-action="Details" asp-route-id="@item.Id" class="post col col-md-4">
-                <div class="post-sync">
-                    <i class="post-date">@Model.RecentNews[i].DateAdded</i>
-                    <span class="post-title">@Model.RecentNews[i].Title</span>
-                    <span class="post-description">@Model.RecentNews[i].Paragraph1.Substring(0, 69)...</span>
-                </div>
-                <div class="post-image" style="background-image:url(/uploads/@Model.RecentNews[i].Photo);"></div>
-            </a>
-            if ((i % cells) == (cells - 1))
-            {
+                }
+                <a asp-controller="Texts" asp-action="Details" asp-route-id="@item.Id" class="post col col-md-4">
+                    <div class="post-sync">
+                        <i class="post-date">@Model.RecentNews[i].DateAdded</i>
+                        <span class="post-title">@Model.RecentNews[i].Title</span>
+                        <span class="post-description">@Model.RecentNews[i].Paragraph1.Substring(0, 69)...</span>
+                    </div>
+                    <div class="post-image" style="background-image:url(/uploads/@Model.RecentNews[i].Photo);"></div>
+                </a>
+                if ((i % cells) == (cells - 1))
+                {
                 @:</div>
             }
         }

@@ -7,21 +7,21 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Manage" asp-action="Index" title="Manage">@User.Identity.Name</a>
+            <a class="nav-link text-dark" asp-controller="Manage" asp-action="Dashboard" style="font-size: 20px; padding-right: 20px;">@User.Identity.Name</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
-                <button type="submit" class="nav-link btn btn-link text-dark">Выйти</button>
+                <a href="" class="nav-link text-dark" onclick="this.parentNode.submit(); return false;" style="font-size: 20px;">Выйти</a>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register" style="font-size: 20px; padding-right: 20px;">Регистрация</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login"  style="font-size: 20px;">Вход</a>
         </li>
     }
 </ul>

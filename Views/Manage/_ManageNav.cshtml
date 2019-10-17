@@ -1,45 +1,44 @@
 ﻿@using Knigosha.Core.Models
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    ApplicationUser user = await UserManager.GetUserAsync(User);
 }
-<div >
-    <div class="menuLogin">
-        <ul class="nav nav-pills flex-column">
-            <li><a asp-action="Index">Мои достижения</a></li>
-            <li><a asp-action="Index">Прочитанные книги</a></li>
-            <li><a asp-action="Index">Отмеченные книги</a></li>
-            <li><a asp-action="Index">Что читает моя семья</a></li>
-            <li><a asp-action="Index">Создать викторину</a></li>
-            <li><a asp-action="Index">Созданные викторины</a></li>
-            <li><a asp-action="Index">Сообщения</a></li>
-            <li><a asp-action="Index">Мои группы</a></li>
-            <li><a asp-action="Index">Купить абонемент</a></li>
-            <li><a asp-action="Index">Мои абонементы</a></li>
-            <li><a asp-action="Index">Активировать абонемент</a></li>
-            <li><a asp-action="Index">Редактировать профиль</a></li>
-        </ul>
+
+<div class="invisible-smartphone">
+    <div class="logged_menu">
+        <a href="/Manage/Dashboard">Мои достижения</a>
+        <a href="/Manage/Answers">Прочтённые книги</a>
+        <a href="/Manage/Books">Отмеченные книги</a>
+        <a href="/Manage/">Что читает моя семья</a>
+        <a href="/Manage/">Создать викторину</a>
+        <a href="/Manage/Points">Созданные викторины</a>
+        <a href="/Manage/Messages">Сообщения </a>
+        <a href="/Manage/Groups">Мои группы</a>
+        <a href="/Manage/Orders">Купить абонемент</a>
+        <a href="/Manage/Licenses">Мои абонементы</a>
+        <a href="/Manage/Licenses">Активировать абонемент</a>
+        <a href="/Manage/Details">Редактировать профиль</a>
     </div>
-    <div class="green-border">
-        @*@if (@Model.MarkedBooks.Count > 0)
-        {*@
-            <ul class="nav nav-pills flex-column">
-                <li>Отмеченные книги</li>
-                @*@for (var i = 0; i < Model.MarkedBooks.Count; i++)
-                        {*@
-                <li class="dynamicLi">
-                    <a asp-controller="" asp-action="" asp-route-data="">
-                        <strong>Маша и медведи</strong><br/><i>Народная</i>
-                    </a></li>
-                @*}*@
-                <li ><a asp-controller="" asp-action="">СМОТРЕТЬ КНИГИ</a></li>
-            </ul>
-        @*}*@
-        
-    </div>
-    
+    @if(user.MarkedBooks.Count > 0)
+    {
+        <div class="yellow_border" style="padding:20px;margin-top:20px;">
+            <b class="yellow" style="font-size:16px;">Отмеченные книги</b><div style="height:30px;"></div>
+
+            @for(var i = 0; i < user.MarkedBooks.Count; i++)
+            {
+                <div style="cursor:pointer;" onclick="window.location='/Book/Details?id=@user.MarkedBooks[i].BookId'">
+                    <div class="dark" style="font-weight:bold;font-size:14px;line-height:18px;">@user.MarkedBooks[i].Book.Title</div>
+                    <div style="color:#707070;font-size:14px;font-style:italic;">@user.MarkedBooks[i].Book.BookAuthor</div>
+                </div>
+                <div style="height:20px;"></div>
+            }
+            <div style="height:10px;"></div>
+            <a href="" class="a1" style="font-size:14px;">СМОТРЕТЬ КНИГИ</a>
+        </div>
+    }
 
 </div>
+
 
 

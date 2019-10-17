@@ -1,64 +1,100 @@
-﻿@using Knigosha.Core.ViewModels.ManageViewModels
+﻿@using Knigosha.Core.Models
+@using Knigosha.Core.Models.Enums
+@using Knigosha.Core.ViewModels.ManageViewModels
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
-@model Knigosha.Core.ViewModels.ManageViewModels.IndexViewModel
-<div class="container">
-    <div class="row" id="headerManageRow">
-        <table id="manageLayoutTable">
-            <tbody>
-                <tr>
-                    <td style="vertical-align: middle; padding: 45px !important;"  class="manageLeftCol">
-                        @if (Model.Photo != null)
-                        {
-                            <img id="profilePic" src="~/uploads/@Model.Photo" alt="profile picture" />
-                        }
-                        else
-                        {
-                            <img id="avatar" src="~/skin/avatar.png" alt="profile picture" />
-                        }
-                    </td>
-                    <td style="vertical-align: middle">
-                        <table id="innerTable" style="line-height: 1.1;">
-                            <tbody>
-                                <tr id="greeting">
-                                    <td colspan="4" style="text-align: left; font-size: 50px;">Привет, @User.Identity.Name</td>
-                                </tr>
-                            <tr>
-                                <td style="font-size: 50px; vertical-align: middle; text-align: left; white-space: nowrap; color: #009400">
-                                    <strong>10%</strong>
-                                </td>
-                                <td style="text-align: left; vertical-align:middle; padding-left: 5px; white-space: nowrap; line-height: 1.2em; font-weight: 600">правильных<br />ответов</td>
-                                <td style="text-align: left; vertical-align: middle; padding-left: 20px; font-size: 50px;  white-space: nowrap;color: #009400"><strong>4</strong></td>
-                                <td style="text-align: left; vertical-align:middle;  padding-left: 5px; width: 99%; line-height: 1.2em; font-weight: 600">пройденных<br />викторин</td>
-                            </tr>
-                            <tr id="group">
-                                <td colspan="4" style="font-size: 20px; text-align: left; font-weight: 600">Рабочая группа:</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+    <div id="content">
+        <div class="container">
+            <div class="invisible-smartphone">
+                <table width="100%" class="sc">
+                    <tr>
+                        <td style="width: 100%">
+                            <div class="profile_header_left">
+                                <div class="hello mc">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                @if (user.Photo != null)
+                                                {<div class="avatar" style="width: 130px; height:130px; background-image: url(/uploads/@user.Photo);"></div> }
+                                                else
+                                                { <div class="avatar" style="width:130px; height:130px; background-image:url(/skin/avatar.png);"></div>}
 
-    <div class="row" id="manageRow">
-        <table>
-            <tbody>
-            <tr>
-                <td class="manageLeftCol" id="menu" style="padding:0">
-                    @await Html.PartialAsync("_ManageNav")
-                </td>
-                <td >
-                    @RenderBody()
-                </td>
-            </tr>
-           
-            </tbody>
-        </table>
+                                            </td>
+                                            <td style="padding-left:50px;">
+                                                Привет, @User.Identity.Name
+                                                <div class="visible-mobile" style="height:30px;"></div>
+                                                @if (user.UserType == UserTypes.Student)
+                                                {
+                                                    <div style="height:20px;"></div>
+                                                    <table class="sc mc">
+                                                        <tr>
+                                                            <td style="font-weight:bold;font-size:50px;" class="yellow">
+                                                                @user.PercentageOfRightResponses%
+                                                            </td>
+                                                            <td style="padding-left:15px;font-size:18px;">
+                                                                <div class="visible-mobile" style="height:10px;"></div>
+                                                                правильных<br>
+                                                                ответов
+                                                                <div class="visible-mobile" style="height:30px;"></div>
+                                                            </td>
+                                                            <td style="font-weight: bold; font-size: 50px; padding-left: 40px;" class="yellow">
+                                                                @user.Answers.Count
+                                                            </td>
+                                                            <td style="padding-left:15px;font-size:18px;">
+                                                                <div class="visible-mobile" style="height:10px;"></div>
+                                                                решенных<br>
+                                                                викторин
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div style="padding-top:20px;font-size:20px;line-height:24px;">
+                                                        Группа:
+                                                        1  клас
+                                                        на Dmitri Klimenko
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </td>
+                        <td valign="bottom" align="right">
+                            <div style="display:inline-block;text-align:center;position:relative;">
+                                <div style="position:absolute;width:100%;top:60px;font-weight:bold;font-size:16px;">
+                                    <span style="font-size:16px;">уровень @((int)user.Level)<br>@Html.DisplayFor(u => user.Level)</span>
+                                </div>
+                                <img src="/skin/mascot_header.png">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <table style="width: 100%;" class="sc">
+                <tbody>
+                    <tr>
+                        <td valign="top" class="desktop-top-border"
+                            style="width:220px;">
+                            @await Html.PartialAsync("_ManageNav")
+                        </td>
+                        @RenderBody()
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
     </div>
-</div>
 
 @section Scripts {
     @RenderSection("Scripts", required: false)

@@ -5,13 +5,13 @@ namespace Knigosha.Core.Models.Enums
     public enum AgeGroups
     {
         [Display(Name = "6+")]
-        SixPlus,
+        SixPlus = 1,
         [Display(Name = "8+")]
-        EightPlus,
+        EightPlus = 2,
         [Display(Name = "11+")]
-        ElevenPlus,
+        ElevenPlus = 3,
         [Display(Name = "14+")]
-        FourteenPlus
+        FourteenPlus = 4
 
     }
 }

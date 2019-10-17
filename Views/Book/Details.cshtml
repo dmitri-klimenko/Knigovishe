@@ -3,8 +3,52 @@
 @{
     ViewBag.Title = "Книга";
 }
+@functions{
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
+        {
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
+        }
+        return returnVal;
+    }
+}
+
 <div class="visible-desktop">
-    <div class="bookMain bg class4">
+    <div class="bookMain bg @GetClassFromGrade((int)Model.Book.Grade)">
         <div class="container">
             <div style="padding:20px;">
                 <div style="font-size:30px;font-weight:bold;padding-bottom:10px;">@Model.Book.Title</div>
@@ -20,23 +64,23 @@
         <table class="tc sc">
             <tr>
                 <td valign="top" style="width:300px;">
-                    <div class="book_div bg class4" style="padding:20px;padding-top:0px;position:relative;">
+                    <div class="book_div bg @GetClassFromGrade((int)Model.Book.Grade)" style="padding:20px;padding-top:0px;position:relative;">
                         <div class="visible-mobile" style="height:20px;"></div>
-                        <div class="bookLabel bg class4">@Html.DisplayFor(m => m.Book.AgeGroup)</div>
+                        <div class="bookLabel bg @GetClassFromGrade((int)Model.Book.Grade)">@Html.DisplayFor(m => m.Book.AgeGroup)</div>
                         <img src="/uploads/@Model.Book.CoverPhoto" style="width:100%;">
                     </div>
                     <div style="height:20px"></div>
-                    <div class="border class4" style="padding:20px;">
+                    <div class="border @GetClassFromGrade((int)Model.Book.Grade)" style="padding:20px;">
                         <div style="font-weight:bold;font-size:18px;padding-bottom:5px;">@Model.Book.Title</div>
                         <div style="padding-bottom:10px;">@Model.Book.BookAuthor</div>
-                        <div style="padding-bottom:10px;">Категория: <b>@Html.DisplayFor(m => m.Book.BookCategory)</b></div>
-                        <div style="padding-bottom:10px;">Год издания: <b>@Model.Book.YearPublished</b></div>
-                        <div style="padding-bottom:10px;">Издателство: <b>@Model.Book.Publisher</b></div>
+                        <div style="padding-bottom:10px;">Категория: <span style="font-weight: bold">@Html.DisplayFor(m => m.Book.BookCategory)</span></div>
+                        <div style="padding-bottom:10px;">Год издания: <span style="font-weight: bold">@Model.Book.YearPublished</span></div>
+                        <div style="padding-bottom:10px;">Издателство: <span style="font-weight: bold">@Model.Book.Publisher</span></div>
                         @if (Model.Book.Translator != null)
-                        {<div style="padding-bottom:10px;">Переводчик: <b>@Model.Book.Translator</b></div>}
-                        <div style="padding-bottom:10px;">Сложность викторины: <b>@Html.DisplayFor(m => m.Book.AgeGroup)</b></div>
-                        <div style="padding-bottom:10px;">Автор викторины: <b>@Model.Book.QuestionsAuthor</b></div>
-                        <br><br>
+                        {<div style="padding-bottom:10px;">Переводчик: <span style="font-weight: bold">@Model.Book.Translator</span></div>}
+                        <div style="padding-bottom:10px;">Сложность викторины: <span style="font-weight: bold">@Html.DisplayFor(m => m.Book.AgeGroup)</span></div>
+                        <div style="padding-bottom:10px;">Автор викторины: <span style="font-weight: bold">@Model.Book.QuestionsAuthor</span></div>
+                        <br>
                         <div class="rating">
                             <b>@Model.Book.AverageRating</b>/5  &nbsp;
                             <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
@@ -74,7 +118,7 @@
                                         <img src="/uploads/@Model.Recommended[1].CoverPhoto">
                                         <div style="height:15px;"></div>
                                         <h3>@Model.Recommended[1].Title</h3>
-                                        <div class="bookAuthor">/@Model.Recommended[1].BookAuthor</div>
+                                        <div class="bookAuthor">@Model.Recommended[1].BookAuthor</div>
                                         <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>

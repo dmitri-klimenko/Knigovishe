@@ -9,11 +9,11 @@
     <div>
         @if (Model.Photo != null)
         {
-            <img src="~/uploads/@Model.Photo" id="detailsCoverPhoto" alt="profile picture" />
+            <img src="~/uploads/@Model.Photo"  class="coverPhoto" alt="profile picture" />
         }
         else
         {
-            <img src="~/skin/avatar.png" id="detailsCoverPhoto" alt="profile picture" />
+            <img src="~/skin/avatar.png" class="coverPhoto" alt="profile picture" />
         }
         <hr />
         <dl class="row">

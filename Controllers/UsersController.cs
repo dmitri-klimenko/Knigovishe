@@ -128,5 +128,40 @@ namespace Knigosha.Controllers
             return _userManager.Users.Any(u => u.Id == id);
         }
 
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null) return NotFound();
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null) return NotFound();
+            if (user.Country != null)
+            {
+                var country = await _context.Countries.FirstOrDefaultAsync(c => c.Id.ToString() == user.Country);
+                ViewData["Country"] = country.Title;
+            }
+
+            if (user.City != null)
+            {
+                var city = await _context.Cities.FirstOrDefaultAsync(c => c.Id.ToString() == user.City);
+                ViewData["City"] = city.Title;
+            }
+
+            if (user.School != "Выберите город")
+            {
+                var school = await _context.Schools.FirstOrDefaultAsync(c => c.Id.ToString() == user.School);
+                ViewData["School"] = school.Title;
+            }
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

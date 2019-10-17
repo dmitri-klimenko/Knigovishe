@@ -250,6 +250,7 @@ namespace Knigosha.Controllers
             var vm = new RegisterViewModel();
             vm.Countries = _context.Countries.Select(c => new SelectListItem()
                 { Value = c.Id.ToString(), Text = c.Title }).ToList();
+
             vm.MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
             {Value = c.Id.ToString(), Text = c.Title }).ToList();
 

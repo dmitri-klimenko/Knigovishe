@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Книгоша</title>
+    <title>@ViewData["Title"] - Книговище</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -34,18 +34,20 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
+                        <li><a asp-controller="Home" asp-action="Index">
+                            <img src="~/skin/logo_header.png" style="width: 130px; "/></a></li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Книги</a>
+                            <a class="nav-link text-dark"  asp-controller="Book" asp-action="Index" style="font-size: 20px; padding-left: 40px">Книги</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Help">Помощь</a>
+                            <a class="nav-link text-dark"  asp-controller="Home" asp-action="Help" style="font-size: 20px; padding-left: 20px">Помощь</a>
                         </li>
                         <li class="nav-item">
                             @if (User.Identity.IsAuthenticated)
                             {
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="IndexAdmin">Администрация</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="IndexAdmin" style="font-size: 20px; padding-left: 20px">Администрация</a>
                                 }
                             }
                         </li>
@@ -63,7 +65,7 @@
     <footer>
         <div id="footer">
             <div class="container">
-                <a asp-controller="Home" asp-action="Index">@*<img src="/skin/logo_text.png">*@</a>
+                <a asp-controller="Home" asp-action="Index"></a>
                 <div class="row">
                     <div class="col-md-3">
                         <h5>Книговище</h5>
@@ -86,8 +88,8 @@
                     </div>
                     <div class="col-md-3">
                         <h5>Викторины</h5>
-                        <a @*asp-controller="Book" asp-action="GetBooks"*@>Художественная литература</a><div style="height:15px;"></div>
-                        <a @*asp-controller="Book" asp-action="GetBooks"*@>Научнопопулярная литература</a><div style="height:15px;"></div>
+                        <a asp-controller="Book" asp-action="Index" asp-route-category="1">Художественная литература</a><div style="height:15px;"></div>
+                        <a asp-controller="Book" asp-action="Index" asp-route-category="2">Научнопопулярная литература</a><div style="height:15px;"></div>
                         <a asp-controller="Home" asp-action="CreateQuiz">Создать викторину</a><div style="height:15px;"></div>
                     </div>
                     <div class="col-md-3">
@@ -99,7 +101,7 @@
             </div>
         </div>
         <div style="height: 50px;" class="container">
-            <span style="line-height: 50px; ">&copy; 2019 - Knigosha.ru</span>
+            <span style="line-height: 50px; ">&copy; 2019 - Knigovishe.ru</span>
         </div>
     </footer>
 
