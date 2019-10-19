@@ -1136,14 +1136,14 @@ input::placeholder {
 
 .rated_book, .rate_book {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 18px;
     color: #333;
 }
 
     .rate_book i, .rated_book i {
         color: #f8ae00;
         font-size: 20px;
-        padding-right: 5px;
+        padding-right: 0px;
         display: inline-block;
     }
 

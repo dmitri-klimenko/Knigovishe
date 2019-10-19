@@ -3,7 +3,6 @@
 }
 @using Knigosha.Core.Models.Enums
 @model Knigosha.Core.ViewModels.HomeViewModel
-
 @functions{
     public string GetClassFromGrade(int grade)
     {
@@ -65,85 +64,90 @@
         </div>
     </div>
 </div>
-<div>
-    <div class="container">
-        <div style="height:50px;"></div>
-        <table style="margin:auto;" class="visible-desktop">
-            <tbody>
-                <tr>
-                    <td style="width:260px;"><img src="/skin/step1.png"></td>
-                    <td style="padding-right: 60px;"><img src="/skin/arrow.png"></td>
-                    <td style="width:260px;"><img src="~/skin/step2.png" /></td>
-                    <td style="padding-right:60px;"><img src="/skin/arrow.png"></td>
-                    <td style="width:260px;"><img src="~/skin/step3.png" /></td>
-                </tr>
-                <tr>
-                    <td style="vertical-align:top;">
-                        <div style="height:20px;"></div>
-                        <h2>Войдите в свой аккаунт</h2>
-                        <div class="dark" style="line-height:150%;">Создайте мир Книговища.</div>
-                        <div style="height:30px;"></div>
-                    </td>
-                    <td></td>
-                    <td style="vertical-align:top;">
-                        <div style="height:20px;"></div>
-                        <h2>Решайте викторины</h2>
-                        <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
-                        <div style="height:30px;"></div>
-                    </td>
-                    <td></td>
-                    <td style="vertical-align:top;">
-                        <div style="height:20px;"></div>
-                        <h2>Получайте очки</h2>
-                        <div class="dark" style="line-height:150%;">
-                            При правильных ответах вы накапливаете очки и открываете уровни.
-                        </div>
-                        <div style="height:30px;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a></td>
-                    <td></td>
-                    <td><a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a></td>
-                    <td></td>
-                    <td><a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ ВИКТОРИНУ</a></td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div class="visible-mobile" style="text-align:center;">
-            <img src="/skin/step1.png">
-            <div style="height:10px;"></div>
-            <h2>Войдите в свой аккаунт</h2>
-            <div class="dark" style="line-height:150%;">Создайте мир Книгоши.</div>
-            <div style="height:30px;"></div>
-            <a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a>
-            <div style="height:30px;"></div>
-            <i class="fa fa-arrow-down" style="font-size:60px;"></i>
+@if(!User.Identity.IsAuthenticated)
+{
+    <div>
+        <div class="container">
             <div style="height:50px;"></div>
+            <table style="margin:auto;" class="visible-desktop">
+                <tbody>
+                    <tr>
+                        <td style="width:260px;"><img src="/skin/step1.png"></td>
+                        <td style="padding-right: 60px;"><img src="/skin/arrow.png"></td>
+                        <td style="width:260px;"><img src="~/skin/step2.png" /></td>
+                        <td style="padding-right:60px;"><img src="/skin/arrow.png"></td>
+                        <td style="width:260px;"><img src="~/skin/step3.png" /></td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top;">
+                            <div style="height:20px;"></div>
+                            <h2>Войдите в свой аккаунт</h2>
+                            <div class="dark" style="line-height:150%;">Создайте мир Книговища.</div>
+                            <div style="height:30px;"></div>
+                        </td>
+                        <td></td>
+                        <td style="vertical-align:top;">
+                            <div style="height:20px;"></div>
+                            <h2>Решайте викторины</h2>
+                            <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
+                            <div style="height:30px;"></div>
+                        </td>
+                        <td></td>
+                        <td style="vertical-align:top;">
+                            <div style="height:20px;"></div>
+                            <h2>Получайте очки</h2>
+                            <div class="dark" style="line-height:150%;">
+                                При правильных ответах вы накапливаете очки и открываете уровни.
+                            </div>
+                            <div style="height:30px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a></td>
+                        <td></td>
+                        <td><a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a></td>
+                        <td></td>
+                        <td><a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ ВИКТОРИНУ</a></td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <img src="/skin/step2.png">
-            <div style="height:10px;"></div>
-            <h2>Решайте викторины</h2>
-            <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
-            <div style="height:30px;"></div>
-            <a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a>
-            <div style="height:30px;"></div>
-            <i class="fa fa-arrow-down" style="font-size:60px;"></i>
-            <div style="height:50px;"></div>
+            <div class="visible-mobile" style="text-align:center;">
+                <img src="/skin/step1.png">
+                <div style="height:10px;"></div>
+                <h2>Войдите в свой аккаунт</h2>
+                <div class="dark" style="line-height:150%;">Создайте мир Книгоши.</div>
+                <div style="height:30px;"></div>
+                <a asp-controller="Account" asp-action="Register" class="button small">ЗАРЕГИСТРИРОВАТЬСЯ</a>
+                <div style="height:30px;"></div>
+                <i class="fa fa-arrow-down" style="font-size:60px;"></i>
+                <div style="height:50px;"></div>
+
+                <img src="/skin/step2.png">
+                <div style="height:10px;"></div>
+                <h2>Решайте викторины</h2>
+                <div class="dark" style="line-height:150%;">Найдите викторину по прочитанной книге.</div>
+                <div style="height:30px;"></div>
+                <a asp-controller="Book" asp-action="Index" class="button small">СМОТРЕТЬ КНИГИ</a>
+                <div style="height:30px;"></div>
+                <i class="fa fa-arrow-down" style="font-size:60px;"></i>
+                <div style="height:50px;"></div>
 
 
-            <img src="/skin/step3.png">
-            <div style="height:10px;"></div>
-            <h2>Получайте очки</h2>
-            <div class="dark" style="line-height:150%;">При правильных ответах вы накапливаете очки и открываете уровни.</div>
-            <div style="height:30px;"></div>
-            <a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a>
+                <img src="/skin/step3.png">
+                <div style="height:10px;"></div>
+                <h2>Получайте очки</h2>
+                <div class="dark" style="line-height:150%;">При правильных ответах вы накапливаете очки и открываете уровни.</div>
+                <div style="height:30px;"></div>
+                <a asp-controller="Book" asp-action="Index" class="button small">ВЫБРАТЬ АНКЕТУ</a>
+            </div>
+            <div style="height:80px;"></div>
         </div>
-        <div style="height:80px;"></div>
     </div>
-</div>
-<div id="bg1">
+}
+
+<div class="bg1">
     <div style="height: 80px;"></div>
     <div id="books">
         <h1 class="section_title" onclick="window.location='/Book/Search?sort_field=latest'">Новое в Книговище</h1>
@@ -153,8 +157,11 @@
                 <tr>
                     <td style="vertical-align: top; width: 18%; width: 18%; display: table-cell;">
                         <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[0].Id'">
-                            <div class="wishlist" data-book="@Model.LatestAddedBooks[0].Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="wishlist" data-book="@Model.LatestAddedBooks[0].Id"
+                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            }
                             <img src="~/uploads/@Model.LatestAddedBooks[0].CoverPhoto" alt="coverphoto" />
                             <div style="height: 15px"></div>
                             <h3>@Model.LatestAddedBooks[0].Title</h3>
@@ -165,8 +172,11 @@
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
                         <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[1].Id'">
-                            <div class="wishlist" data-book="@Model.LatestAddedBooks[1].Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="wishlist" data-book="@Model.LatestAddedBooks[1].Id"
+                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            }
                             <img src="~/uploads/@Model.LatestAddedBooks[1].CoverPhoto" alt="coverphoto" />
                             <div style="height: 15px"></div>
                             <h3>@Model.LatestAddedBooks[1].Title</h3>
@@ -177,8 +187,11 @@
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
                         <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[2].Id'">
-                            <div class="wishlist" data-book="@Model.LatestAddedBooks[2].Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="wishlist" data-book="@Model.LatestAddedBooks[2].Id"
+                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            }
                             <img src="~/uploads/@Model.LatestAddedBooks[2].CoverPhoto" alt="coverphoto" />
                             <div style="height: 15px"></div>
                             <h3>@Model.LatestAddedBooks[2].Title</h3>
@@ -189,8 +202,11 @@
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
                         <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[3].Id'">
-                            <div class="wishlist" data-book="@Model.LatestAddedBooks[3].Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="wishlist" data-book="@Model.LatestAddedBooks[3].Id"
+                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            }
                             <img src="~/uploads/@Model.LatestAddedBooks[3].CoverPhoto" alt="coverphoto" />
                             <div style="height: 15px"></div>
                             <h3>@Model.LatestAddedBooks[3].Title</h3>
@@ -201,8 +217,11 @@
                     <td style="width: 2.5%;"></td>
                     <td style="vertical-align: top; width: 18%">
                         <div class="book_div" onclick="window.location='/Book/Details?id=@Model.LatestAddedBooks[4].Id'">
-                            <div class="wishlist" data-book="@Model.LatestAddedBooks[4].Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="wishlist" data-book="@Model.LatestAddedBooks[4].Id"
+                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                            }
                             <img src="~/uploads/@Model.LatestAddedBooks[4].CoverPhoto" alt="coverphoto" />
                             <div style="height: 15px"></div>
                             <h3>@Model.LatestAddedBooks[4].Title</h3>
@@ -589,7 +608,7 @@
 {
     <div id="articles" class="container">
         <div style="height:80px;"></div>
-        <h2 class="section_title" onclick="window.location='/Texts/Index'">Новости Книговища</h2>
+        <h1 class="section_title" onclick="window.location='/Texts/Index'">Новости Книговища</h1>
 
         @for (int i = 0; i < Model.RecentNews.Count; i++)
         {

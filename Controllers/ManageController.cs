@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -147,10 +148,46 @@ namespace Knigosha.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
             var answers = await _context.Answers.Where(a => a.UserId == user.Id).ToListAsync();
+            ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year + "/"
+                                     + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year.ToString();
             return View(answers);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> MarkedBooks()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+            var markedBooks = await _context.MarkedBooks.Include(mb => mb.Book).Where(a => a.UserId == user.Id).ToListAsync();
+            return View(markedBooks);
+        }
+
+        [HttpGet]
+        public IActionResult CreateQuiz()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Points()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+            var createdByUserBooks = _context.Books.Where(b => String.Equals(b.QuestionsAuthor, (user.Name + " " + user.Surname), StringComparison.CurrentCultureIgnoreCase)).ToList();
+            ViewData["CreatedBooks"] = createdByUserBooks.Count;
+            ViewData["PointsForCreatedBooks"] = user.PointsForCreatedBooks;
+            return View(createdByUserBooks);
+        }
+
+
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

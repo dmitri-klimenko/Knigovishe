@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191018213828_ChangesInBookNoteAgain")]
+    partial class ChangesInBookNoteAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68367,9 +68369,6 @@ namespace Knigosha.Persistence.Migrations
                     b.HasBaseType("Knigosha.Core.Models.ApplicationUser");
 
                     b.Property<int?>("AllClassesGroupId");
-
-                    b.Property<string>("NameOfGroup")
-                        .HasMaxLength(50);
 
                     b.HasIndex("AllClassesGroupId");
 

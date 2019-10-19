@@ -1,10 +1,10 @@
-﻿using Knigosha.Core.Models;
-using Knigosha.Persistence.EntityConfigurations;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Knigosha.Core;
+using Knigosha.Core.Models;
+using Knigosha.Persistence;
+using Knigosha.Persistence.EntityConfigurations;
 using Microsoft.AspNetCore.Identity;
 
 

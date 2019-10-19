@@ -1,6 +1,4 @@
-﻿using Knigosha.Core.Models;
-using Knigosha.Core.Models.Enums;
-using Knigosha.Core.ViewModels.AccountViewModels;
+﻿
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,11 +10,14 @@ using System.Linq;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Knigosha.Controllers;
 using Knigosha.Controllers.Api;
-using Knigosha.Core.ViewModels;
-using Knigosha.Core.ViewModels.UserViewModels;
+using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
+using Knigosha.Core.ViewModels.AccountViewModels;
 using Knigosha.Persistence;
 using Knigosha.Utilities;
+
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;

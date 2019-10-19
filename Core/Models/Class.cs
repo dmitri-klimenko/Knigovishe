@@ -7,6 +7,8 @@ namespace Knigosha.Core.Models
 {
     public class Class : ApplicationUser
     {
+        public string NameOfGroup { get; set; }
+
         // calculated properties
         public int TotalPoints => Students.Sum(student => student.Points);
 

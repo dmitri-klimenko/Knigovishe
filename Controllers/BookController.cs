@@ -8,6 +8,7 @@ using Knigosha.Core.ViewModels.BookViewModels;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,11 @@ namespace Knigosha.Controllers
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookController(ApplicationDbContext context, IHostingEnvironment environment)
+        public BookController(ApplicationDbContext context, IHostingEnvironment environment, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _hostingEnvironment = environment;
             _context = context;
         }
@@ -41,8 +44,9 @@ namespace Knigosha.Controllers
             if (!string.IsNullOrEmpty(keywords))
             {
                 books = books.Where(b => b.Title.Contains(keywords) ||
-                                         b.BookAuthor.Contains(keywords)
-                                         || b.Isbn1.Contains(keywords) ||
+                                         b.BookAuthor.Contains(keywords) ||
+                                         b.Isbn1.Contains(keywords) ||
+                                         b.Publisher.Contains(keywords) ||
                                          b.Isbn2.Contains(keywords));
             }
 
@@ -111,32 +115,92 @@ namespace Knigosha.Controllers
 
         public async Task<IActionResult> DetailsAdmin(int? id)
         {
-            if (id == null) return NotFound();
             var book = await _context.Books
                 .Include(b=> b.Questions)
                 .Include(b => b.Answers)
                 .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null) return NotFound();
             return View(book);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
             var book = await _context.Books
                 .Include(b => b.Answers)
                 .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null) return NotFound();
-
             var recommended = _context.Books.Take(4).ToList();
-            var vm = new DetailsViewModel() 
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var bookNote = await _context.BookNotes.SingleOrDefaultAsync(bn => bn.UserId == user.Id && bn.BookId == book.Id) ??
+                               new BookNote()
+                               {
+                                   Book = book,
+                                   BookId = book.Id,
+                                   User = user,
+                                   UserId = user.Id
+                               };
+                var vm1 = new DetailsViewModel()
+                {
+                    Book = book,
+                    BookId = book.Id,
+                    Recommended = recommended,
+                    BookNote = bookNote
+                };
+                return View(vm1);
+            }
+            var vm2 = new DetailsViewModel() 
             {
                 Book = book,
                 Recommended = recommended
             };
-            return View(vm);
+            return View(vm2);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(DetailsViewModel detailsViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                var book = await _context.Books
+                    .Include(b => b.Answers)
+                    .Include(b => b.BookRatings)
+                    .FirstOrDefaultAsync(m => m.Id == detailsViewModel.BookId);
+                var recommended = _context.Books.Take(4).ToList();
+
+                var bookNote = await _context.BookNotes
+                    .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
+                                                bn.BookId == detailsViewModel.BookId);
+                           
+                if (bookNote == null)
+                {
+                    var newBookNote = new BookNote()
+                    {
+                        User = user,
+                        UserId = user.Id,
+                        Book = book,
+                        BookId = book.Id,
+                        Text = detailsViewModel.BookNote.Text
+                    };
+                    user.BookNotes.Add(newBookNote);
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    bookNote.Text = detailsViewModel.BookNote.Text;
+                    await _context.SaveChangesAsync();
+                }
+                detailsViewModel.Book = book;
+                detailsViewModel.Recommended = recommended;
+                detailsViewModel.BookNote = bookNote;
+                return View(detailsViewModel);
+            }
+            return View(detailsViewModel);
         }
 
         public IActionResult Create()

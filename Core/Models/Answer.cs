@@ -55,10 +55,5 @@ namespace Knigosha.Core.Models
             DateTime = System.DateTime.Now.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
 
-        // Start (){ }
-        // Finish (){ }
-
-        //Reset (){}
-        //Refuse () {}
     }
 }

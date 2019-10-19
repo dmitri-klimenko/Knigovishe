@@ -67,7 +67,7 @@ namespace Knigosha.Controllers
                 ViewData["City"] = city.Title;
             }
 
-            if (user.School != "Выберите город")
+            if (user.School != "Выберите город" && user.School != null)
             {
                 var school = await _context.Schools.FirstOrDefaultAsync(c => c.Id.ToString() == user.School);
                 ViewData["School"] = school.Title;
@@ -147,7 +147,7 @@ namespace Knigosha.Controllers
                 ViewData["City"] = city.Title;
             }
 
-            if (user.School != "Выберите город")
+            if (user.School != "Выберите город" && user.School != null)
             {
                 var school = await _context.Schools.FirstOrDefaultAsync(c => c.Id.ToString() == user.School);
                 ViewData["School"] = school.Title;

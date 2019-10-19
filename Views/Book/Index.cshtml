@@ -62,14 +62,11 @@
 <form name="form" class="container" asp-controller="Book" asp-action="Index" method="get">
     <input type="hidden" name="page">
     <input type="hidden" name="advanced">
-   
-
     <div class="container">
 
         <div style="position:absolute;top:-20px;opacity:0;width:1px;height:1px;overflow:hidden;">
             <input type="submit">
         </div>
-
         <div style="padding-top:20px;padding-bottom:20px;">
             <table width="100%" class="sc">
                 <tr>
@@ -85,7 +82,7 @@
                             Год издания
                             <span class="mbr"></span>
                             от:
-                            <input asp-for="YearFrom" class="short" >
+                            <input asp-for="YearFrom" class="short">
                             до:
                             <input asp-for="YearTo" class="short" />
                             <div style="height:10px;"></div>
@@ -94,26 +91,27 @@
                             <input type="button" class="button" value="Очистить" onclick="window.location='/Book/Index'">
                             <div style="height:40px;"></div>
                         </div>
-                         @{
-                             if (Model.Books.Count == 1) {<span>Найдена 1 книга</span>}
-                             else if(Model.Books.Count == 2 || Model.Books.Count == 3) {<span>Найдено @Model.Books.Count книги</span>}
-                             else {<span>Найдено @Model.Books.Count книг</span>}
-                         }
+                        @{
+                            if (Model.Books.Count == 1)
+                            {<span>Найдена 1 книга</span>}
+                            else if (Model.Books.Count == 2 || Model.Books.Count == 3)
+                            {<span>Найдено @Model.Books.Count книги</span>}
+                        else
+                        {<span>Найдено @Model.Books.Count книг</span>}
+                        }
                     </td>
                     <td id="sa">
                         <table class="search_right sc">
                             <tr>
                                 <td style="white-space:nowrap;">
                                     <input asp-for="Keywords" placeholder="Введите название, автора, издателство или ISBN" id="k"
-                                           class="search_input"><button 
-                                                                   style="border-top-left-radius:0;border-bottom-left-radius:0;padding-left:10px;padding-right:15px;" class="button" type="submit" value=""><i class="fa fa-search"></i></button>
+                                           class="search_input"><button style="border-top-left-radius:0;border-bottom-left-radius:0;padding-left:10px;padding-right:15px;" class="button" type="submit" value="">
+                                        <i class="fa fa-search"></i>
+                                    </button>
                                 </td>
                                 <td style="padding-left:20px;">
-                                    <a href="javascript:;" class="advanced_button" 
-                                       onclick="$('#left').remove();
-                                                $('.advanced').show();
-                                                $('.advanced').parent().css('text-align', 'left');
-                                                document.form.advanced.value = 1; $('#sa').remove();">
+                                    <a href="javascript:;" class="advanced_button"
+                                       onclick="$('#left').remove();$('.advanced').show();$('.advanced').parent().css('text-align', 'left');document.form.advanced.value = 1; $('#sa').remove();">
                                         Раcширенный поиск <i class="fa fa-angle-down"></i>
                                     </a>
                                 </td>
@@ -123,19 +121,17 @@
                 </tr>
             </table>
         </div>
-
-
         <table width="100%" style="border-top:1px solid #ffdb60;" class="sc tc">
             <tr>
                 <td style="vertical-align:top;width:280px;">
                     <div style="background: #ffefc7; padding: 20px;">
                         <table>
                             <tr>
-                            <td></td>
-                            <td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Категория</td>
+                                <td></td>
+                                <td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Категория</td>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" asp-for="Category"  value="1"
+                                    <input type="radio" asp-for="Category" value="1"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px;vertical-align: top; font-size: 16px;">
@@ -144,7 +140,7 @@
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio" asp-for="Category"  value="2"
+                                    <input type="radio" asp-for="Category" value="2"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">
@@ -159,9 +155,7 @@
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Все</td>
                             </tr>
                         </table>
-
                         <div style="height: 30px;"></div>
-
                         <table>
                             <tr><td></td><td style="padding-bottom: 10px; font-weight: bold; font-size: 20px;" class="yellow">Возраст</td>
                             <tr class="check">
@@ -169,33 +163,35 @@
                                     <input type="radio" asp-for="AgeGroup" value="1"
                                            onclick="document.form.submit()">
                                 </td>
-                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      vertical-align: top; font-size: 16px;">6+</td>
+                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      vertical-align: top; font-size: 16px;">
+                                    6+
+                                </td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio"  asp-for="AgeGroup" value="2"
+                                    <input type="radio" asp-for="AgeGroup" value="2"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">8+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio"  asp-for="AgeGroup" value="3"
+                                    <input type="radio" asp-for="AgeGroup" value="3"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">11+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio"  asp-for="AgeGroup" value="4"
+                                    <input type="radio" asp-for="AgeGroup" value="4"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px;">14+</td>
                             </tr>
                             <tr class="check">
                                 <td style="vertical-align: top; width: 30px;">
-                                    <input type="radio"  asp-for="AgeGroup" value="0"
+                                    <input type="radio" asp-for="AgeGroup" value="0"
                                            onclick="document.form.submit()">
                                 </td>
                                 <td onclick="check(this); document.form.submit();" style="cursor: pointer; padding-bottom: 10px; vertical-align: top; font-size: 16px; font-weight: bold;">Все</td>
@@ -227,7 +223,7 @@
                             <text>Что нужно для этого сделать Вы можете прочитать</text><a asp-controller="Home" asp-action="CreateQuiz"> здесь.</a>
                         }
                         else
-                        {<table class="sc tc">
+                           {<table class="sc tc">
                                 @for (int i = 0; i < Model.Books.Count; i++)
                                 {
                                     var cells = 4;
@@ -243,6 +239,11 @@
                                                      style="background-image: url(/uploads/@Model.Books[i].CoverPhoto);"
                                                      onclick="window.location = '/Book/Details?id=@Model.Books[i].Id'">
                                                     <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
+                                                    @if (User.Identity.IsAuthenticated)
+                                                    {
+                                                        <div class="wishlist" data-book="@Model.Books[i].Id"
+                                                             onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                                    }
                                                     <div class="details">
                                                         <div style="display: table; width: 100%;">
                                                             <div style="display: table-row">
@@ -279,6 +280,11 @@
                                                  style="background-image: url(/uploads/@Model.Books[i].CoverPhoto);"
                                                  onclick="window.location = '/Book/Details?id=@Model.Books[i].Id'">
                                                 <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <div class="wishlist" data-book="@Model.Books[i].Id"
+                                                         onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                                }
                                                 <div class="details">
                                                     <div style="display: table; width: 100%;">
                                                         <div style="display: table-row">
@@ -295,7 +301,7 @@
                                                 <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                             </div>
                                             <div class="rating">
-                                                <b>@Model.Books[i].AverageRating</b>/5 &nbsp;
+                                                <span style="font-weight: bold">@Model.Books[i].AverageRating</span>/5 &nbsp;
                                                 <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                 <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                 <i class="@(Model.Books[i].AverageRating == 0? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
@@ -307,16 +313,12 @@
                                         </td>
                                         <td width="30">&nbsp;</td>
                                     }
-
                                 }
-
                             </table>
                         }
                     </div>
                 </td>
             </tr>
         </table>
-
-
     </div>
 </form>
