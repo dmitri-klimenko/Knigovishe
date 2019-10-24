@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191020060910_AddStudentClassModel")]
+    partial class AddStudentClassModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1536,34 +1538,6 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("MarkedBooks");
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("DateTime");
-
-                    b.Property<string>("RecipientId");
-
-                    b.Property<string>("SenderId");
-
-                    b.Property<string>("Topic")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipientId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("Knigosha.Core.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -1601,6 +1575,44 @@ namespace Knigosha.Persistence.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+                {
+                    b.Property<string>("ReceiverId");
+
+                    b.Property<string>("SenderId");
+
+                    b.Property<string>("Body");
+
+                    b.Property<string>("DateTime");
+
+                    b.Property<string>("Topic");
+
+                    b.HasKey("ReceiverId", "SenderId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ReceivedMessages");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.SentMessage", b =>
+                {
+                    b.Property<string>("ReceiverId");
+
+                    b.Property<string>("SenderId");
+
+                    b.Property<string>("Body");
+
+                    b.Property<string>("DateTime");
+
+                    b.Property<string>("Topic");
+
+                    b.HasKey("ReceiverId", "SenderId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("SentMessages");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.StudentClass", b =>
@@ -68487,24 +68499,38 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
-                {
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Recipient")
-                        .WithMany()
-                        .HasForeignKey("RecipientId");
-
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Sender")
-                        .WithMany("Messages")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Knigosha.Core.Models.Question", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
                         .WithMany("Questions")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.ReceivedMessage", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.SentMessage", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.StudentClass", b =>

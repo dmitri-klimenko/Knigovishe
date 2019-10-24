@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Knigosha.Controllers;
 using Knigosha.Controllers.Api;
@@ -67,43 +68,64 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            if (model.Email.IndexOf('@') > -1)
+            {
+                //Validate email format
+                var emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                                 @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                                 @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+                var re = new Regex(emailRegex);
+                if (!re.IsMatch(model.Email))
+                {
+                    ModelState.AddModelError("Email", "Неверный адрес");
+                }
+            }
+            else
+            {
+                //validate Username format
+                string emailRegex = @"^[a-zA-Z0-9]*$";
+                var re = new Regex(emailRegex);
+                if (!re.IsMatch(model.Email))
+                {
+                    ModelState.AddModelError("Email", "Имя пользователя неверно");
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                var signedUser = await _userManager.FindByEmailAsync(model.Email);
-                SignInResult result = null;
-                if (signedUser.Email != signedUser.UserName)
+                var userName = model.Email;
+                if (userName.IndexOf('@') > -1)
                 {
-                    result = await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-                }
-                else
-                {
-                    result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-                }
-                if (result.Succeeded)
-                {
-                    // save last login date
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user == null)
                     {
-                        return NotFound("Unable to load user for update last login.");
+                        ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
+                        return View(model);
                     }
+
+                    userName = user.UserName;
                     user.LastLogin = DateTime.Now.ToString("g");
-                    user.LoginTimes ++;
-                    var lastLoginResult = await _userManager.UpdateAsync(user);
-                    if (!lastLoginResult.Succeeded)
-                    {
-                        throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
-                                                            $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
-                    }
-                    _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    user.LoginTimes++;
+                    await _userManager.UpdateAsync(user);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
-                    return View(model);
+                    var user = await _userManager.FindByNameAsync(model.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
+                        return View(model);
+                    }
+
+                    userName = user.UserName;
+                    user.LastLogin = DateTime.Now.ToString("g");
+                    user.LoginTimes++;
+                    await _userManager.UpdateAsync(user);
                 }
+                
+                var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                _logger.LogInformation("User logged in.");
+                return RedirectToLocal(returnUrl);
             }
 
             // If we got this far, something failed, redisplay form

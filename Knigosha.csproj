@@ -47,6 +47,12 @@
     <Compile Remove="Persistence\Migrations\20191018204925_ChangesInBookNote.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191018205944_ChangesInBookNote.cs" />
     <Compile Remove="Persistence\Migrations\20191018205944_ChangesInBookNote.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191020005202_addStudentClassModel.cs" />
+    <Compile Remove="Persistence\Migrations\20191020005202_addStudentClassModel.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191020055135_CAddStudentClassModel.cs" />
+    <Compile Remove="Persistence\Migrations\20191020055135_CAddStudentClassModel.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191022210930_ADDMessageRecipientsDELETEReceivedMessagesCHANGESentMessages.cs" />
+    <Compile Remove="Persistence\Migrations\20191022210930_ADDMessageRecipientsDELETEReceivedMessagesCHANGESentMessages.Designer.cs" />
   </ItemGroup>
 
 

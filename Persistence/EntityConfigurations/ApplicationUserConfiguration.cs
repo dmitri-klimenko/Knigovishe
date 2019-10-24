@@ -24,16 +24,12 @@ namespace Knigosha.Persistence.EntityConfigurations
                 .WithOne(mb => mb.User)
                 .HasForeignKey(mb => mb.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany(a => a.SentMessages)
+            
+            builder.HasMany(a => a.Messages)
                 .WithOne(m => m.Sender)
                 .HasForeignKey(sm => sm.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(a => a.ReceivedMessages)
-                .WithOne(m => m.Receiver)
-                .HasForeignKey(sm => sm.ReceiverId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(a => a.Answers)
                 .WithOne(a => a.User)

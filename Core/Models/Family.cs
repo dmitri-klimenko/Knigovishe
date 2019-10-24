@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -11,15 +12,15 @@ namespace Knigosha.Core.Models
     {
         public bool ShowAchievements { get; set; }
         //calculated properties
-        public int TotalPoints => Students.Sum(student => student.Points);
+        public int TotalPoints => Students.Sum(s => s.Points);
 
-        public int TotalNumberOfAnswers => Students.Sum(student => student.Answers.Count);
+        public int TotalNumberOfAnswers => Students.Sum(s => s.Answers.Count);
 
         public int TotalPercentageOfRightResponses
         {
             get
             {
-                var totalPercentage = Students.Sum(student => student.PercentageOfRightResponses);
+                var totalPercentage = Students.Sum(s => s.PercentageOfRightResponses);
                 return NumberOfStudentsInFamily != 0? totalPercentage / NumberOfStudentsInFamily : 0; 
             }
         }

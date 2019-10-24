@@ -1,0 +1,35 @@
+﻿@model Knigosha.Core.Models.Message
+
+@{
+    ViewData["Title"] = "Создать сообщение";
+}
+<td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+					
+    <div style="padding:20px;">
+        <div style="width:400px;">
+        <form method="post" asp-action="Messages">
+            <input type="hidden" name="action" value="send">
+            <input type="hidden" name="screen" value="send">
+            Отправка сообщения:
+            <div style="height:5px;"></div>
+            <input type="hidden" asp-for="@Model.RecipientId">
+            <input type="hidden" asp-for="@Model.SenderId">
+            <input type="text" asp-for="@Model.RecipientName" disabled style="width:400px;">
+
+            <div style="height:5px;"></div>
+
+            <input type="text" placeholder="Тема" asp-for="@Model.Topic" style="width:400px;">
+            <div style="height:5px;"></div>
+								
+            <textarea placeholder="Сообщение" asp-for="@Model.Body" style="width:400px;height:100px;"></textarea>
+            <div style="height:5px;"></div>
+								
+            <input type="button" class="button" value="Назад" onclick="window.location='/Manage/Messages'">
+            <input type="submit" class="button" value="Отправить">
+            <div style="height:5px;"></div>
+        </form>
+    </div>
+						
+    </div>						
+</td>

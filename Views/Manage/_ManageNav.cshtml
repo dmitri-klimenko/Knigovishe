@@ -1,4 +1,5 @@
 ﻿@using Knigosha.Core.Models
+@using Knigosha.Core.Models.Enums
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -10,7 +11,8 @@
         <a href="/Manage/Dashboard">Мои достижения</a>
         <a href="/Manage/Answers">Прочтённые книги</a>
         <a href="/Manage/MarkedBooks">Отмеченные книги</a>
-        <a href="/Manage/">Что читает моя семья</a>
+        @if (user.UserType == UserTypes.Student)
+        {<a href="/Manage/Answers?type=family">Что читает моя семья</a>}
         <a href="/Manage/CreateQuiz">Создать викторину</a>
         <a href="/Manage/Points">Созданные викторины</a>
         <a href="/Manage/Messages">Сообщения </a>

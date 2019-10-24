@@ -10,6 +10,10 @@ namespace Knigosha.Persistence.EntityConfigurations
         {
             builder.ToTable("Students");
 
+            builder.HasMany(s => s.StudentClasses)
+                .WithOne(sc => sc.Student)
+                .HasForeignKey(sc => sc.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

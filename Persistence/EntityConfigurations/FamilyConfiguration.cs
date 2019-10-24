@@ -11,8 +11,8 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.ToTable("Families");
 
             builder.HasMany(f => f.Students)
-                .WithOne(s => s.FamilyStudentBelongsTo)
-                .HasForeignKey(s => s.FamilyStudentBelongsToId)
+                .WithOne(s => s.Family)
+                .HasForeignKey(s => s.FamilyId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

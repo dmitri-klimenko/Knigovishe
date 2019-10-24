@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -141,17 +142,35 @@ namespace Knigosha.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Answers()
+        public async Task<IActionResult> Answers(string type)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            } 
+            
+            if (type == "family")
+            {
+                ViewBag.HasQueryString = true;
+                var meStudent = await _context.Students.SingleOrDefaultAsync(s => s.Id == user.Id);
+                var myFamily = await _context.Families.SingleOrDefaultAsync(f => f.Id == meStudent.FamilyId);
+                List<Answer> answers = null;
+                if (myFamily != null)
+                {
+                    var ids = _context.Students.Where(s => s.FamilyId == myFamily.Id).Select(s => s.Id).ToList();
+                    answers = _context.Answers.Include(a => a.Book).ThenInclude(b => b.Answers)
+                        .Where(a => ids.Contains(a.UserId)).ToList();
+                    ViewBag.Ids = ids;
+                    return View(answers);
+                }
+                return View(answers);
             }
-            var answers = await _context.Answers.Where(a => a.UserId == user.Id).ToListAsync();
+            var answers2 = await _context.Answers.Include(a => a.Book).ThenInclude(b => b.Answers).Where(a => a.UserId == user.Id).ToListAsync();
+            ViewBag.HasQueryString = false;
             ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year + "/"
-                                     + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year.ToString();
-            return View(answers);
+                                     + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year;
+            return View(answers2);
         }
 
         [HttpGet]
@@ -187,7 +206,96 @@ namespace Knigosha.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Messages(string type, string subject, string to, int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (id != 0)
+            {
+                var message = await _context.Messages
+                    .Include(m => m.Sender)
+                    .Include(m => m.Recipient)
+                    .SingleAsync(m => m.Id == id);
+                return View("MessageDetails", message);
+            } 
 
+            if (type == "sent")
+            {
+                var sentMessages = _context.Messages.Include(m => m.Recipient).Where(m => m.SenderId == user.Id).ToList();
+                ViewBag.MyName = user.Name + " " + user.Surname + "[" + user.UserName + "]";
+                return View("MessageSent", sentMessages);
+            }
+
+            if (type == "send" && to == null && _context.StudentClasses.Single(sc => sc.StudentId == user.Id && sc.IsActive) != null ) 
+                                    //or user.Student.StudentClasses.Single(sc => sc.IsActive != null)???
+            {
+                var recipient = _context.StudentClasses.Single(sc => sc.StudentId == user.Id && sc.IsActive).Class;
+                var message = new Message()
+                {
+                    SenderId = user.Id,
+                    RecipientId = recipient.Id
+                };
+                return View("MessageCreate", message);
+            }
+
+            if (type == "send" && to != null)
+            {
+                var recipient = _context.StudentClasses.Single(sc => sc.ClassId == to).Class;
+                var message = new Message()
+                {
+                    SenderId = user.Id,
+                    RecipientId = recipient.Id,
+                    Topic = subject
+                };
+                return View("MessageCreate", message);
+            }
+            var receivedMessages = _context.Messages
+                .Include(m => m.Sender)
+                .Where(m => m.RecipientId == user.Id)
+                .ToList();
+            ViewBag.MyName = user.Name + " " + user.Surname + "[" + user.UserName + "]";
+            return View(receivedMessages);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public  async Task<IActionResult> Messages(Message message)
+        {
+            message.DateTime = DateTime.Now.ToString("dd.MM.YYYY");
+            await _context.Messages.AddAsync(message);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Messages));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Groups()
+        {
+            var groupsVm = new GroupsViewModel();
+            var user = await _userManager.GetUserAsync(User);
+            var activeStudentClass = await _context.StudentClasses.SingleOrDefaultAsync(sc => sc.StudentId == user.Id);
+            if (activeStudentClass != null)
+            {
+                var myClass = activeStudentClass.Class;
+                groupsVm.MyClass = myClass;
+            }
+            return View(groupsVm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Groups(GroupsViewModel groupsVm)
+        {
+            if (!string.IsNullOrEmpty(groupsVm.Search))
+            {
+                var groups = await _context.Classes.ToListAsync();
+                    //Where(c => c.NameOfGroup.Contains(groupsVm.Search) ||
+                    //                                     c.FullName.Contains(groupsVm.Search) ||
+                    //                                     c.UserName.Contains(groupsVm.Search));
+                    groupsVm.Groups = groups;
+            }
+            return View(groupsVm);
+        }
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

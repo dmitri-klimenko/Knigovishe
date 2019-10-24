@@ -18,6 +18,8 @@ namespace Knigosha.Core.Models
 
         public string Surname { get; set; }
 
+        public string FullName => Name + " " + Surname;
+
         public override string UserName { get; set; }
 
         public string Password { get; set; }
@@ -37,10 +39,6 @@ namespace Knigosha.Core.Models
         public string Parallel { get; set; }
 
         public Student Student { get; set; }
-
-        public Family Family { get; set; }
-
-        public Class Class { get; set; }
 
         public Grades Grade { get; set; }
 
@@ -96,8 +94,6 @@ namespace Knigosha.Core.Models
 
         }
 
-        public int NumberOfReceivedMessages => ReceivedMessages.Count;
-
         public bool SubscribedToNewsletter { get; set; }
 
         public string DateAdded { get; set; }
@@ -118,22 +114,17 @@ namespace Knigosha.Core.Models
 
         public IList<MarkedBook> MarkedBooks { get; set; }
 
-        public ICollection<SentMessage> SentMessages { get; set; }
-
-        public ICollection<ReceivedMessage> ReceivedMessages { get; set; }
-
-
+        public IList<Message> Messages { get; set; }
 
 
         public ApplicationUser()
         {
             UserSubscriptions = new Collection<UserSubscription>();
+            Messages = new List<Message>();
             Answers = new Collection<Answer>();
             BookNotes = new Collection<BookNote>();
             BookRatings = new Collection<BookRating>();
             MarkedBooks = new Collection<MarkedBook>();
-            SentMessages = new Collection<SentMessage>();
-            ReceivedMessages = new Collection<ReceivedMessage>();
             DateAdded = DateTime.Now.ToString("d");
 
         }

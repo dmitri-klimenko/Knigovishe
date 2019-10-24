@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -10,15 +11,15 @@ namespace Knigosha.Core.Models
         public string NameOfGroup { get; set; }
 
         // calculated properties
-        public int TotalPoints => Students.Sum(student => student.Points);
+        public int TotalPoints => StudentClasses.Sum(sc => sc.Student.Points);
 
-        public int TotalNumberOfAnswers => Students.Sum(student => student.Answers.Count);
+        public int TotalNumberOfAnswers => StudentClasses.Sum(sc => sc.Student.Answers.Count);
 
         public int TotalPercentageOfRightResponses
         {
             get
             {
-                var totalPercentage = Students.Sum(student => student.PercentageOfRightResponses);
+                var totalPercentage = StudentClasses.Sum(sc => sc.Student.PercentageOfRightResponses);
                 return NumberOfStudentsInClass != 0 ? totalPercentage / NumberOfStudentsInClass : 0;
             }
         }
@@ -125,15 +126,15 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public int NumberOfStudentsInClass => Students.Count;
+        public int NumberOfStudentsInClass => StudentClasses.Count;
 
-        public IList<Student> Students { get; set; }
+        public IList<StudentClass> StudentClasses { get; set; }
 
         public AllClassesGroup AllClassesGroup { get; set; }
         
         public Class()
         {
-            Students = new List<Student>();
+            StudentClasses = new List<StudentClass>();
         }
 
     }

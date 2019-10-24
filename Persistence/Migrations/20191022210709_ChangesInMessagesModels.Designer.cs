@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191022210709_ChangesInMessagesModels")]
+    partial class ChangesInMessagesModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1548,16 +1550,12 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("DateTime");
 
-                    b.Property<string>("RecipientId");
-
                     b.Property<string>("SenderId");
 
                     b.Property<string>("Topic")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipientId");
 
                     b.HasIndex("SenderId");
 
@@ -68489,10 +68487,6 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.Message", b =>
                 {
-                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "Recipient")
-                        .WithMany()
-                        .HasForeignKey("RecipientId");
-
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")

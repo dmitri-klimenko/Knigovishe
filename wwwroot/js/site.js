@@ -203,11 +203,12 @@ $(function () {
 
 $(window).load(function () {
     syncLicense();
+    console.log("Hi Andrei");
 });
 
 
 function deleteConfirm() {
-    var answer = confirm("Сигурен ли си, че искаш да продължиш?")
+    var answer = confirm("Сигурен ли си, че искаш да продължиш?");
     if (answer) {
         return true;
     }
@@ -780,3 +781,8 @@ function toggleSearch(el) {
 function licensePopup(el) {
     $(el).closest('.license').find('.vote_shadow').show();
 }
+
+
+
+
+

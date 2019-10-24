@@ -27,9 +27,10 @@ namespace Knigosha.Persistence
         public DbSet<MarkedBook> MarkedBooks { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentClass> StudentClasses { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<SentMessage> SentMessages { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<School> Schools { get; set; }
@@ -135,6 +136,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new BookConfiguration());
             builder.ApplyConfiguration(new BookNoteConfiguration());
             builder.ApplyConfiguration(new BookRatingConfiguration());
+            builder.ApplyConfiguration(new StudentClassConfiguration());
             builder.ApplyConfiguration(new ClassConfiguration());
             builder.ApplyConfiguration(new FamilyConfiguration());
             builder.ApplyConfiguration(new ActivationKeyConfiguration());
@@ -143,8 +145,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new StudentConfiguration());
             builder.ApplyConfiguration(new UserSubscriptionConfiguration());
             builder.ApplyConfiguration(new SubscriptionConfiguration());
-            builder.ApplyConfiguration(new SentMessageConfiguration());
-            builder.ApplyConfiguration(new ReceivedMessageConfiguration());
+            builder.ApplyConfiguration(new MessageConfiguration());
             builder.ApplyConfiguration(new CountryConfiguration());
             builder.ApplyConfiguration(new CityConfiguration());
             builder.ApplyConfiguration(new SchoolConfiguration());
