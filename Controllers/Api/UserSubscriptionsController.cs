@@ -35,6 +35,7 @@ namespace Knigosha.Controllers.Api
                     userSubscription = new UserSubscription(user, studentSubscription);
                     var studentActivationKey = new ActivationKey() {ActivationKeyType = ActivationKeyTypes.Student};
                     userSubscription.ActivationKeys.Add(studentActivationKey);
+                    userSubscription.Status = StatusTypes.Activated;
                     userSubscription.ActivatedOn = DateTime.Today.ToString("d");
                     break;
                 case UserTypes.Parent:
@@ -43,6 +44,7 @@ namespace Knigosha.Controllers.Api
                     userSubscription = new UserSubscription(user, familySubscription);
                     var familyActivationKey = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Family };
                     userSubscription.ActivationKeys.Add(familyActivationKey);
+                    userSubscription.Status = StatusTypes.Activated;
                     userSubscription.ActivatedOn = DateTime.Today.ToString("d");
                     for (var i = 1; i < 5; i++)
                     {
@@ -56,6 +58,7 @@ namespace Knigosha.Controllers.Api
                     userSubscription = new UserSubscription(user, classSubscription);
                     var classActivationKey = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Class };
                     userSubscription.ActivationKeys.Add(classActivationKey);
+                    userSubscription.Status = StatusTypes.Activated;
                     userSubscription.ActivatedOn = DateTime.Today.ToString("d");
                     for (var i = 1; i < 31; i++)
                     {

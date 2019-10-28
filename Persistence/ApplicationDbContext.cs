@@ -37,6 +37,7 @@ namespace Knigosha.Persistence
         public DbSet<Text> Texts { get; set; }
         public DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
         public DbSet<AllClassesGroup> AllClassesGroup { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

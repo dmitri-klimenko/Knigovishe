@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191028064358_changesinApplicationUser")]
+    partial class changesinApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1750,8 +1752,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("ActivatedOn");
 
-                    b.Property<string>("AddressOfInstitution")
-                        .HasMaxLength(50);
+                    b.Property<string>("AddressOfInstitution");
 
                     b.Property<string>("City");
 
@@ -1759,8 +1760,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("Institution")
-                        .HasMaxLength(50);
+                    b.Property<string>("Institution");
 
                     b.Property<string>("Note");
 
@@ -1768,18 +1768,15 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int?>("PaymentType");
 
-                    b.Property<string>("Person")
-                        .HasMaxLength(50);
+                    b.Property<string>("Person");
 
                     b.Property<int?>("Status");
 
                     b.Property<int>("SubscriptionId");
 
-                    b.Property<string>("TelephoneOfInstitution")
-                        .HasMaxLength(50);
+                    b.Property<string>("TelephoneOfInstitution");
 
-                    b.Property<string>("Uid")
-                        .HasMaxLength(50);
+                    b.Property<string>("Uid");
 
                     b.Property<string>("UserId")
                         .IsRequired();

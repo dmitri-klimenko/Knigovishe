@@ -1,5 +1,198 @@
-﻿@model Knigosha.Core.ViewModels.ManageViewModels.GroupsViewModel
+﻿@using Knigosha.Core.Models
+@using Knigosha.Core.Models.Enums
+@using Microsoft.AspNetCore.Identity
+@model Knigosha.Core.ViewModels.ManageViewModels.GroupsViewModel
 
 @{
     ViewData["Title"] = "Группы";
+}
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ApplicationUser user = await UserManager.GetUserAsync(User);
+}
+
+@if (user.UserType == UserTypes.Student)
+{
+    <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
+        <a href="" name="s" style="position:relative;top:-100px;"></a>
+        <div style="padding:50px;">
+            <form asp-controller="Manage" asp-action="Groups" method="post">
+                <input style="width:360px;max-width:100%;" asp-for="Search" placeholder="Введите имя учителя, школу или группу">
+                <input type="submit" class="button" value="Поиск">
+                <br>
+                <br>
+                <br>
+            </form>
+            @if (Model.AllGroups != null && Model.AllGroups.Count == 0)
+            {
+                <h3>Результаты поиска</h3>
+                <span>По данному запросу групп не найдено.</span>
+                <br>
+                <br>
+            }
+            else if (Model.AllGroups != null && Model.AllGroups.Count > 0)
+            {
+                <h3>Результаты поиска</h3>
+                <table style="width: 100%;" class="group_table">
+                    @for (int i = 0; i < Model.AllGroups.Count; i++)
+                    {
+                        <tr>
+                            <td style="padding: 10px; padding-left: 0; width: 100%; border-bottom: 1px solid #ccc;">
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Country))
+                                {<span style="font-weight: bold">Cтрана:</span> @Model.AllGroups[i].Country<br>}
+
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].City))
+                                {<span style="font-weight: bold">Город:</span> @Model.AllGroups[i].City<br>}
+
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].School))
+                                {<span style="font-weight: bold">Школа:</span> @Model.AllGroups[i].School<br>}
+
+                                <span style="font-weight: bold">Учитель:</span> @Model.AllGroups[i].FullName<br>
+
+                                <span style="font-weight: bold">Класс:</span> @Html.DisplayFor(m => m.AllGroups[i].Grade)@if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Parallel))
+                                                                                                                         {<span> "@Model.AllGroups[i].Parallel"</span>}<br>
+
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].NameOfGroup))
+                                {<span style="font-weight: bold">Имя группы:</span> @Model.AllGroups[i].NameOfGroup<br>}
+                            </td>
+                           @if (ViewBag.Ids.Contains(Model.AllGroups[i].Id))
+                           {
+                               <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
+                                   <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="leave" onclick="return deleteConfirm()">Покинуть группу</a>
+                               </td>
+                           }
+                           else
+                           {
+                               <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
+                                   <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="request">Подать заявку на приём</a>
+                                   </td>
+                           }
+                        </tr>
+                    }
+                </table>
+                <br />
+                <br />
+            }
+
+            @if (Model.MyCurrentGroups != null)
+            {
+                <h3>Мои группы</h3>
+                <table style="width: 100%;" class="group_table">
+                    @for (int i = 0; i < Model.MyCurrentGroups.Count; i++)
+                    {
+                        <tr>
+                            <td style="padding: 10px; padding-left: 0; width: 100%; border-bottom: 1px solid #ccc;">
+                                @if (!string.IsNullOrEmpty(Model.MyCurrentGroups[i].Class.Country))
+                                {<span style="font-weight: bold">Cтрана:</span> @Model.MyCurrentGroups[i].Class.Country<br>}
+
+                                @if (!string.IsNullOrEmpty(Model.MyCurrentGroups[i].Class.City))
+                                {<span style="font-weight: bold">Город:</span> @Model.MyCurrentGroups[i].Class.City<br>}
+
+                                @if (!string.IsNullOrEmpty(Model.MyCurrentGroups[i].Class.School))
+                                {<span style="font-weight: bold">Школа:</span> @Model.MyCurrentGroups[i].Class.School<br>}
+
+                                <span style="font-weight: bold">Учитель:</span> @Model.MyCurrentGroups[i].Class.FullName<br>
+
+                                <span style="font-weight: bold">Класс:</span> @Html.DisplayFor(m => m.MyCurrentGroups[i].Class.Grade) 
+                                @if (!string.IsNullOrEmpty(Model.MyCurrentGroups[i].Class.Parallel))
+                                {<span> "@Model.MyCurrentGroups[i].Class.Parallel"</span>}<br>
+                                
+                                @if (!string.IsNullOrEmpty(Model.MyCurrentGroups[i].Class.NameOfGroup))
+                                {<span style="font-weight: bold">Имя группы:</span> @Model.MyCurrentGroups[i].Class.NameOfGroup<br>}
+                            </td>
+                            @*@if (Model.MyCurrentGroups[i].IsActive)
+                            {*@
+                                <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
+                                    Рабочая группа
+                                    <div style="height: 10px;"></div>
+                                    <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.MyCurrentGroups[i].ClassId asp-route-type="leave" onclick="return deleteConfirm()">Покинуть группу</a>
+                                </td>
+                            @*}*@
+
+                        </tr>
+                    }
+
+                </table>
+                <br>
+                <br>
+            }
+            @if (Model.MyRequests != null)
+            {
+                <h3>Запросы на приём</h3>
+                <table style="width: 100%;" class="group_table">
+                    @for (int i = 0; i < Model.MyRequests.Count; i++)
+                    {
+                        <tr>
+                            <td style="padding: 10px; padding-left: 0; width: 100%; border-bottom: 1px solid #ccc;">
+                                @if (!string.IsNullOrEmpty(Model.MyRequests[i].Class.Country))
+                                {<span style="font-weight: bold">Cтрана:</span> @Model.MyRequests[i].Class.Country<br>}
+
+                                @if (!string.IsNullOrEmpty(Model.MyRequests[i].Class.City))
+                                {<span style="font-weight: bold">Город:</span> @Model.MyRequests[i].Class.City<br>}
+
+                                @if (!string.IsNullOrEmpty(@Model.MyRequests[i].Class.School))
+                                {<span style="font-weight: bold">Школа:</span> @Model.MyRequests[i].Class.School<br>}
+
+                                <span style="font-weight: bold">Учитель:</span> @Model.MyRequests[i].Class.FullName<br>
+                               
+                                <span style="font-weight: bold">Класс:</span> @Html.DisplayFor(m => m.MyRequests[i].Class.Grade) 
+                                @if(!string.IsNullOrEmpty(Model.MyRequests[i].Class.Parallel))
+                                {<span> "@Model.MyRequests[i].Class.Parallel"</span>}<br>
+                               
+                                @if (!string.IsNullOrEmpty(Model.MyRequests[i].Class.NameOfGroup))
+                                {<span style="font-weight: bold">Имя группы:</span> @Model.MyRequests[i].Class.NameOfGroup<br>}
+                            </td>
+                            <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">Запрос на приём отправлен</td>
+                        </tr>
+                    }
+                </table>
+                <br>
+                <br>
+            }
+
+
+        </div>
+    </td> }
+
+else if (user.UserType == UserTypes.Teacher)
+
+{
+    <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">
+        <a href="" name="s" style="position:relative;top:-100px;"></a>
+					
+        <div style="padding:50px;">	
+        @if (Model.MyRequests != null)
+        {
+            <h3>Заявки на приём в группу</h3>
+            <table>
+                @for (int i = 0; i < Model.MyRequests.Count; i++)
+                {
+                    <tr>
+                        <td style="padding: 10px;">
+                            @if (!string.IsNullOrWhiteSpace(Model.MyRequests[i].Student.Photo))
+                            {
+                                <div class="avatar" style="background-image: url(/uploads/@Model.MyRequests[i].Student.Photo)"></div>
+                            }
+                            else
+                            {
+                                <div class="avatar" style="background-image: url(/skin/avatar.png)"></div>
+                            }
+                        </td>
+                        <td style="padding: 10px;">@Model.MyRequests[i].Student.FullName</td>
+                        <td style="padding: 10px;">
+                            <a asp-controller="Manage"
+                               asp-action="Groups"
+                               asp-route-id=@Model.MyRequests[i].Student.Id
+                               asp-route-type="accept">Принять</a></td>
+                        <td style="padding: 10px;">
+                            <a asp-controller="Manage"
+                               asp-action="Groups"
+                               asp-route-id=@Model.MyRequests[i].Student.Id
+                               asp-route-type="deny">Отклонить</a></td>
+                    </tr>
+                }
+            </table>
+        }
+        </div>
+    </td>
 }

@@ -1,5 +1,5 @@
 ﻿@using Knigosha.Core.Models.Enums
-@model Knigosha.Core.Models.Student
+@model Knigosha.Core.Models.ApplicationUser
 <div class="invisible-smartphone">
     <table width="100%" class="sc">
         <tr>
@@ -21,7 +21,7 @@
                                 <td style="padding-left: 50px;">
                                     Привет, @User.Identity.Name
                                     <div class="visible-mobile" style="height: 30px;"></div>
-                                    @if (Model != null)
+                                    @if (Model.UserType == UserTypes.Student)
                                     {
                                         <div style="height: 20px;"></div>
                                         <table class="sc mc">
@@ -45,11 +45,11 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        @if (Model.StudentClasses.SingleOrDefault(sc => sc.IsActive) != null)
+                                        @if (Model.Student.StudentClasses.SingleOrDefault(sc => sc.IsActive) != null)
                                         {
                                             <div style="padding-top: 20px; font-size: 20px; line-height: 24px;">
-                                                Группа: @Model.StudentClasses.Single(sc => sc.IsActive).Class.NameOfGroup
-                                                @Model.StudentClasses.Single(sc => sc.IsActive).Class.Grade @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.FullName
+                                                Группа: @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.NameOfGroup
+                                                @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.Grade @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.FullName
                                             </div>
                                         }
 

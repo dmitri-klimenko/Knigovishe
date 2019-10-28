@@ -272,19 +272,19 @@ namespace Knigosha.Controllers
 
             var vm = new RegisterViewModel();
             vm.Countries = _context.Countries.Select(c => new SelectListItem()
-                { Value = c.Id.ToString(), Text = c.Title }).ToList();
+                { Value = c.Title, Text = c.Title }).ToList();
 
             vm.MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
-            {Value = c.Id.ToString(), Text = c.Title }).ToList();
+            {Value = c.Title, Text = c.Title }).ToList();
 
             return View(vm);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult GetSchoolList(int cityId)
+        public JsonResult GetSchoolList(string cityId)
         {
-            var schoolList = new SelectList(_context.Schools.Where(s => s.City.Id == cityId), "Id", "Title");
+            var schoolList = new SelectList(_context.Schools.Where(s => s.City.Title == cityId), "Title", "Title");
             return Json(schoolList);
         }
 
@@ -377,6 +377,7 @@ namespace Knigosha.Controllers
                             Email = model.RequiredEmail,
                             PhoneNumber = model.PhoneNumber,
                             City = model.MainCityRussia ?? model.CityInput,
+                            School = model.SchoolSelect ?? model.SchoolInput,
                             Grade = model.Grade,
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter

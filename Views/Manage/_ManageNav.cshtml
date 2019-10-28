@@ -8,39 +8,73 @@
 
 <div class="invisible-smartphone">
     <div class="logged_menu">
-        <a href="/Manage/Dashboard">Мои достижения</a>
-        <a href="/Manage/Answers">Прочтённые книги</a>
-        <a href="/Manage/MarkedBooks">Отмеченные книги</a>
         @if (user.UserType == UserTypes.Student)
-        {<a href="/Manage/Answers?type=family">Что читает моя семья</a>}
-        <a href="/Manage/CreateQuiz">Создать викторину</a>
-        <a href="/Manage/Points">Созданные викторины</a>
-        <a href="/Manage/Messages">Сообщения </a>
-        <a href="/Manage/Groups">Мои группы</a>
-        <a href="/Manage/Orders">Купить абонемент</a>
-        <a href="/Manage/Licenses">Мои абонементы</a>
-        <a href="/Manage/Licenses">Активировать абонемент</a>
-        <a href="/Manage/Details">Редактировать профиль</a>
-    </div>
-    @if(user.MarkedBooks.Count > 0)
-    {
-        <div class="yellow_border" style="padding:20px;margin-top:20px;">
-            <b class="yellow" style="font-size:16px;">Отмеченные книги</b><div style="height:30px;"></div>
+        {
+            <a href="/Manage/Dashboard">Мои достижения</a>
+            <a href="/Manage/Answers">Прочитанные книги</a>
+            <a href="/Manage/MarkedBooks">Отмеченные книги</a>
+            <a href="/Manage/Answers?type=class">Что читает моя семья</a>
+            <a href="/Manage/CreateQuiz">Создать викторину</a>
+            <a href="/Manage/Points">Созданные викторины</a>
+            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/Groups">Мои группы</a>
+            <a href="/Manage/Order">Купить абонемент</a>
+            <a href="/Manage/Licenses">Мои абонементы</a>
+            <a href="/Manage/License">Активировать абонемент</a>
+            <a href="/Manage/Details">Редактировать профиль</a>
+        }
+        else if (user.UserType == UserTypes.Parent)
+        {
+            <a href="/Manage/Dashboard">Моя семья</a>
+            <a href="/Manage/Details">Мой профиль</a>
+            <a href="/Manage/Students">Мои дети</a>
+            <a href="/Manage/Answers?type=reset">Заявки на рестарт</a>
+            <a href="/Manage/Answers">Прочитанные книги</a>
+            <a href="/Manage/Help">Справка</a>
+            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/CreateQuiz">Создать викторину</a>
+            <a href="/Manage/Points">Созданные викторины</a>
+            <a href="/Manage/Order">Купить абонемент</a>
+            <a href="/Manage/Licenses">Мои абонементы</a>
+            <a href="/Manage/License">Активировать абонемент</a>
+        }
+        else
+        {
+            <a href="/Manage/Dashboard">Мой класс</a>
+            <a href="/Manage/Details">Мой профиль</a>
+            <a href="/Manage/Students">Мои ученики</a>
+            <a href="/Manage/Groups">Заявки на приём</a>
+            <a href="/Manage/Answers?type=reset">Заявки на рестарт</a>
+            <a href="/Manage/Answers">Прочитанные книги</a>
+            <a href="/Manage/Answers?type=group">ВМЕСТЕ</a>
+            <a href="/Manage/Help">Справка</a>
+            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/CreateQuiz">Создать викторину</a>
+            <a href="/Manage/Points">Созданные викторины</a>
+            <a href="/Manage/Order">Купить абонемент</a>
+            <a href="/Manage/Licenses">Мои абонементы</a>
+            <a href="/Manage/License">Активировать абонемент</a>
+        }
 
-            @for(var i = 0; i < user.MarkedBooks.Count; i++)
-            {
-                <div style="cursor:pointer;" onclick="window.location='/Book/Details?id=@user.MarkedBooks[i].BookId'">
-                    <div class="dark" style="font-weight:bold;font-size:14px;line-height:18px;">@user.MarkedBooks[i].Book.Title</div>
-                    <div style="color:#707070;font-size:14px;font-style:italic;">@user.MarkedBooks[i].Book.BookAuthor</div>
-                </div>
-                <div style="height:20px;"></div>
-            }
-            <div style="height:10px;"></div>
-            <a href="" class="a1" style="font-size:14px;">СМОТРЕТЬ КНИГИ</a>
-        </div>
-    }
+        @if (user.MarkedBooks.Count > 0)
+        {
+            <div class="yellow_border" style="padding:20px;margin-top:20px;">
+                <b class="yellow" style="font-size:16px;">Отмеченные книги</b><div style="height:30px;"></div>
+
+                @for (var i = 0; i < user.MarkedBooks.Count; i++)
+                {
+                    <div style="cursor:pointer;" onclick="window.location='/Book/Details?id=@user.MarkedBooks[i].BookId'">
+                        <div class="dark" style="font-weight:bold;font-size:14px;line-height:18px;">@user.MarkedBooks[i].Book.Title</div>
+                        <div style="color:#707070;font-size:14px;font-style:italic;">@user.MarkedBooks[i].Book.BookAuthor</div>
+                    </div>
+                    <div style="height:20px;"></div>
+                }
+                <div style="height:10px;"></div>
+                <a href="" class="a1" style="font-size:14px;">СМОТРЕТЬ КНИГИ</a>
+            </div>
+        }
+
+    </div>
 
 </div>
-
-
 

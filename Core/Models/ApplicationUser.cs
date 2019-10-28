@@ -3,6 +3,7 @@ using Knigosha.Core.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -34,7 +35,7 @@ namespace Knigosha.Core.Models
 
         public string Country { get; set; }
 
-        public string School { get; set; }
+        public string School { get; set; } 
 
         public string Parallel { get; set; }
 
@@ -126,7 +127,7 @@ namespace Knigosha.Core.Models
             BookRatings = new Collection<BookRating>();
             MarkedBooks = new Collection<MarkedBook>();
             DateAdded = DateTime.Now.ToString("d");
-
+            
         }
 
     }

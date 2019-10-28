@@ -1,0 +1,56 @@
+﻿@using Knigosha.Core.Models.Enums
+@model  List<Knigosha.Core.Models.UserSubscription>
+
+    <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-top:50px;padding-left:50px;">
+        <h3>Мои абонементы</h3>
+        @if (Model.Count == 0)
+        {
+            <text>Вы еще не приобрели ни одного абонемента.</text>
+            <div style="height:10px;"></div>
+            <a asp-controller="Manage" asp-action="Order" class="button">Купить абонемент</a><div style="height:15px;"></div>
+        }
+        else
+        {
+    <table class="table">
+        <tr>
+            <th>Номер абонемента</th>
+            <th>Вид абонемента</th>
+            <th>Заказан</th>
+            <th>Учебный год</th>
+            <th>Способ оплаты</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th>Ключ активации</th>
+        </tr>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td align="center">@Model[i].Id</td>
+                <td align="center">@Model[i].Subscription.SubscriptionType</td>
+                <td align="center">@Model[i].OrderedOn</td>
+                <td align="center">@Model[i].SchoolYear</td>
+                <td align="center">@Html.DisplayFor(m => m[i].PaymentType)</td>
+                <td align="center">@Model[i].Subscription.CurrentPrice</td>
+                <td align="center"><a asp-comtroller="Manage" asp-action="Order" asp-route-id=@Model[i].SubscriptionId old=@Model[i].Id>@Html.DisplayFor(m => m[i].Status)</a></td>
+                <td align="center">@Model[i].ActivationKeys.Where(ak => ak.ActivationKeyType == ViewBag.UserType)</td>
+            </tr>
+            @if (Model[i].PaymentType == PaymentType.BankTransfer)
+            {
+                <tr>
+                    <td colspan="4"></td>
+                    <td colspan="4">
+                        Данные банковского счёта:<br>
+                        Получатель: ФОНДАЦИЯ ГУТЕНБЕРГ 3.0<br>
+                        Банк: UniCredit Bulbank<br>
+                        BIC: UNCRBGSF<br>
+                        IBAN: BG30UNCR70001523277151<br>
+                        Предмет оплаты: <span style="font-weight: bold">Абонемент номер @Model[i].Id</span>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </table>
+        }
+    </td>

@@ -1,0 +1,122 @@
+﻿@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.ViewModels.ManageViewModels.UserSubscriptionViewModel
+@{
+    ViewData["Title"] = "Заказ";
+}
+
+
+<td colspan="2" valign="top" style="border-top: 1px solid #ffdb60; padding-top: 50px; padding-left: 50px;">
+    <h2 style="margin-top: 0px;">Заказ абонемента</h2>
+    <div style="height: 10px;"></div>
+    <div>
+        Тип абонемента: <span style="font-weight: bold">@Html.DisplayFor((m => m.Subscription.SubscriptionType))</span><br>
+        @if (Model.Subscription.SubscriptionType == SubscriptionTypes.Class)
+        {
+            <text>Учительскиx профилей: </text><span style="font-weight: bold">@Model.Subscription.NumberOfTeacherProfiles</span><br>
+        }
+        else if (@Model.Subscription.SubscriptionType == SubscriptionTypes.Family)
+        {
+            <text>Родительских профилей: </text><span style="font-weight: bold">@Model.Subscription.NumberOfParentProfiles</span><br>
+        }
+        Ученических профилей: <span style="font-weight: bold">@Model.Subscription.NumberOfStudentProfiles</span><br>
+        Действителен до: <span style="font-weight: bold">@Model.Subscription.ValidUntil</span><br>
+        Количество викторин:: <span style="font-weight: bold">@Model.Subscription.MaxQuizzes</span><br>
+        Цена: <span style="font-weight: bold">@Model.Subscription.CurrentPrice</span><br>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+    <form asp-controller="Manage" asp-action="Order" name="form" method="post">
+
+        <span style="font-weight: bold">Способ платежа</span>:<br>
+        <div style="height: 10px;"></div>
+
+        <div><input type="radio" asp-for="BankTransfer" value="true"> <span class="cb">Банковский перевод</span></div>
+        <div style="height: 5px;"></div>
+        <div><input type="radio" asp-for="BankTransfer" value="false"> <span class="cb">Кредитная карточка</span></div>
+        <div style="height: 5px;"></div>
+        <div style="height: 20px;"></div>
+
+
+        <div>
+            <input type="checkbox" name="invoice" onclick="toggleInvoice()">
+            <span class="cb">
+                Я хочу получить счёт
+            </span>
+        </div>
+        <div style="height: 20px;"></div>
+
+
+        <div id="invoice" style="display: none; border: 1px solid #333; padding: 10px; max-width: 400px; margin-bottom: 20px;">
+            <span style="font-weight: bold">ДАННЫЕ СЧЁТА</span>
+            <div style="height: 20px;"></div>
+
+
+            Страна:
+            <div style="height: 5px;"></div>
+            <select asp-for="Country" asp-items="@Model.Countries" onchange="updateCountry()" class="countries" style="width: 100%;">
+            </select>
+            <div style="height: 10px;"></div>
+
+            <div class="abroad" style="display: none;">
+                Город:
+                <div style="height: 5px;"></div>
+                <input asp-for="CityInput">
+                <div style="height: 10px;"></div>
+            </div>
+
+            <div class="russia" style="display: none;">
+                Город:
+                <div style="height: 5px;"></div>
+                <select asp-for="MainCityRussia" asp-items="@Model.MainCitiesRussia" class="mainCitiesRussia" style="width: 100%;">
+                </select>
+                <div style="height: 10px;"></div>
+            </div>
+
+            Учреждение:
+            <div style="height: 5px;"></div>
+            <input asp-for="Institution" style="width: 100%;">
+            <div style="height: 20px;"></div>
+
+            Адрес учреждения:
+            <div style="height: 5px;"></div>
+            <input asp-for="AddressOfInstitution" style="width: 100%;">
+            <div style="height: 20px;"></div>
+
+            Телефон учреждения:
+            <div style="height: 5px;"></div>
+            <input asp-for="TelephoneOfInstitution" style="width: 100%;">
+            <div style="height: 20px;"></div>
+
+            Индитиф. номер налогоплательщика:
+            <div style="height: 5px;"></div>
+            <input asp-for="Uid" style="width: 100%;">
+            <div style="height: 20px;"></div>
+
+            Имя заказчика:
+            <div style="height: 5px;"></div>
+            <input asp-for="Person" style="width: 100%;">
+            <div style="height: 20px;"></div>
+        </div>
+
+
+        Почта:
+        <div style="height: 5px;"></div>
+
+        <input asp-for="Email" type="text" style="width: 340px;">
+        <input type="submit" class="button" value="ЗАКАЗАТЬ"><br/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <div style="height: 10px;"></div>
+        <span style="font-weight: bold">
+            Вы получите инструкции и код для активации Вашей платной подписки на Ваш электронный адрес.<br>
+            Пожалуйста, убедитесь, что адрес электронной почты написан правильно.
+        </span>
+    </form>
+</td>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/lib/select2-4.0.8/dist/js/select2.min.js"></script>
+    <script src="~/lib/select2-4.0.8/dist/js/i18n/ru.js"></script>
+
+}

@@ -53,6 +53,10 @@
     <Compile Remove="Persistence\Migrations\20191020055135_CAddStudentClassModel.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191022210930_ADDMessageRecipientsDELETEReceivedMessagesCHANGESentMessages.cs" />
     <Compile Remove="Persistence\Migrations\20191022210930_ADDMessageRecipientsDELETEReceivedMessagesCHANGESentMessages.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191024202534_SEtDefaultValueToNameOFGroupProperty.cs" />
+    <Compile Remove="Persistence\Migrations\20191024202534_SEtDefaultValueToNameOFGroupProperty.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191025065323_CheckingEverthing.cs" />
+    <Compile Remove="Persistence\Migrations\20191025065323_CheckingEverthing.Designer.cs" />
   </ItemGroup>
 
 
@@ -65,7 +69,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Core\Dtos\" />
     <Folder Include="Core\Repositories\" />
     <Folder Include="Persistence\Repositories\" />
   </ItemGroup>

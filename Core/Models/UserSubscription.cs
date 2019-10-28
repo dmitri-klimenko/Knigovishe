@@ -19,6 +19,22 @@ namespace Knigosha.Core.Models
 
         public int SubscriptionId { get; set; }
 
+        public string Email { get; set; }
+
+        public string Country { get; set; }
+
+        public string City { get; set; }
+
+        public string Institution { get; set; }
+
+        public string AddressOfInstitution { get; set; }
+
+        public string TelephoneOfInstitution { get; set; }
+
+        public string Uid { get; set; }
+
+        public string Person { get; set; }
+
         public string OrderedOn { get; set; }
 
         public string ActivatedOn { get; set; }
@@ -43,7 +59,7 @@ namespace Knigosha.Core.Models
 
         public List<ActivationKey> ActivationKeys { get; set; }
 
-        private UserSubscription() { }
+        public UserSubscription() { }
 
         public UserSubscription(ApplicationUser user, Subscription subscription)
         {

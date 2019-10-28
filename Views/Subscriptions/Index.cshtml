@@ -12,7 +12,8 @@
             <div class="section_text">
                 Выберите подходящий абонемент.<br />
                 <br />
-                При регистрации Вашего профиля, автоматически начинается <span style="font-weight: bold">трёхнедельный демо-период</span>. Чтобы продолжить пользование после этого периода, Вам нужно выбрать Ваш абонемент.<br />
+                При регистрации Вашего профиля, автоматически начинается <span style="font-weight: bold">трёхнедельный демо-период</span>. 
+                Чтобы продолжить пользование после этого периода, Вам нужно выбрать Ваш абонемент.<br />
                 <br />
                 Все подписки действительны до @Model[0].ValidUntil.<br />
                 <br />
@@ -34,7 +35,9 @@
                             </div>
                         </div>
                         <div style="height: 20px;"></div>
-                        <div class="license_text license_price "><i>Цена:</i><br><b>@Model[0].CurrentPrice</b> </div>
+                        <div class="license_text license_price ">
+                            <i>Цена:</i><br><b>@Model[0].CurrentPrice</b>
+                        </div>
                         <div class="vote_shadow" style="display: none;" onclick="$(this).hide();event.stopPropagation();">
                             <div class="vote_popup license_popup"></div>
                         </div>

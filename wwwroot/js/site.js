@@ -156,15 +156,22 @@ $(function () {
     $(".qmark").prepend('<i class="fa fa-question"></i>');
     $(".hint").closest('.input').addClass('hint_input');
 
-    $(".select2").select2({
-        matcher: function (params, data) {
-            return matchStart(params, data);
-        },
-        language: "bg"
+
+    $(".countries").select2({
+        theme: 'bootstrap4',
+        language: "ru",
+        matcher: function(params, data) {
+            params.term = params.term || '';
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) === 0) {
+                return data;
+            }
+            return false;
+        }
     });
 
-    $(".select2_any").select2({
-        language: "bg"
+    $('.mainCitiesRussia').select2({
+        theme: 'bootstrap4',
+        language: "ru"
     });
 
 
@@ -173,8 +180,234 @@ $(function () {
         $(this).css('top', '-100px');
     });
 
+   //my code
+
+    var student = "1";
+            var teacher = "2";
+            var parent = "3";
+            var russia = "Россия";
 
 
+            function studentRussia() {
+                $('#text').show();
+                $('#emailDiv').show();
+                $('#parentEmailDiv').show();
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#requiredEmailDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
+                $('#schoolsSelect').empty().append('<option value="">Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+
+            function studentNotRussia() {
+                $('#text').show();
+                $('#emailDiv').show();
+                $('#parentEmailDiv').show();
+                $('#mainCitiesRussiaDiv').hide();
+                $('#requiredEmailDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolInputDiv').css("display", "block");
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+
+            function teacherRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').css("display", "block");
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#schoolsSelect').empty().append('<option value="">Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+
+            function teacherNotRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').css("display", "block");
+                $('#mainCitiesRussiaDiv').hide();
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolInputDiv').css("display", "block");
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').show();
+                $('#parallelDiv').show();
+            }
+
+            function parentRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').css("display", "block");
+                $('#mainCitiesRussia').val("");
+                $('#mainCitiesRussiaDiv').show();
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolInputDiv').css("display", "none");
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').hide();
+                $('#parallelDiv').hide();
+            }
+
+            function parentNotRussia() {
+                $('#text').hide();
+                $('#emailDiv').hide();
+                $('#parentEmailDiv').hide();
+                $('#requiredEmailDiv').css("display", "block");
+                $('#mainCitiesRussiaDiv').hide();
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolInputDiv').css("display", "none");
+                $('#schoolsSelectDiv').hide();
+                $('#gradeDiv').hide();
+                $('#parallelDiv').hide();
+            }
+
+            function blankCityNotParent() {
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolsSelect').empty().append('<option value="">Выберите город</option>');
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+            };
+
+            function blankCityParent() {
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolsSelectDiv').hide();
+            };
+
+            function otherCityNotParent() {
+                $('#schoolInputDiv').css("display", "block");
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolsSelectDiv').hide();
+            };
+
+            function otherCityParent() {
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "block");
+                $('#schoolsSelectDiv').hide();
+            };
+
+            function mainCityParent() {
+                $('#schoolInputDiv').css("display", "none");
+                $('#cityInputDiv').css("display", "none");
+                $('#schoolsSelectDiv').hide();
+            };
+
+            function mainCityNotParent() {
+                $('#schoolInputDiv').hide();
+                $('#cityInputDiv').hide();
+                $('.addedSchoolSelect').remove();
+                $('#schoolsSelectDiv').show();
+            };
+
+            var userVal = $("#userType").val();
+            var countryVal = $("#countries").val();
+            var mainCityRussiaVal = $("#mainCitiesRussia").val();
+
+            $('#schoolsSelect').select2({
+                theme: 'bootstrap4',
+                language: "ru",
+                sorter: function (data) {
+                    if(data && data.length>1 && data[0].rank){
+                        data.sort(function(a,b) {return (a.rank > b.rank) ? -1 : ((b.rank > a.rank) ? 1 : 0);} );
+                    }
+                    return data;
+                },
+                matcher:function(params, data) {
+                    if ($.trim(params.term) === '') {
+                        return data;
+                    }
+                    if (typeof data.text === 'undefined') {
+                        return null;
+                    }
+                    var idx = data.text.toLowerCase().indexOf(params.term.toLowerCase());
+                    if (idx > -1) {
+                        var modifiedData = $.extend({
+                            'rank':(params.term.length / data.text.length)+(data.text.length-params.term.length-idx)/(3*data.text.length)
+                        }, data, true);
+                        return modifiedData;
+                    }
+                    return null;
+                }
+            });
+
+        
+
+            var defaultRangeValidator = $.validator.methods.range;
+            $.validator.methods.range = function(value, element, param) {
+                if (element.type === 'checkbox') {
+                    return element.checked;
+                } else {
+                    return defaultRangeValidator.call(this, value, element, param);
+                }
+            }
+
+            $("#userType").change(function() {
+                console.log('userType' + $(this).val() + 'country_' + countryVal);
+                userVal = $(this).val();
+                if (userVal === student)
+                    countryVal === russia ? studentRussia() : studentNotRussia();
+                else if (userVal === teacher)
+                    countryVal === russia ? teacherRussia() : teacherNotRussia();
+                else if (userVal === parent)
+                    countryVal === russia ? parentRussia() : parentNotRussia();
+            });
+
+
+            $("#countries").change(function() {
+                console.log('country_' + $(this).val() + 'user_' + userVal);
+                countryVal = $(this).val();
+                if (countryVal === russia) {
+                    if (userVal === student) studentRussia();
+                    else if (userVal === teacher) teacherRussia();
+                    else if (userVal === parent) parentRussia();
+                } else if (countryVal !== russia) {
+                    if (userVal === student) studentNotRussia();
+                    else if (userVal === teacher) teacherNotRussia();
+                    else if (userVal === parent) parentNotRussia();
+                }
+            }).change();
+
+
+            $("#mainCitiesRussia").change(function() {
+                mainCityRussiaVal = $(this).val();
+                console.log(mainCityRussiaVal);
+                if (this.selectedIndex === 0)
+                    userVal === parent ? blankCityParent() : blankCityNotParent();
+                else if (this.selectedIndex === 1) userVal === parent ? otherCityParent() : otherCityNotParent();
+                else if (this.selectedIndex > 1)
+                    if (userVal === parent) {
+                        mainCityParent();
+                    } else {
+                        var url = "/Account/GetSchoolList";
+                        $.getJSON(url,
+                            { CityId: mainCityRussiaVal },
+                            function(data) {
+                                var item = "";
+                                $("#schoolsSelect").empty();
+                                $.each(data,
+                                    function(i, school) {
+                                        item += '<option value="' + school.value + '">' + school.text + '</option>';
+                                    });
+                                $("#schoolsSelect").html(item);
+                            });
+                        mainCityNotParent();
+                    }
+            });
+
+            // end of my code
 
     $(document).keydown(function (e) {
 
@@ -203,12 +436,11 @@ $(function () {
 
 $(window).load(function () {
     syncLicense();
-    console.log("Hi Andrei");
 });
 
 
 function deleteConfirm() {
-    var answer = confirm("Сигурен ли си, че искаш да продължиш?");
+    var answer = confirm("Вы уверены, что хотите продолжить?");
     if (answer) {
         return true;
     }
@@ -466,15 +698,16 @@ function updateSchools() {
 
 function updateCountry() {
 
-    if ($("select[name=country]").length != 1) return;
+    if ($("select[name=Country]").length != 1) return;
 
-    var c = $("select[name=country]").val();
+    var c = $("select[name=Country]").val();
+    console.log(c);
 
-    if (c == 'България') {
-        $(".bulgaria").show();
+    if (c == 'Россия') {
+        $(".russia").show();
         $(".abroad").hide();
     } else {
-        $(".bulgaria").hide();
+        $(".russia").hide();
         $(".abroad").show();
     }
 }

@@ -23,6 +23,7 @@ namespace Knigosha.Persistence
         DbSet<Text> Texts { get; set; }
         DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
         DbSet<AllClassesGroup> AllClassesGroup { get; set; }
+        DbSet<Request> Requests { get; set; }
 
     }
 }

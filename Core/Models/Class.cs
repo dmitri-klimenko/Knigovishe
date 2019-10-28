@@ -135,6 +135,7 @@ namespace Knigosha.Core.Models
         public Class()
         {
             StudentClasses = new List<StudentClass>();
+            NameOfGroup = "";
         }
 
     }

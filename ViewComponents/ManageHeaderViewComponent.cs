@@ -27,15 +27,15 @@ namespace Knigosha.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await _userManager.GetUserAsync(Request.HttpContext.User);
-            Student student = null;
+     
             if (user.UserType == UserTypes.Student)
             {
-                 student = await _context.Students
+                 user.Student = await _context.Students
                     .Include(s => s.Answers)
                     .Include(s => s.StudentClasses).ThenInclude(sc => sc.Class)
                     .SingleAsync(s => s.Id == user.Id);
             }
-            return View(student);
+            return View(user);
         }
     }
 }

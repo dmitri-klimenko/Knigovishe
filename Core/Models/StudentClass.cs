@@ -9,11 +9,11 @@ namespace Knigosha.Core.Models
 {
     public class StudentClass
     {
-        [Key, Column(Order = 2)]
+        public int  Id { get; set; }
         public string StudentId { get; set; }
         public Student Student { get; set; }
 
-        [Key, Column(Order = 1)]
+
         public string ClassId { get; set; }
         public Class Class { get; set; }
 

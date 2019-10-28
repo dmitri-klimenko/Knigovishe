@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191025220556_AddRequestModel")]
+    partial class AddRequestModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1750,36 +1752,15 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("ActivatedOn");
 
-                    b.Property<string>("AddressOfInstitution")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("City");
-
-                    b.Property<string>("Country");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Institution")
-                        .HasMaxLength(50);
-
                     b.Property<string>("Note");
 
                     b.Property<string>("OrderedOn");
 
                     b.Property<int?>("PaymentType");
 
-                    b.Property<string>("Person")
-                        .HasMaxLength(50);
-
                     b.Property<int?>("Status");
 
                     b.Property<int>("SubscriptionId");
-
-                    b.Property<string>("TelephoneOfInstitution")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Uid")
-                        .HasMaxLength(50);
 
                     b.Property<string>("UserId")
                         .IsRequired();

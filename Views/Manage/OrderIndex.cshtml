@@ -1,0 +1,144 @@
+﻿@model Knigosha.Core.ViewModels.OrderViewModel.OrderViewModel
+
+@{
+    ViewData["Title"] = "Абонементы";
+}
+
+
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-top:50px;padding-left:50px;">
+    <div id="license_types">
+        <h1 class="section_title">АБОНЕМЕНТЫ В КНИГОВИЩЕ</h1>
+        <div class="section_text">
+            <small>
+                При регистрации Вашего профиля, автоматически начинается <span>трёхнедельный демо-период</span>.
+                Чтобы продолжить пользование после этого периода, Вам нужно выбрать Ваш абонемент. Все подписки действительны до @Model.Suggested.ValidUntil.
+            </small>
+        </div>
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="license license2" onclick="window.location='/Manage/Order?id=@Model.Suggested.Id&myself=1'" style="cursor:pointer;">
+                    <div style="height:60px;">
+                        <div class="license_text">
+                            <h4 style="font-size: 22px; line-height: 26px;">@Html.DisplayFor(m => m.Suggested.Name) aбонемент для моего профиля</h4>
+                        </div>
+                    </div>
+                    <div class="license_center myself">
+                        <div class="license_text">
+                            <i>Ученических профилей:</i><br><span>@Model.Suggested.NumberOfStudentProfiles</span><div style="height: 10px;"></div>
+                            <i>Действителен до:</i><br><span>@Model.Suggested.ValidUntil</span><div style="height: 10px;"></div>
+                            <i>Количество викторин:</i><br><span>@Model.Suggested.MaxQuizzes</span>
+                        </div>
+                    </div>
+                    <div style="height:20px;"></div>
+                    <div class="license_text license_price myself">
+                        <i>Цена:</i><br><span>@Model.Suggested.CurrentPrice</span>
+                    </div>
+                    <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                        <div class="vote_popup license_popup"></div>
+                    </div>
+                    <div style="height:40px;"></div>
+                    <a asp-controller="Manage" asp-action="Order" asp-route-id=@Model.Suggested.Id  asp-route-myself="1" class="button">Заказать</a>
+                </div>
+                <div style="height:50px;"></div>
+            </div>
+        </div>
+        <div style="height:20px;"></div>
+
+        <div class="row">
+            <div class="col col-md-4">
+                <div class="license license2" onclick="window.location='/Manage/Order?id=@Model.Subscriptions[0].Id'" style="cursor:pointer;">
+                    <div style="height:80px;">
+                        <div class="license_text">
+                            <h4 style="font-size:16px;line-height:18px;">Индивидуальный абонамент для другого профиля</h4>
+                        </div>
+                    </div>
+                    <div class="license_center ">
+                        <div class="license_text">
+                            <i>Ученических профилей:</i><br><span>@Model.Subscriptions[0].NumberOfStudentProfiles</span><div style="height: 10px;"></div>
+                            <i>Действителен до:</i><br><span>@Model.Subscriptions[0].ValidUntil</span><div style="height: 10px;"></div>
+                            <i>Количество викторин:</i><br><span>@Model.Subscriptions[0].MaxQuizzes</span>
+                        </div>
+                    </div>
+                    <div style="height:20px;"></div>
+                    <div class="license_text license_price ">
+                        <i>Цена:</i> <span>@Model.Subscriptions[0].CurrentPrice</span>
+                    </div>
+                    <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                        <div class="vote_popup license_popup"></div>
+                    </div>
+                    <div style="height:40px;"></div>
+                    <a asp-controller="Manage" asp-action="Order" asp-route-id=@Model.Subscriptions[0].Id class="button">Заказать</a>
+                </div>
+                <div style="height:50px;"></div>
+            </div>
+            <div class="col col-md-4">
+                <div class="license license3" onclick="window.location ='/Manage/Order?id=@Model.Subscriptions[1].Id'" style="cursor: pointer;">
+                    <div style="height: 80px;">
+                        <div class="license_text">
+                            <h4 style="font-size: 16px; line-height: 18px;">Семейный абонемент для другого профиля</h4>
+                        </div>
+                    </div>
+                    <div class="license_center ">
+                        <div class="license_text">
+                            <i>Родительских профилей:</i><br><span>@Model.Subscriptions[1].NumberOfParentProfiles</span><div style="height:10px;"></div>
+                            <i>Ученических профилей:</i><br><span>@Model.Subscriptions[1].NumberOfStudentProfiles</span><div style="height:10px;"></div>
+                            <i>Действителен до:</i><br><span>@Model.Subscriptions[1].ValidUntil</span><div style="height:10px;"></div>
+                            <i>Количество викторин:</i><br><span>@Model.Subscriptions[1].MaxQuizzes</span>
+                        </div>
+                    </div>
+                    <div style="height: 20px;"></div>
+                    <div class="license_text license_price "><i>Цена:</i> <span>@Model.Subscriptions[1].CurrentPrice</span></div>
+                    <div class="vote_shadow" style="display: none;" onclick="$(this).hide();event.stopPropagation();">
+                        <div class="vote_popup license_popup">
+                        </div>
+                    </div>
+                    <div style="height: 40px;"></div>
+                    <a asp-controller="Manage" asp-action="Order" asp-route-id=@Model.Subscriptions[1].Id class="button">Заказать</a>
+                </div>
+                <div style="height: 50px;"></div>
+            </div>
+            <div class="col col-md-4">
+                <div class="license license4" onclick="window.location='/Manage/Order?id=@Model.Subscriptions[2].Id'" style="cursor:pointer;">
+                    <div style="height:80px;">
+                        <div class="license_text">
+                            <h4 style="font-size:16px;line-height:18px;">Классный абонемент для другого профиля</h4>
+                        </div>
+                    </div>
+                    <div class="license_center ">
+                        <div class="license_text">
+                            <i>Учительских профилей:</i><br><span>@Model.Subscriptions[2].NumberOfTeacherProfiles</span><div style="height:10px;"></div>
+                            <i>Ученических профилей:</i><br><span>@Model.Subscriptions[2].NumberOfStudentProfiles</span><div style="height:10px;"></div>
+                            <i>Действителен до:</i><br><span>@Model.Subscriptions[2].ValidUntil</span><div style="height:10px;"></div>
+                            <i>Количество викторин:</i><br><span>@Model.Subscriptions[2].MaxQuizzes</span>
+                        </div>
+                        </div>
+                        <div style="height:20px;"></div>
+                    <div class="license_text license_price "><i>Цена:</i> <span>@Model.Subscriptions[2].CurrentPrice</span> 		
+                            <div style="height:5px;"></div><a href="javascript:;" id="license_link_1" onclick="licensePopup(this);event.stopPropagation();">Дополнительные скидки</a>	
+                            </div>
+                        <div class="vote_shadow" style="display:none;" onclick="$(this).hide();event.stopPropagation();">
+                            <div class="vote_popup license_popup">
+                                 Дополнительные скидки при покупке нескольких классных<br />
+                                абонементов одновременно:<br />
+                                <br />
+                                - от 3 до 5 классных абонементов – скидка 5 % <br />
+                                - от 6 до 9 классных абонементов – скидка 7 % <br />
+                                - от 10 до 14 классных абонементов – скидка 10 % <br />
+                                - от 15 до 19 классных абонементов – скидка 12 % <br />
+                                - от 20 до 24 классных абонементов – скидка 15 % <br />
+                                - от 25 до 29 классных абонементов – скидка 17 % <br />
+                                - от 30 до 34 классных абонементов – скидка 20 % <br />
+                                - от 35 до 39 классных абонементов – скидка 25 % <br />
+                                - от 40 абонементов – скидка 30 % <br />
+                                <br />
+                                 Для информации и заявок: info@knigovishe.ru                            
+                                 </div>
+                        </div>
+                        <div style="height:40px;"></div>
+                        <a asp-controller="Manage" asp-action="Order" asp-route-id=@Model.Subscriptions[2].Id class="button">Заказать</a>
+                    </div>
+                    <div style="height:50px;"></div>
+                </div>
+            </div>
+        </div>
+</td>
