@@ -9,7 +9,7 @@
                 <tr>
                     <td valign="top" class="desktop-top-border"
                         style="width: 220px;">
-                        @await Html.PartialAsync("_ManageNav")
+                        @await Component.InvokeAsync("ManageNav")
                     </td>
                     @RenderBody()
                 </tr>
