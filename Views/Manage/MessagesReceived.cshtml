@@ -1,0 +1,49 @@
+﻿@model Knigosha.Core.ViewModels.ManageViewModels.MessagesViewModel
+@{
+    ViewData["Title"] = "Мои сообщения";
+}
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    <div style="padding:20px;">
+        @if (Model.HasGroup)
+        {
+            <a asp-controller="Manage" asp-action="Messages" asp-route-type="send" class="button">Послать сообщение</a>
+        }
+        else
+        {
+            <a asp-controller="Manage" asp-action="Messages" class="button">Послать сообщение</a>
+        }
+        <div style="height:40px;"></div>
+        <h3>СООБЩЕНИЯ</h3>
+        <div class="twoButtons">
+            <a asp-controller="Manage" asp-action="Messages" class="button active">Полученные</a>
+            <a asp-controller="Manage" asp-action="Messages" asp-route-type="sent" class="button">Отправленные</a>
+        </div>
+
+        <div style="height:10px;"></div>
+        @if (Model.Messages.Count > 0)
+        {
+            <table class="table">
+                <tr>
+                    <th>Дата</th>
+                    <th>От</th>
+                    <th>Кому</th>
+                    <th>Тема</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                @for (int i = 0; i < Model.Messages.Count; i++)
+                {
+                    <tr>
+                        <td align="center">@Model.Messages[i].DateTime</td>
+                        <td align="center">@Model.Messages[i].Sender.Name @Model.Messages[i].Sender.Surname [@Model.Messages[i].Sender.UserName]</td>
+                        <td align="center">@Model.Messages[i].Recipient.Name @Model.Messages[i].Recipient.Surname [@Model.Messages[i].Recipient.UserName]</td>
+                        <td align="center">@Model.Messages[i].Topic</td>
+                        <td align="center"><a asp-controller="Manage" asp-action="Messages" asp-route-id="@Model.Messages[i].Id">Прочесть</a></td>
+                        <td align="center"><a href="/Manage/Messages?to=@Model.Messages[i].Sender.Id&subject=@Model.Messages[i].Topic&type=send">Ответить</a></td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+</td>

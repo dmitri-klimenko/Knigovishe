@@ -1,4 +1,4 @@
-﻿@model Knigosha.Core.Models.Message
+﻿@model Knigosha.Core.ViewModels.ManageViewModels.MessageViewModel
 
 @{
     ViewData["Title"] = "Создать сообщение";
@@ -13,16 +13,24 @@
             <input type="hidden" name="screen" value="send">
             Отправка сообщения:
             <div style="height:5px;"></div>
-            <input type="hidden" asp-for="@Model.RecipientId">
-            <input type="hidden" asp-for="@Model.SenderId">
-            <input type="text" asp-for="@Model.RecipientName" disabled style="width:400px;">
+            <input type="hidden" asp-for="@Model.Message.SenderId">
+            @if(Model.Recipients.Count() == 1)
+            {
+                <input type="hidden" asp-for="@Model.Message.RecipientId"  value="@Model.Recipients.Last().Value">
+                <input type="text"  value="@Model.Recipients.Last().Text" disabled style="width:400px;">
+            }
+            else
+            {
+                <select asp-for="@Model.Message.RecipientId" asp-items="@Model.Recipients"></select>
+            }
+
 
             <div style="height:5px;"></div>
 
-            <input type="text" placeholder="Тема" asp-for="@Model.Topic" style="width:400px;">
+            <input type="text" placeholder="Тема" asp-for="@Model.Message.Topic" style="width:400px;">
             <div style="height:5px;"></div>
 								
-            <textarea placeholder="Сообщение" asp-for="@Model.Body" style="width:400px;height:100px;"></textarea>
+            <textarea placeholder="Сообщение" asp-for="@Model.Message.Body" style="width:400px;height:100px;"></textarea>
             <div style="height:5px;"></div>
 								
             <input type="button" class="button" value="Назад" onclick="window.location='/Manage/Messages'">

@@ -1,20 +1,20 @@
 ﻿@model Knigosha.Core.Models.Message
 
 @{
-    ViewData["Title"] = "Создать сообщение";
+    ViewData["Title"] = "Сообщение";
 }
 <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
     <div style="padding:20px;">
         <div style="font-size:16px;line-height:24px;">
         Дата: @Model.DateTime<br>
-        От:  @Model.SenderName<br>
-        До: @Model.RecipientName<br>
+        От:  @Model.Sender.FullName [@Model.Sender.UserName]<br>
+        Кому: @Model.Recipient.FullName [@Model.Recipient.UserName]<br>
         Тема: @Model.Topic
     </div>
     <div style="height:10px;"></div>
     @Model.Body
-    <div style="height:10px;"></div>
+    <div style="height:20px;"></div>
     <a asp-controller="Manage" asp-action="Messages" class="button">Назад</a>
     <a href="/Manage/Messages?to=@(Model.Sender.UserName == User.Identity.Name ? Model.RecipientId : Model.SenderId)&subject=@Model.Topic&type=send" class="button">Ответить</a>
 							

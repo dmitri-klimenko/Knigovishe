@@ -10,7 +10,9 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
     {
         public string Search { get; set; }
         public List<Class> AllGroups { get; set; }
-        public List<StudentClass> MyCurrentGroups { get; set; }
+        public List<StudentClass> MyCurrentStudentClasses { get; set; }
+        public List<StudentFamily> MyCurrentStudentFamilies { get; set; }
+
         public List<Request> MyRequests { get; set; }
     }
 }

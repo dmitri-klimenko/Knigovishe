@@ -123,7 +123,7 @@ namespace Knigosha.Controllers
                     await _userManager.UpdateAsync(user);
                 }
                 
-                var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 _logger.LogInformation("User logged in.");
                 return RedirectToLocal(returnUrl);
             }
@@ -270,12 +270,16 @@ namespace Knigosha.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            var vm = new RegisterViewModel();
-            vm.Countries = _context.Countries.Select(c => new SelectListItem()
-                { Value = c.Title, Text = c.Title }).ToList();
+            var vm = new RegisterViewModel
+            {
+                Countries =
+                    _context.Countries.Select(c => new SelectListItem() {Value = c.Title, Text = c.Title}).ToList(),
+                MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
+                {
+                    Value = c.Title, Text = c.Title
+                }).ToList()
+            };
 
-            vm.MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
-            {Value = c.Title, Text = c.Title }).ToList();
 
             return View(vm);
         }
@@ -311,8 +315,8 @@ namespace Knigosha.Controllers
                             Password = model.Password,
                             Email = model.Email ?? model.ParentEmail,
                             PhoneNumber = model.PhoneNumber,
-                            City = model.MainCityRussia ?? model.CityInput,
-                            School = model.SchoolSelect ?? model.SchoolInput,
+                            City = !string.IsNullOrWhiteSpace(model.CityInput)? model.CityInput: model.MainCityRussia,
+                            School = !string.IsNullOrWhiteSpace(model.SchoolInput) ? model.SchoolInput : model.SchoolSelect,
                             Grade = model.Grade,
                             Parallel = model.Parallel,
                             Country = model.Country,
@@ -343,7 +347,7 @@ namespace Knigosha.Controllers
                             Password = model.Password,
                             Email = model.RequiredEmail,
                             PhoneNumber = model.PhoneNumber,
-                            City = model.MainCityRussia ?? model.CityInput,
+                            City = !string.IsNullOrWhiteSpace(model.CityInput) ? model.CityInput : model.MainCityRussia,
                             Grade = model.Grade,
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter
@@ -376,8 +380,8 @@ namespace Knigosha.Controllers
                             Password = model.Password,
                             Email = model.RequiredEmail,
                             PhoneNumber = model.PhoneNumber,
-                            City = model.MainCityRussia ?? model.CityInput,
-                            School = model.SchoolSelect ?? model.SchoolInput,
+                            City = !string.IsNullOrWhiteSpace(model.CityInput) ? model.CityInput : model.MainCityRussia,
+                            School = !string.IsNullOrWhiteSpace(model.SchoolInput) ? model.SchoolInput : model.SchoolSelect,
                             Grade = model.Grade,
                             Country = model.Country,
                             SubscribedToNewsletter = model.SubscribedToNewsletter

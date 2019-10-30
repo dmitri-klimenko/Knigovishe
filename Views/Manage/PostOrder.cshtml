@@ -1,0 +1,35 @@
+﻿@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.Models.Subscription
+@{
+    ViewData["Title"] = "Заказ";
+}
+    <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-top:50px;padding-left:50px;">
+        <h2 style="margin-top:0px;">Заказ абонемента</h2>
+        <div>
+            Тип абонемента: <span style="font-weight: bold">@Html.DisplayFor((m => m.SubscriptionType))</span><br>
+            @if (Model.SubscriptionType == SubscriptionTypes.Class)
+            {
+                <text>Учительскиx профилей: </text><span style="font-weight: bold">@Model.NumberOfTeacherProfiles</span><br>
+            }
+            else if (@Model.SubscriptionType == SubscriptionTypes.Family)
+            {
+                <text>Родительских профилей: </text><span style="font-weight: bold">@Model.NumberOfParentProfiles</span><br>
+            }
+            Ученических профилей: <span style="font-weight: bold">@Model.NumberOfStudentProfiles</span><br>
+            Действителен до: <span style="font-weight: bold">@Model.ValidUntil</span><br>
+            Количество викторин:: <span style="font-weight: bold">@Model.MaxQuizzes</span><br>
+            Цена: <span style="font-weight: bold">@Model.CurrentPrice</span><br>
+        </div>
+        <div style="height:20px;"></div>
+        <div style="font-size:20px;">
+            Благодарим за заказ! Ключи подписки будут активированы после получения оплаты банковским переводом.<br><br>
+        </div>
+        <div>
+            Данные за банковского счёта:<br>
+            Получатель: ФОНДАЦИЯ ГУТЕНБЕРГ 3.0<br>
+            Банк: UniCredit Bulbank<br>
+            BIC: UNCRBGSF<br>
+            IBAN: BG30UNCR70001523277151<br>
+            Предмет платежа: <span style="font-weight: bold">Абонемент номер @ViewData["UserSubscriptionId"]</span>
+        </div>
+    </td>

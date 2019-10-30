@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191029012040_AddMyselfPropertyToUSModel")]
+    partial class AddMyselfPropertyToUSModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1624,44 +1626,19 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.StudentClass", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("ClassId");
-
-                    b.Property<bool>("IsActive");
 
                     b.Property<string>("StudentId");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Id");
 
-                    b.HasIndex("ClassId");
+                    b.Property<bool>("IsActive");
+
+                    b.HasKey("ClassId", "StudentId");
 
                     b.HasIndex("StudentId");
 
                     b.ToTable("StudentClass");
-                });
-
-            modelBuilder.Entity("Knigosha.Core.Models.StudentFamily", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FamilyId");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("StudentId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FamilyId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentFamily");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Subscription", b =>
@@ -68465,9 +68442,13 @@ namespace Knigosha.Persistence.Migrations
                 {
                     b.HasBaseType("Knigosha.Core.Models.ApplicationUser");
 
+                    b.Property<string>("FamilyId");
+
                     b.Property<string>("GreetingName");
 
                     b.Property<string>("ParentEmail");
+
+                    b.HasIndex("FamilyId");
 
                     b.ToTable("Students");
 
@@ -68598,19 +68579,6 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Knigosha.Core.Models.StudentFamily", b =>
-                {
-                    b.HasOne("Knigosha.Core.Models.Family", "Family")
-                        .WithMany("StudentFamilies")
-                        .HasForeignKey("FamilyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Knigosha.Core.Models.Student", "Student")
-                        .WithMany("StudentFamilies")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Knigosha.Core.Models.UserSubscription", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Subscription", "Subscription")
@@ -68676,6 +68644,14 @@ namespace Knigosha.Persistence.Migrations
                     b.HasOne("Knigosha.Core.Models.AllFamiliesGroup", "AllFamiliesGroup")
                         .WithMany("Families")
                         .HasForeignKey("AllFamiliesGroupId");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.Student", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.Family", "Family")
+                        .WithMany("Students")
+                        .HasForeignKey("FamilyId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

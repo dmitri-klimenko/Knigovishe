@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
@@ -26,16 +28,33 @@ namespace Knigosha.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = await _userManager.GetUserAsync(Request.HttpContext.User);
-     
+            var user = await _userManager.GetUserAsync(UserClaimsPrincipal);
+
+            Class activeClass = null;
+            Family activeFamily = null;
+
             if (user.UserType == UserTypes.Student)
             {
-                 user.Student = await _context.Students
-                    .Include(s => s.Answers)
-                    .Include(s => s.StudentClasses).ThenInclude(sc => sc.Class)
-                    .SingleAsync(s => s.Id == user.Id);
+                user = await _context.Students.Include(s => s.Answers).SingleAsync(s => s.Id == user.Id);
+                activeClass = _context.StudentClasses.SingleOrDefault(sc => sc.IsActive && sc.StudentId == user.Id)?.Class;
+                activeFamily = _context.StudentFamilies.SingleOrDefault(sf => sf.IsActive && sf.StudentId == user.Id)?.Family;
             }
-            return View(user);
+
+            var componentVm = new ComponentViewModel()
+            {
+                User = user,
+                ActiveClass = activeClass,
+                ActiveFamily = activeFamily
+            };
+
+            return View(componentVm);
         }
+    }
+
+    public class ComponentViewModel
+    {
+        public ApplicationUser User { get; set; }
+        public Class ActiveClass { get; set; }
+        public Family ActiveFamily { get; set; }
     }
 }

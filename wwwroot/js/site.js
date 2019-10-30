@@ -713,7 +713,7 @@ function updateCountry() {
 }
 
 function toggleInvoice() {
-    if ($('input[name=invoice]').is(':checked')) {
+    if ($('input[name=Invoice]').is(':checked')) {
         $('#invoice').show();
     } else {
         $('#invoice').hide();

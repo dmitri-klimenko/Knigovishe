@@ -28,6 +28,7 @@ namespace Knigosha.Persistence
         public DbSet<Question> Questions { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentClass> StudentClasses { get; set; }
+        public DbSet<StudentFamily> StudentFamilies { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -138,6 +139,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new BookNoteConfiguration());
             builder.ApplyConfiguration(new BookRatingConfiguration());
             builder.ApplyConfiguration(new StudentClassConfiguration());
+            builder.ApplyConfiguration(new StudentFamilyConfiguration());
             builder.ApplyConfiguration(new ClassConfiguration());
             builder.ApplyConfiguration(new FamilyConfiguration());
             builder.ApplyConfiguration(new ActivationKeyConfiguration());

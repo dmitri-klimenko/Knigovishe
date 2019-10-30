@@ -1,5 +1,5 @@
 ﻿@using Knigosha.Core.Models.Enums
-@model Knigosha.Core.Models.ApplicationUser
+@model Knigosha.ViewComponents.ComponentViewModel
 <div class="invisible-smartphone">
     <table width="100%" class="sc">
         <tr>
@@ -9,9 +9,9 @@
                         <table>
                             <tr>
                                 <td>
-                                    @if (Model.Photo != null)
+                                    @if (Model.User.Photo != null)
                                     {
-                                        <div class="avatar" style="width: 130px; height: 130px; background-image: url(/uploads/@Model.Photo);"></div>
+                                        <div class="avatar" style="width: 130px; height: 130px; background-image: url(/uploads/@Model.User.Photo);"></div>
                                     }
                                     else
                                     {
@@ -21,13 +21,13 @@
                                 <td style="padding-left: 50px;">
                                     Привет, @User.Identity.Name
                                     <div class="visible-mobile" style="height: 30px;"></div>
-                                    @if (Model.UserType == UserTypes.Student)
+                                    @if (Model.User.UserType == UserTypes.Student)
                                     {
                                         <div style="height: 20px;"></div>
                                         <table class="sc mc">
                                             <tr>
                                                 <td style="font-weight: bold; font-size: 50px;" class="yellow">
-                                                    @Model.PercentageOfRightResponses%
+                                                    @Model.User.PercentageOfRightResponses%
                                                 </td>
                                                 <td style="padding-left: 10px; font-size: 18px;">
                                                     <div class="visible-mobile" style="height: 10px;"></div>
@@ -36,7 +36,7 @@
                                                     <div class="visible-mobile" style="height: 30px;"></div>
                                                 </td>
                                                 <td style="font-weight: bold; font-size: 50px; padding-left: 40px;" class="yellow">
-                                                    @Model.Answers.Count
+                                                    @Model.User.Answers.Count
                                                 </td>
                                                 <td style="padding-left: 10px; font-size: 18px;">
                                                     <div class="visible-mobile" style="height: 10px;"></div>
@@ -45,14 +45,19 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        @if (Model.Student.StudentClasses.SingleOrDefault(sc => sc.IsActive) != null)
+                                        @if (Model.ActiveFamily != null)
                                         {
                                             <div style="padding-top: 20px; font-size: 20px; line-height: 24px;">
-                                                Группа: @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.NameOfGroup
-                                                @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.Grade @Model.Student.StudentClasses.Single(sc => sc.IsActive).Class.FullName
+                                                Группа: @Model.ActiveFamily.Grade @Model.ActiveFamily.FullName<br />
                                             </div>
                                         }
-
+                                        else if (Model.ActiveClass != null)
+                                        {
+                                            <div style="padding-top: 20px; font-size: 20px; line-height: 24px;">
+                                                Группа: @Html.DisplayFor(m => m.ActiveClass.Grade) класс от @Model.ActiveClass.FullName<br />
+                                                Имя группы: "@Model.ActiveClass.NameOfGroup"
+                                            </div>
+                                        }
                                     }
                                 </td>
                             </tr>
@@ -64,7 +69,7 @@
             <td valign="bottom" align="right">
                 <div style="display: inline-block; text-align: center; position: relative;">
                     <div style="position: absolute; width: 100%; top: 60px; font-weight: bold; font-size: 16px;">
-                        <span style="font-size: 16px;">уровень @((int)Model.Level)<br>@Html.DisplayFor(u => Model.Level)</span>
+                        <span style="font-size: 16px;">уровень @((int)Model.User.Level)<br>@Html.DisplayFor(u => Model.User.Level)</span>
                     </div>
                     <img src="/skin/mascot_header.png">
                 </div>

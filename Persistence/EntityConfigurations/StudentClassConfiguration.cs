@@ -13,7 +13,7 @@ namespace Knigosha.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<StudentClass> builder)
         {
             builder.ToTable("StudentClass");
-            builder.HasKey(sc => new { sc.ClassId, sc.StudentId});
+            builder.HasKey(sc =>sc.Id);
             builder
                 .HasOne(sc => sc.Student)
                 .WithMany(s => s.StudentClasses)
@@ -22,7 +22,7 @@ namespace Knigosha.Persistence.EntityConfigurations
 
 
             builder.HasOne(sc => sc.Class)
-                .WithMany(sc => sc.StudentClasses)
+                .WithMany(s => s.StudentClasses)
                 .HasForeignKey(sc => sc.ClassId)
                 .OnDelete(DeleteBehavior.Restrict);
 

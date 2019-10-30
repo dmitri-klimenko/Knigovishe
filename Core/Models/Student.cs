@@ -10,12 +10,13 @@ namespace Knigosha.Core.Models
     public class Student : ApplicationUser
     {
         public IList<StudentClass> StudentClasses { get; set; }
-        public Family Family { get; set; }
-        public string FamilyId { get; set; }
+        public IList<StudentFamily> StudentFamilies { get; set; }
+ 
 
         public Student()
         {
             StudentClasses = new List<StudentClass>();
+            StudentFamilies = new List<StudentFamily>();
         }
 
         public string ParentEmail { get; set; }
@@ -27,9 +28,9 @@ namespace Knigosha.Core.Models
         {
             get
             {
-                var student = this;
-                var studentsInOrder = Family.Students.OrderBy(s => s.Points);
-                var number = studentsInOrder.IndexOf(student) + 1;
+                var activeFamily = StudentFamilies.Single(sc => sc.IsActive).Family;
+                var studentsInOrder = activeFamily.StudentFamilies.OrderBy(cs => cs.Student.Points);
+                var number = studentsInOrder.IndexOf(StudentFamilies.Single(sc => sc.StudentId == Id)) + 1;
                 return number > 0 ? number : 0;
             }
         }
@@ -49,9 +50,9 @@ namespace Knigosha.Core.Models
         {
             get
             {
-                var student = this;
-                var studentsInOrder = Family.Students.OrderBy(s => s.NumberOfAnswers);
-                var number = studentsInOrder.IndexOf(student) + 1;
+                var activeFamily = StudentFamilies.Single(sc => sc.IsActive).Family;
+                var studentsInOrder = activeFamily.StudentFamilies.OrderBy(cs => cs.Student.NumberOfAnswers);
+                var number = studentsInOrder.IndexOf(StudentFamilies.Single(sc => sc.StudentId == Id)) + 1;
                 return number > 0 ? number : 0;
             }
         }
@@ -71,9 +72,9 @@ namespace Knigosha.Core.Models
         {
             get
             {
-                var student = this;
-                var studentsInOrder = Family.Students.OrderBy(s => s.PercentageOfRightResponses);
-                var number = studentsInOrder.IndexOf(student) + 1;
+                var activeFamily = StudentFamilies.Single(sc => sc.IsActive).Family;
+                var studentsInOrder = activeFamily.StudentFamilies.OrderBy(cs => cs.Student.NumberOfAnswers);
+                var number = studentsInOrder.IndexOf(StudentFamilies.Single(sc => sc.StudentId == Id)) + 1;
                 return number > 0 ? number : 0;
             }
         }

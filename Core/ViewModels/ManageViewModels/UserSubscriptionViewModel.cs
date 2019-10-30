@@ -10,10 +10,18 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
 {
     public class UserSubscriptionViewModel
     {
-        public Subscription  Subscription { get; set; }
+        public int Id  { get; set; }
 
-        public bool BankTransfer { get; set; }
+        public int SubscriptionId   { get; set; }
 
+        public Subscription Subscription { get; set; }
+
+        [Required(ErrorMessage = "Пожалуйста, выберите способ платежа")]
+        public int PayMethod { get; set; }
+
+        public bool Invoice { get; set; }
+
+        [Required]
         [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string Email { get; set; }
 

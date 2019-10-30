@@ -57,6 +57,8 @@
     <Compile Remove="Persistence\Migrations\20191024202534_SEtDefaultValueToNameOFGroupProperty.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191025065323_CheckingEverthing.cs" />
     <Compile Remove="Persistence\Migrations\20191025065323_CheckingEverthing.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191029021714_AddStudentFamilyModelAndTable.cs" />
+    <Compile Remove="Persistence\Migrations\20191029021714_AddStudentFamilyModelAndTable.Designer.cs" />
   </ItemGroup>
 
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Knigosha.Core.Models
@@ -18,6 +19,10 @@ namespace Knigosha.Core.Models
         public Subscription Subscription { get; set; }
 
         public int SubscriptionId { get; set; }
+
+        public bool Myself { get; set; }
+
+        public bool Invoice  { get; set; }
 
         public string Email { get; set; }
 
@@ -41,6 +46,7 @@ namespace Knigosha.Core.Models
 
         public PaymentType? PaymentType { get; set; }
 
+        // delete?
         public string Note { get; set; }
 
         public StatusTypes? Status { get; set; }
@@ -59,14 +65,16 @@ namespace Knigosha.Core.Models
 
         public List<ActivationKey> ActivationKeys { get; set; }
 
-        public UserSubscription() { }
+        private UserSubscription() { }
 
         public UserSubscription(ApplicationUser user, Subscription subscription)
         {
             ActivationKeys = new List<ActivationKey>();
             User = user ?? throw new ArgumentNullException(nameof(User));
             Subscription = subscription ?? throw new ArgumentNullException(nameof(Subscription));
-            
+            OrderedOn = DateTime.Now.ToString("dd.MM.yyyy");
+
+
         }
     }
 }

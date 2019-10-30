@@ -16,8 +16,6 @@ namespace Knigosha.Core.Models
         public string Body { get; set; }
         public ApplicationUser Recipient { get; set; }
         public string RecipientId { get; set; }
-        public string RecipientName => Recipient.Name + " " + Recipient.Surname + " " + "[" + Recipient.UserName + "]";
-        public string SenderName => Sender.Name + " " + Sender.Surname + " " + "[" + Sender.UserName + "]";
 
         public Message()
         {

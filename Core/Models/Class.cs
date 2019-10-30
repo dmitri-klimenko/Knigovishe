@@ -26,7 +26,7 @@ namespace Knigosha.Core.Models
 
         public int PositionInAgeGroupAccordingToTotalPoints
         {
-            
+
             get
             {
                 var schoolClass = this;

@@ -12,15 +12,15 @@ namespace Knigosha.Core.Models
     {
         public bool ShowAchievements { get; set; }
         //calculated properties
-        public int TotalPoints => Students.Sum(s => s.Points);
+        public int TotalPoints => StudentFamilies.Sum(s => s.Student.Points);
 
-        public int TotalNumberOfAnswers => Students.Sum(s => s.Answers.Count);
+        public int TotalNumberOfAnswers => StudentFamilies.Sum(s => s.Student.Answers.Count);
 
         public int TotalPercentageOfRightResponses
         {
             get
             {
-                var totalPercentage = Students.Sum(s => s.PercentageOfRightResponses);
+                var totalPercentage = StudentFamilies.Sum(s => s.Student.PercentageOfRightResponses);
                 return NumberOfStudentsInFamily != 0? totalPercentage / NumberOfStudentsInFamily : 0; 
             }
         }
@@ -126,15 +126,15 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public int NumberOfStudentsInFamily => Students.Count;
+        public int NumberOfStudentsInFamily => StudentFamilies.Count;
 
-        public IList<Student> Students { get; set; }
+        public IList<StudentFamily> StudentFamilies { get; set; }
 
         public AllFamiliesGroup AllFamiliesGroup { get; set; }
         
         public Family()   
         {
-            Students = new List<Student>();
+            StudentFamilies = new List<StudentFamily>();
         }
     }
 }

@@ -24,6 +24,10 @@ namespace Knigosha.Persistence
         DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
         DbSet<AllClassesGroup> AllClassesGroup { get; set; }
         DbSet<Request> Requests { get; set; }
+        DbSet<Message> Messages { get; set; }
+        DbSet<StudentClass> StudentClasses { get; set; }
+        DbSet<StudentFamily> StudentFamilies { get; set; }
+
 
     }
 }

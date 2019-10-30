@@ -6,7 +6,7 @@
 
 
 <td colspan="2" valign="top" style="border-top: 1px solid #ffdb60; padding-top: 50px; padding-left: 50px;">
-    <h2 style="margin-top: 0px;">Заказ абонемента</h2>
+    <h2 style="margin-top: 0;">Заказ абонемента</h2>
     <div style="height: 10px;"></div>
     <div>
         Тип абонемента: <span style="font-weight: bold">@Html.DisplayFor((m => m.Subscription.SubscriptionType))</span><br>
@@ -28,18 +28,26 @@
 
     <form asp-controller="Manage" asp-action="Order" name="form" method="post">
 
+  
         <span style="font-weight: bold">Способ платежа</span>:<br>
         <div style="height: 10px;"></div>
+        
+        <input asp-for="Id" type="hidden" value="@Model.Id">
+        <input asp-for="SubscriptionId" type="hidden">
 
-        <div><input type="radio" asp-for="BankTransfer" value="true"> <span class="cb">Банковский перевод</span></div>
+  
+
+
+        <div><input type="radio" asp-for="PayMethod" value="1"> <span class="cb">Банковский перевод</span></div>
         <div style="height: 5px;"></div>
-        <div><input type="radio" asp-for="BankTransfer" value="false"> <span class="cb">Кредитная карточка</span></div>
+        <div><input type="radio" asp-for="PayMethod" value="2"> <span class="cb">Кредитная карточка</span></div>
         <div style="height: 5px;"></div>
+        <span asp-validation-for="PayMethod" style="color: #D3502D"></span>
         <div style="height: 20px;"></div>
 
 
         <div>
-            <input type="checkbox" name="invoice" onclick="toggleInvoice()">
+            <input type="checkbox" asp-for="Invoice" onclick="toggleInvoice()">
             <span class="cb">
                 Я хочу получить счёт
             </span>
@@ -105,7 +113,7 @@
 
         <input asp-for="Email" type="text" style="width: 340px;">
         <input type="submit" class="button" value="ЗАКАЗАТЬ"><br/>
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <span asp-validation-for="Email" style="color: #D3502D"></span>
         <div style="height: 10px;"></div>
         <span style="font-weight: bold">
             Вы получите инструкции и код для активации Вашей платной подписки на Ваш электронный адрес.<br>
