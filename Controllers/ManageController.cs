@@ -641,7 +641,9 @@ namespace Knigosha.Controllers
                     CityInput = user.City,
                     SubscriptionId = subscription.Id,
                     Subscription = subscription,
-                    Email = user.Email
+                    Email = user.Email,
+                    Myself = myself == 1
+                    
                 };
                 return View(newUserSubscriptionVm); 
             }
@@ -662,6 +664,7 @@ namespace Knigosha.Controllers
                     MainCityRussia = userSubscription.City,
                     CityInput = userSubscription.City,
                     SubscriptionId = subscription.Id,
+                    Myself = userSubscription.Myself,
                     Subscription = subscription,
                     Email = userSubscription.User.Email,
                     Uid = userSubscription.Uid,
@@ -701,13 +704,12 @@ namespace Knigosha.Controllers
             return View("PreOrder", vM);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Order(UserSubscriptionViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
             var subscription = await _context.Subscriptions.SingleAsync(s => s.Id == model.SubscriptionId);
+            model.Subscription = subscription;
             if (ModelState.IsValid)
             {
                 if (model.Id != 0) 
@@ -715,6 +717,7 @@ namespace Knigosha.Controllers
                     var userSubscription = await _context.UserSubscriptions.SingleAsync(us => us.Id == model.Id);
                     userSubscription.Email = model.Email;
                     userSubscription.Invoice = model.Invoice;
+                    userSubscription.Myself = model.Myself;
                     userSubscription.PaymentType =
                         model.PayMethod == 1 ? PaymentType.BankTransfer : PaymentType.CreditCard;
                     if (model.Invoice)
@@ -739,9 +742,11 @@ namespace Knigosha.Controllers
                     var newUserSubscription = new UserSubscription(user, subscription)
                     {
                         Status = StatusTypes.Waiting,
+                        OrderedOn = DateTime.Today.ToString("dd.MM.YYYY"),
                         Email = model.Email,
                         PaymentType = model.PayMethod == 1 ? PaymentType.BankTransfer : PaymentType.CreditCard,
-                        Invoice = model.Invoice
+                        Invoice = model.Invoice,
+                        Myself = model.Myself
                     };
                     if (model.Invoice)
                     {
@@ -753,14 +758,10 @@ namespace Knigosha.Controllers
                         newUserSubscription.Country = model.Country;
                         newUserSubscription.City = !string.IsNullOrWhiteSpace(model.CityInput) ? model.CityInput : model.MainCityRussia;
                     }
-                    CreateActivationKeys(newUserSubscription);
-
+                    new UserSubscriptionController(_context).CreateActivationKeys(newUserSubscription);
                     user.UserSubscriptions.Add(newUserSubscription);
                     _context.UserSubscriptions.Add(newUserSubscription);
-
-
                     await _context.SaveChangesAsync();
-
                     //for credit card
                     //if (newUserSubscription.PaymentType == PaymentType.CreditCard) return Redirect(""); 
                     return RedirectToAction("Order", new { license_id = newUserSubscription.Id, id = model.SubscriptionId });
@@ -769,73 +770,50 @@ namespace Knigosha.Controllers
             return View(model);
         }
 
-        public void CreateActivationKeys(UserSubscription userSubscription)
-        {
-            switch (userSubscription.Subscription.SubscriptionType)
-            {
-                case SubscriptionTypes.Student:
-                    var studentActivationKey = new ActivationKey();
-                    userSubscription.ActivationKeys.Add(studentActivationKey);
-                    _context.ActivationKeys.Add(studentActivationKey); // needed?
-                    break;
-                case SubscriptionTypes.Family:
-                    var familyActivationKey = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Family };
-                    userSubscription.ActivationKeys.Add(familyActivationKey);
-                    for (var i = 1; i <= 5; i++)
-                    {
-                        var studentActivationKeyInFamily = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Student };
-                        userSubscription.ActivationKeys.Add(studentActivationKeyInFamily);
-                        _context.ActivationKeys.Add(studentActivationKeyInFamily); // needed?
-                    }
-                    break;
-                case SubscriptionTypes.Class:
-                    var classActivationKey = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Class };
-                    userSubscription.ActivationKeys.Add(classActivationKey);
-                    for (var i = 1; i <= 31; i++)
-                    {
-                        var studentActivationKeyInClass = new ActivationKey() { ActivationKeyType = ActivationKeyTypes.Student };
-                        userSubscription.ActivationKeys.Add(studentActivationKeyInClass);
-                        _context.ActivationKeys.Add(studentActivationKeyInClass); // needed?
-                    }
-                    break;
-            }
-        }
-
-        [HttpGet]
+       [HttpGet]
         public async Task<IActionResult> Licenses()
         {
             var user = await _userManager.GetUserAsync(User);
-            var allUserSubscriptions = _context.UserSubscriptions
+            var paidUserSubscriptions = _context.UserSubscriptions
                 .Include(us => us.Subscription)
                 .Include(us => us.ActivationKeys)
-                .Where(us => us.UserId == user.Id).ToList();
-            var paid = allUserSubscriptions.Where(us =>
-                us.Subscription.SubscriptionType != SubscriptionTypes.FreeClass ||
-                us.Subscription.SubscriptionType != SubscriptionTypes.FreeFamily ||
-                us.Subscription.SubscriptionType != SubscriptionTypes.FreeClass).ToList();
-            Enum userType = null;
-            switch (user.UserType)
-            {
-                case UserTypes.Student:
-                    userType = ActivationKeyTypes.Student;
-                    break;
-                case UserTypes.Parent:
-                    userType = ActivationKeyTypes.Family;
-                    break;
-                case UserTypes.Teacher:
-                    userType = ActivationKeyTypes.Class;
-                    break;
-            }
-            ViewBag.UserType = userType;
-            return View(paid);
+                .Where(us => us.UserId == user.Id && 
+                             (us.Subscription.SubscriptionType == SubscriptionTypes.Class || 
+                              us.Subscription.SubscriptionType == SubscriptionTypes.Family ||
+                              us.Subscription.SubscriptionType == SubscriptionTypes.Student)).ToList();
+            return View(paidUserSubscriptions);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> License()
-        //{
+        [HttpGet]
+        public async Task<IActionResult> License()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var myUserSubscription = await _context.UserSubscriptions
+                .Include(us => us.ActivationKeys)
+                .Include(us => us.Subscription)
+                .SingleAsync(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
+            var licenseVm = new LicenseViewModel()
+            {
+                MyUserSubscription = myUserSubscription,
+                User = user,
+            };
+            return View(licenseVm);
+        }
 
-        //    return View();
-        //}
+
+        [HttpPost]
+        public async Task<IActionResult> License(LicenseViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            
+
+
+            return View(model);
+        }
+
+
+
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

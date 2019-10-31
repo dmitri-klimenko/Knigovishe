@@ -69,7 +69,18 @@
             <td valign="bottom" align="right">
                 <div style="display: inline-block; text-align: center; position: relative;">
                     <div style="position: absolute; width: 100%; top: 60px; font-weight: bold; font-size: 16px;">
-                        <span style="font-size: 16px;">уровень @((int)Model.User.Level)<br>@Html.DisplayFor(u => Model.User.Level)</span>
+                        @if (Model.User.UserType == UserTypes.Student)
+                        {
+                            <span style="font-size: 16px;">уровень @((int)Model.User.Level)<br>@Html.DisplayFor(u => Model.User.Level)</span>
+                        }
+                        else if (Model.User.UserType == UserTypes.Teacher)
+                        {
+                            <span style="font-size: 16px;">Мой класс<br>это супер!</span>
+                        }
+                        else if (Model.User.UserType == UserTypes.Parent)
+                        {
+                            <span style="font-size: 16px;">Моя семья<br>это супер!</span>
+                        }
                     </div>
                     <img src="/skin/mascot_header.png">
                 </div>

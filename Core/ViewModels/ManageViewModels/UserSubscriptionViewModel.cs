@@ -19,6 +19,8 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         [Required(ErrorMessage = "Пожалуйста, выберите способ платежа")]
         public int PayMethod { get; set; }
 
+        public bool Myself { get; set; }
+
         public bool Invoice { get; set; }
 
         [Required]

@@ -61,22 +61,19 @@
                     Страна:
                 </dt>
                 <dd class="col-sm-8">
-                    @ViewData["Country"]
+                   @Html.DisplayFor(m => m.Country)
                 </dd>
                 <dt class="col-sm-4">
                     Город:
                 </dt>
                 <dd class="col-sm-8">
-                    @ViewData["City"]
+                    @Html.DisplayFor(m => m.City)
                 </dd>
                 <dt class="col-sm-4">
                     Школа
                 </dt>
                 <dd class="col-sm-8">
-                    @if (Model.School != "Выберите город")
-                    {
-                        @ViewData["School"]
-                    }
+                    @Html.DisplayFor(m => m.School)
                 </dd>
                 <dt class="col-sm-4">
                     Параллель

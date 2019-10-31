@@ -20,7 +20,7 @@
         }
         Ученических профилей: <span style="font-weight: bold">@Model.Subscription.NumberOfStudentProfiles</span><br>
         Действителен до: <span style="font-weight: bold">@Model.Subscription.ValidUntil</span><br>
-        Количество викторин:: <span style="font-weight: bold">@Model.Subscription.MaxQuizzes</span><br>
+        Количество викторин: <span style="font-weight: bold">@Model.Subscription.MaxQuizzes</span><br>
         Цена: <span style="font-weight: bold">@Model.Subscription.CurrentPrice</span><br>
     </div>
 
@@ -34,6 +34,7 @@
         
         <input asp-for="Id" type="hidden" value="@Model.Id">
         <input asp-for="SubscriptionId" type="hidden">
+        <input asp-for="Myself" value="@Model.Myself" type="hidden">
 
   
 

@@ -1,0 +1,72 @@
+﻿@model Knigosha.Core.Models.UserSubscription
+
+@{
+    ViewData["Title"] = "Удалить подписку";
+}
+<div class="container">
+    <partial name="_DashboardPartial" />
+    <div>
+        <div class="header">
+            <h4>Вы уверены, что хотите удалить эту подписку?</h4>
+            <a asp-action="Index" class="btn btn btn-light ">Назад к подпискам</a>
+        </div>
+        <div>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">
+                    Тип абонемента:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Subscription.SubscriptionType)
+                </dd>
+                <dt class="col-sm-4">
+                    Действителен до:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Subscription.ValidUntil)
+                </dd>
+                <dt class="col-sm-4">
+                    Заказан:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.OrderedOn)
+                </dd>
+                <dt class="col-sm-4">
+                    Статус:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Status) 
+                </dd>
+                <dt class="col-sm-4">
+                    Активирован:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.ActivatedOn)
+                </dd>
+                <dt class="col-sm-4">
+                    Тип оплаты:
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.PaymentType)
+                </dd>
+                <dt class="col-sm-4">
+                    Заметка пользователя:
+                </dt>
+                <dd class="break-word col-sm-8">
+                    @Html.DisplayFor(model => model.Note)
+                </dd>
+                <dt class="col-sm-4">
+                    Учебный год:
+                </dt>
+                <dd class="break-word col-sm-8">
+                    @Html.DisplayFor(model => model.SchoolYear)
+                </dd>
+            </dl>
+        </div>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+        </form>
+    </div>
+</div>
+

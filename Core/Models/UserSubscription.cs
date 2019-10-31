@@ -72,9 +72,6 @@ namespace Knigosha.Core.Models
             ActivationKeys = new List<ActivationKey>();
             User = user ?? throw new ArgumentNullException(nameof(User));
             Subscription = subscription ?? throw new ArgumentNullException(nameof(Subscription));
-            OrderedOn = DateTime.Now.ToString("dd.MM.yyyy");
-
-
         }
     }
 }

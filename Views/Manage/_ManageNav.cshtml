@@ -1,9 +1,0 @@
-﻿@using Knigosha.Core.Models
-@using Knigosha.Core.Models.Enums
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<ApplicationUser> UserManager
-@{
-    ApplicationUser user = await UserManager.GetUserAsync(User);
-}
-
-

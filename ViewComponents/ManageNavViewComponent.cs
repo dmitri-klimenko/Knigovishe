@@ -26,30 +26,51 @@ namespace Knigosha.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var user = await _userManager.GetUserAsync(UserClaimsPrincipal);
-
-            if (user.UserType == UserTypes.Student)
+            switch (user.UserType)
             {
-                var student = await _context.Students
-                    .Include(s => s.MarkedBooks)
-                    .Include(s => s.StudentClasses)
-                    .Include(s => s.StudentFamilies)
-                    .SingleAsync(s => s.Id == user.Id);
-
-                var hasActiveClass = student.StudentClasses.Any(sc => sc.IsActive);
-                var hasActiveFamily = student.StudentFamilies.Any(sc => sc.IsActive);
-
-                var componentVm = new ManageNavViewModel()
+                case UserTypes.Student:
                 {
-                    User = user,
-                    HasActiveClass = hasActiveClass,
-                    HasActiveFamily = hasActiveFamily
+                    var student = await _context.Students
+                        .Include(s => s.MarkedBooks)
+                        .Include(s => s.StudentClasses)
+                        .Include(s => s.StudentFamilies)
+                        .SingleAsync(s => s.Id == user.Id);
+                    var hasActiveClass = student.StudentClasses.Any(sc => sc.IsActive);
+                    var hasActiveFamily = student.StudentFamilies.Any(sc => sc.IsActive);
+                    var componentVm = new ManageNavViewModel()
+                    {
+                        User = user,
+                        HasActiveClass = hasActiveClass,
+                        HasActiveFamily = hasActiveFamily
+                    };
+                    return View(componentVm);
+                }
+                case UserTypes.Parent:
+                {
+                    var parent = await _context.Families
+                        .Include(s => s.MarkedBooks)
+                        .SingleAsync(s => s.Id == user.Id);
 
-                };
+                    var componentVm2 = new ManageNavViewModel()
+                    {
+                        User = parent,
+                    };
+                    return View(componentVm2);
+                }
+                case UserTypes.Teacher:
+                {
+                    var teacher = await _context.Classes
+                        .Include(s => s.MarkedBooks)
+                        .SingleAsync(s => s.Id == user.Id);
 
-                return View(componentVm);
+                    var componentVm3 = new ManageNavViewModel()
+                    {
+                        User = teacher,
+                    };
+                    return View(componentVm3);
+                }
             }
             return View();
-
         }
     }
 

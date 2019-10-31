@@ -38,11 +38,22 @@
                     <td align="center">
                         @if (Model[i].Status == StatusTypes.Paid)
                         {
-                            @Model[i].ActivationKeys.Single(ak => ak.ActivationKeyType == ViewBag.UserType)
+                            switch (Model[i].Subscription.SubscriptionType)
+                            {
+                                case SubscriptionTypes.Student:
+                                    @Model[i].ActivationKeys.Single(ak => ak.ActivationKeyType == ActivationKeyTypes.Student).Code
+                                    break;
+                                case SubscriptionTypes.Family:
+                                    @Model[i].ActivationKeys.Single(ak => ak.ActivationKeyType == ActivationKeyTypes.Family).Code
+                                    break;
+                                case SubscriptionTypes.Class:
+                                    @Model[i].ActivationKeys.Single(ak => ak.ActivationKeyType == ActivationKeyTypes.Class).Code
+                                    break;
+                            }
                         }
                     </td>
                 </tr>
-                @if (Model[i].PaymentType == PaymentType.BankTransfer)
+                @if (Model[i].PaymentType == PaymentType.BankTransfer && Model[i].Status == StatusTypes.Waiting)
                 {
                     <tr>
                         <td colspan="4"></td>
