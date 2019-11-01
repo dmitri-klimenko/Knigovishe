@@ -11,5 +11,7 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         public string Code { get; set; }
         public UserSubscription MyUserSubscription { get; set; }
         public ApplicationUser User { get; set; }
+        public bool Activated { get; set; }
+        public bool  Joined { get; set; }
     }
 }

@@ -8,7 +8,14 @@
     <a href="" name="s" style="position:relative;top:-100px;"></a>
 					
     <div style="padding:50px;line-height:24px;">
-
+        @if (Model.Activated)
+        {
+            <span style="color: green">Абонемент успешно активирован!</span>
+        }
+        @if (Model.Joined)
+        {
+            <span style="color: green">Профиль успешно присоединён к групп</span><span style="font-weight: bold">СЕМЬЯ!</span>
+        }
         @if (Model.User.UserType == UserTypes.Student)
         {
             <span>Ключ абонамента: </span><span style="font-weight: bold">@Model.MyUserSubscription.ActivationKeys.Last().Code</span>
@@ -30,6 +37,9 @@
                         <input asp-for="Code">
                     </td>
                     <td><input type="submit" class="button" value="Активировать"></td>
+                </tr>
+                <tr>
+                    <td><span asp-validation-for="Code" class="text-danger"></span></td>
                 </tr>
             </table>
         </form>

@@ -18,6 +18,8 @@ namespace Knigosha.Core.Models
 
         public Subscription Subscription { get; set; }
 
+    
+
         public int SubscriptionId { get; set; }
 
         public bool Myself { get; set; }
@@ -45,9 +47,6 @@ namespace Knigosha.Core.Models
         public string ActivatedOn { get; set; }
 
         public PaymentType? PaymentType { get; set; }
-
-        // delete?
-        public string Note { get; set; }
 
         public StatusTypes? Status { get; set; }
 

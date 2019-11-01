@@ -11,8 +11,8 @@ namespace Knigosha.Core.Models.Enums
 
         [Display(Name = "Ожидание платежа")] Waiting,
         [Display(Name = "Абонемент оплачен")] Paid,
-        [Display(Name ="Абонемент активирован")] Activated,
-        [Display(Name = "Абонемент истёк")] Expired
+        [Display(Name ="Абонемент активирован")] Activated
+  
     }
 
     //public static class temp

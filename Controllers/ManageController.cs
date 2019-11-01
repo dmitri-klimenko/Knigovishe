@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Knigosha.Controllers
@@ -519,7 +520,7 @@ namespace Knigosha.Controllers
                 {
                     // add Student to Class
                     var thisStudent = await _context.Students.SingleAsync(s => s.Id == id);
-                    var hasActiveStudentClass = _context.StudentClasses.Any(sc => sc.StudentId == id && sc.IsActive) ||
+                    var hasActiveGroup = _context.StudentClasses.Any(sc => sc.StudentId == id && sc.IsActive) ||
                         _context.StudentFamilies.Any(sf => sf.StudentId == id && sf.IsActive);
                     var myClass = await _context.Classes.SingleAsync(c => c.Id == user.Id);
                     var newStudentClass = new StudentClass()
@@ -528,13 +529,15 @@ namespace Knigosha.Controllers
                         StudentId = thisStudent.Id,
                         Class = myClass,
                         ClassId = myClass.Id,
-                        IsActive = !hasActiveStudentClass
+                        IsActive = !hasActiveGroup
                     };
                     myClass.StudentClasses.Add(newStudentClass);
                     // remove first key from list
-                    var userSubscription = _context.UserSubscriptions
+                    var userSubscription = _context.UserSubscriptions.Include(us => us.ActivationKeys)
                         .SingleOrDefault(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
-                    userSubscription?.ActivationKeys.RemoveAt(0);
+                    var key = userSubscription?.ActivationKeys.Find(ak =>
+                        ak.ActivationKeyType != ActivationKeyTypes.Class);
+                    if(key != null)_context.ActivationKeys.Remove(key);
                     // remove request
                     var requestToDelete = await _context.Requests
                         .SingleAsync(r => r.StudentId == id && r.ClassId == user.Id);
@@ -742,7 +745,7 @@ namespace Knigosha.Controllers
                     var newUserSubscription = new UserSubscription(user, subscription)
                     {
                         Status = StatusTypes.Waiting,
-                        OrderedOn = DateTime.Today.ToString("dd.MM.YYYY"),
+                        OrderedOn = DateTime.Today.ToString("dd.MM.yyyy"),
                         Email = model.Email,
                         PaymentType = model.PayMethod == 1 ? PaymentType.BankTransfer : PaymentType.CreditCard,
                         Invoice = model.Invoice,
@@ -788,10 +791,10 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> License()
         {
             var user = await _userManager.GetUserAsync(User);
-            var myUserSubscription = await _context.UserSubscriptions
+            var myUserSubscription =  _context.UserSubscriptions
                 .Include(us => us.ActivationKeys)
                 .Include(us => us.Subscription)
-                .SingleAsync(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
+                .Last(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
             var licenseVm = new LicenseViewModel()
             {
                 MyUserSubscription = myUserSubscription,
@@ -800,21 +803,78 @@ namespace Knigosha.Controllers
             return View(licenseVm);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> License(LicenseViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
-            
+            model.User = user;
+            var currentUserSubscription = _context.UserSubscriptions
+                .Include(us => us.ActivationKeys)
+                .Include(us => us.Subscription)
+                .Last(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
 
+            var aKey = await _context.ActivationKeys
+                .Include(ak => ak.UserSubscription)
+                .SingleOrDefaultAsync(ak => ak.Code == model.Code);
 
+            if (aKey == null)
+            {
+                ModelState.AddModelError("Code", "Неверный код абонемента !");
+            }
+            else
+            {
+                var usId = aKey.UserSubscriptionId;
+                var foundUserSubscription = _context.UserSubscriptions
+                    .Include(us => us.Subscription)
+                    .Include(us => us.ActivationKeys)
+                    .Include(us => us.User)
+                    .Single(us => us.Id == usId);
+
+                if (foundUserSubscription.UserId == user.Id)
+                {
+                    foundUserSubscription.Status = StatusTypes.Activated;
+                    foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                    _context.UserSubscriptions.UpdateRange(foundUserSubscription, currentUserSubscription);
+                    await _context.SaveChangesAsync();
+                    model.Activated = true;
+                    model.MyUserSubscription = foundUserSubscription;
+                    return View(model);
+                }
+
+                if (user.UserType == UserTypes.Student && foundUserSubscription.User.UserType == UserTypes.Parent)
+                {
+                    var newStudentFamily = new StudentFamily
+                    {
+                        StudentId = user.Id,
+                        FamilyId = foundUserSubscription.UserId
+                    };
+                    _context.ActivationKeys.Remove(aKey);
+                    _context.Families.Single(f => f.Id == foundUserSubscription.UserId).StudentFamilies.Add(newStudentFamily);
+                    await _context.SaveChangesAsync();
+                    model.Joined = true;
+                    return View(model);
+                }
+
+                if (foundUserSubscription.User.UserType == user.UserType)
+                {
+                    foundUserSubscription.UserId = user.Id;
+                    foundUserSubscription.User = user;
+                    foundUserSubscription.Status = StatusTypes.Activated;
+                    foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                    _context.UserSubscriptions.Update(foundUserSubscription);
+                    await _context.SaveChangesAsync();
+                    model.Activated = true;
+                    model.MyUserSubscription = foundUserSubscription;
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("Code", "Тип Вашего профиля не подходит!");
+                }
+            }
+            model.MyUserSubscription = currentUserSubscription;
             return View(model);
         }
-
-
-
-
-
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)

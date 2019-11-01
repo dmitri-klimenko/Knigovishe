@@ -12,7 +12,6 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Knigosha.Controllers;
-using Knigosha.Controllers.Api;
 using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.AccountViewModels;
