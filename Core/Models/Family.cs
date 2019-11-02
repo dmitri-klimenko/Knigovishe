@@ -10,7 +10,6 @@ namespace Knigosha.Core.Models
 {
     public class Family : ApplicationUser
     {
-        public bool ShowAchievements { get; set; }
         //calculated properties
         public int TotalPoints => StudentFamilies.Sum(s => s.Student.Points);
 

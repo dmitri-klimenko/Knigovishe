@@ -128,7 +128,7 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var user = await _userManager.GetUserAsync(User);
-            
+
             var paidSubscriptions = user.UserSubscriptions.Where(us =>
                 us.Subscription.SubscriptionType == SubscriptionTypes.Class ||
                 us.Subscription.SubscriptionType == SubscriptionTypes.Family ||
@@ -146,7 +146,7 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Answers(string type)
         {
             var user = await _userManager.GetUserAsync(User);
-            
+
             if (type == "family")
             {
                 ViewBag.HasQueryString = true;
@@ -232,12 +232,12 @@ namespace Knigosha.Controllers
                 switch (user.UserType)
                 {
                     case UserTypes.Student:
-                        hasGroup = _context.StudentClasses.Any(sc => sc.StudentId == user.Id) || 
+                        hasGroup = _context.StudentClasses.Any(sc => sc.StudentId == user.Id) ||
                                    _context.StudentFamilies.Any(sc => sc.StudentId == user.Id);
                         break;
                     case UserTypes.Parent:
                         hasGroup = _context.StudentFamilies.Any(sc => sc.FamilyId == user.Id);
-                      break;
+                        break;
                     case UserTypes.Teacher:
                         hasGroup = _context.StudentClasses.Any(sc => sc.ClassId == user.Id);
                         break;
@@ -274,7 +274,7 @@ namespace Knigosha.Controllers
                             var group1 = _context.StudentClasses.Where(sc => sc.StudentId == user.Id).Select(sc => sc.Class)
                                 .ToList();
                             messageVm.Recipients = group1.Select(c => new SelectListItem()
-                                { Value = c.Id, Text = c.FullName + " [" + c.UserName + "] " }).ToList();
+                            { Value = c.Id, Text = c.FullName + " [" + c.UserName + "] " }).ToList();
                         }
 
                         if (_context.StudentFamilies.Any(sc => sc.StudentId == user.Id))
@@ -282,7 +282,7 @@ namespace Knigosha.Controllers
                             var group2 = _context.StudentFamilies.Where(sf => sf.StudentId == user.Id).Select(sf => sf.Family)
                                 .ToList();
                             var selectList2 = group2.Select(f => new SelectListItem()
-                                { Value = f.Id, Text = f.FullName + " [" + f.UserName + "] " }).ToList();
+                            { Value = f.Id, Text = f.FullName + " [" + f.UserName + "] " }).ToList();
 
                             if (messageVm.Recipients.Count != 0) messageVm.Recipients.AddRange(selectList2);
                             else messageVm.Recipients = selectList2;
@@ -305,7 +305,7 @@ namespace Knigosha.Controllers
                             var group1 = _context.StudentClasses.Where(sc => sc.ClassId == user.Id).Select(sc => sc.Student)
                                 .ToList();
                             messageVm2.Recipients = group1.Select(s => new SelectListItem()
-                                { Value = s.Id, Text = s.FullName + " [" + s.UserName + "] " }).ToList();
+                            { Value = s.Id, Text = s.FullName + " [" + s.UserName + "] " }).ToList();
                         }
                         return View("MessageCreate", messageVm2);
 
@@ -325,11 +325,11 @@ namespace Knigosha.Controllers
                             var group1 = _context.StudentFamilies.Where(sc => sc.FamilyId == user.Id).Select(sc => sc.Student)
                                 .ToList();
                             messageVm3.Recipients = group1.Select(s => new SelectListItem()
-                                { Value = s.Id, Text = s.FullName + " [" + s.UserName + "] " }).ToList();
+                            { Value = s.Id, Text = s.FullName + " [" + s.UserName + "] " }).ToList();
                         }
                         return View("MessageCreate", messageVm3);
                 }
-                
+
             }
 
             if (type == "send" && to != null)
@@ -366,7 +366,7 @@ namespace Knigosha.Controllers
                     };
                     messageVm.Recipients.Add(item);
                     return View("MessageCreate", messageVm);
-                } 
+                }
 
                 var recipientFamily = _context.Families.SingleOrDefault(f => f.Id == to);
                 if (recipientFamily != null)
@@ -379,7 +379,7 @@ namespace Knigosha.Controllers
                     messageVm.Recipients.Add(item2);
                     return View("MessageCreate", messageVm);
                 }
-                   
+
                 return View("MessageCreate", messageVm);
             }
 
@@ -404,7 +404,7 @@ namespace Knigosha.Controllers
                     .Include(m => m.Recipient)
                     .Where(m => m.RecipientId == user.Id)
                     .ToList(),
-                     HasGroup = hasGroup2
+                HasGroup = hasGroup2
             };
             return View("MessagesReceived", messagesVm2);
         }
@@ -412,7 +412,7 @@ namespace Knigosha.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  async Task<IActionResult> Messages(MessageViewModel model)
+        public async Task<IActionResult> Messages(MessageViewModel model)
         {
             var message = new Message()
             {
@@ -449,10 +449,10 @@ namespace Knigosha.Controllers
                 {
                     var studentClass = await _context.StudentClasses
                         .SingleOrDefaultAsync(sc => sc.ClassId == id && sc.StudentId == user.Id);
-                    if(studentClass == null)
+                    if (studentClass == null)
                     {
                         var studentFamily = await _context.StudentFamilies
-                                            .SingleAsync(sc => sc.FamilyId == id && sc.StudentId == user.Id);
+                                            .SingleAsync(sf => sf.FamilyId == id && sf.StudentId == user.Id);
                         _context.StudentFamilies.Remove(studentFamily);
                     }
                     else
@@ -469,7 +469,7 @@ namespace Knigosha.Controllers
                     {
                         studentClass.IsActive = studentClass.ClassId == id;
                     }
-                    var myStudentFamilies = _context.StudentFamilies.Where(sf => sf.FamilyId == id)?.ToList();
+                    var myStudentFamilies = _context.StudentFamilies.Where(sf => sf.StudentId == user.Id)?.ToList();
                     foreach (var studentFamily in myStudentFamilies)
                     {
                         studentFamily.IsActive = false;
@@ -483,8 +483,7 @@ namespace Knigosha.Controllers
                     var myStudentFamilies = _context.StudentFamilies.Where(sc => sc.StudentId == user.Id)?.ToList();
                     foreach (var studentFamily in myStudentFamilies)
                     {
-                        if (studentFamily.FamilyId == id) studentFamily.IsActive = true;
-                        studentFamily.IsActive = false;
+                        studentFamily.IsActive = studentFamily.FamilyId == id;
                     }
                     var myStudentClasses = _context.StudentClasses.Where(sc => sc.StudentId == user.Id)?.ToList();
                     foreach (var studentClass in myStudentClasses)
@@ -514,7 +513,7 @@ namespace Knigosha.Controllers
                 if (myCurrentStudentFamilies.Any()) groupsVm.MyCurrentStudentFamilies = myCurrentStudentFamilies;
                 return View(groupsVm);
             }
-            if(user.UserType == UserTypes.Teacher)
+            if (user.UserType == UserTypes.Teacher)
             {
                 if (type == "accept")
                 {
@@ -525,9 +524,7 @@ namespace Knigosha.Controllers
                     var myClass = await _context.Classes.SingleAsync(c => c.Id == user.Id);
                     var newStudentClass = new StudentClass()
                     {
-                        Student = thisStudent,
                         StudentId = thisStudent.Id,
-                        Class = myClass,
                         ClassId = myClass.Id,
                         IsActive = !hasActiveGroup
                     };
@@ -537,7 +534,7 @@ namespace Knigosha.Controllers
                         .SingleOrDefault(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
                     var key = userSubscription?.ActivationKeys.Find(ak =>
                         ak.ActivationKeyType != ActivationKeyTypes.Class);
-                    if(key != null)_context.ActivationKeys.Remove(key);
+                    if (key != null) _context.ActivationKeys.Remove(key);
                     // remove request
                     var requestToDelete = await _context.Requests
                         .SingleAsync(r => r.StudentId == id && r.ClassId == user.Id);
@@ -568,11 +565,12 @@ namespace Knigosha.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if (!string.IsNullOrEmpty(groupsVm.Search) && _context.Classes.Any()) {
+            if (!string.IsNullOrEmpty(groupsVm.Search) && _context.Classes.Any())
+            {
 
                 var allGroups = _context.Classes
-                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search) || 
-                                c.FullName.Contains(groupsVm.Search) || 
+                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search) ||
+                                c.FullName.Contains(groupsVm.Search) ||
                                 c.School != null && c.School.Contains(groupsVm.Search)).ToList();
                 var currentClasses = _context.StudentClasses
                         .Where(sc => sc.StudentId == user.Id)
@@ -620,7 +618,7 @@ namespace Knigosha.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Order( int? id, int? myself, int? old, int? license_id)
+        public async Task<IActionResult> Order(int? id, int? myself, int? old, int? license_id)
         {
             var user = await _userManager.GetUserAsync(User);
             if (id.HasValue && license_id.HasValue)
@@ -635,9 +633,9 @@ namespace Knigosha.Controllers
                 var newUserSubscriptionVm = new UserSubscriptionViewModel()
                 {
                     Countries = _context.Countries.Select(c => new SelectListItem()
-                        { Value = c.Title, Text = c.Title }).ToList(),
+                    { Value = c.Title, Text = c.Title }).ToList(),
                     MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
-                        { Value = c.Title, Text = c.Title }).ToList(),
+                    { Value = c.Title, Text = c.Title }).ToList(),
                     TelephoneOfInstitution = user.PhoneNumber,
                     Country = user.Country,
                     MainCityRussia = user.City,
@@ -646,22 +644,22 @@ namespace Knigosha.Controllers
                     Subscription = subscription,
                     Email = user.Email,
                     Myself = myself == 1
-                    
+
                 };
-                return View(newUserSubscriptionVm); 
+                return View(newUserSubscriptionVm);
             }
             if (id.HasValue && old.HasValue)
             {
                 var subscription = await _context.Subscriptions.SingleAsync(s => s.Id == id);
-               var userSubscription =  await _context.UserSubscriptions.Include(us => us.User)
-                   .SingleAsync(us => us.Id == old);
-               var editUserSubscriptionVm = new UserSubscriptionViewModel()
+                var userSubscription = await _context.UserSubscriptions.Include(us => us.User)
+                    .SingleAsync(us => us.Id == old);
+                var editUserSubscriptionVm = new UserSubscriptionViewModel()
                 {
                     Id = userSubscription.Id,
                     Countries = _context.Countries.Select(c => new SelectListItem()
-                        { Value = c.Title, Text = c.Title }).ToList(),
+                    { Value = c.Title, Text = c.Title }).ToList(),
                     MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
-                        { Value = c.Title, Text = c.Title }).ToList(),
+                    { Value = c.Title, Text = c.Title }).ToList(),
                     TelephoneOfInstitution = userSubscription.TelephoneOfInstitution,
                     Country = userSubscription.Country,
                     MainCityRussia = userSubscription.City,
@@ -674,7 +672,7 @@ namespace Knigosha.Controllers
                     AddressOfInstitution = userSubscription.AddressOfInstitution,
                     Person = userSubscription.Person,
                     Invoice = userSubscription.Invoice,
-                    PayMethod = userSubscription.PaymentType == PaymentType.BankTransfer? 1 : 2
+                    PayMethod = userSubscription.PaymentType == PaymentType.BankTransfer ? 1 : 2
                 };
                 return View(editUserSubscriptionVm);
             }
@@ -715,7 +713,7 @@ namespace Knigosha.Controllers
             model.Subscription = subscription;
             if (ModelState.IsValid)
             {
-                if (model.Id != 0) 
+                if (model.Id != 0)
                 {
                     var userSubscription = await _context.UserSubscriptions.SingleAsync(us => us.Id == model.Id);
                     userSubscription.Email = model.Email;
@@ -735,7 +733,7 @@ namespace Knigosha.Controllers
                             ? model.CityInput
                             : model.MainCityRussia;
                     }
-                   
+
                     _context.UserSubscriptions.Update(userSubscription);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Licenses");
@@ -773,15 +771,15 @@ namespace Knigosha.Controllers
             return View(model);
         }
 
-       [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> Licenses()
         {
             var user = await _userManager.GetUserAsync(User);
             var paidUserSubscriptions = _context.UserSubscriptions
                 .Include(us => us.Subscription)
                 .Include(us => us.ActivationKeys)
-                .Where(us => us.UserId == user.Id && 
-                             (us.Subscription.SubscriptionType == SubscriptionTypes.Class || 
+                .Where(us => us.UserId == user.Id &&
+                             (us.Subscription.SubscriptionType == SubscriptionTypes.Class ||
                               us.Subscription.SubscriptionType == SubscriptionTypes.Family ||
                               us.Subscription.SubscriptionType == SubscriptionTypes.Student)).ToList();
             return View(paidUserSubscriptions);
@@ -791,7 +789,7 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> License()
         {
             var user = await _userManager.GetUserAsync(User);
-            var myUserSubscription =  _context.UserSubscriptions
+            var myUserSubscription = _context.UserSubscriptions
                 .Include(us => us.ActivationKeys)
                 .Include(us => us.Subscription)
                 .Last(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
@@ -819,7 +817,7 @@ namespace Knigosha.Controllers
 
             if (aKey == null)
             {
-                ModelState.AddModelError("Code", "Неверный код абонемента !");
+                ModelState.AddModelError("Code", "Неверный код абонемента!");
             }
             else
             {
@@ -830,51 +828,134 @@ namespace Knigosha.Controllers
                     .Include(us => us.User)
                     .Single(us => us.Id == usId);
 
-                if (foundUserSubscription.UserId == user.Id)
+                if (foundUserSubscription.UserId == user.Id) // my subscriptions
                 {
-                    foundUserSubscription.Status = StatusTypes.Activated;
-                    foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
-                    _context.UserSubscriptions.UpdateRange(foundUserSubscription, currentUserSubscription);
-                    await _context.SaveChangesAsync();
-                    model.Activated = true;
-                    model.MyUserSubscription = foundUserSubscription;
-                    return View(model);
-                }
-
-                if (user.UserType == UserTypes.Student && foundUserSubscription.User.UserType == UserTypes.Parent)
-                {
-                    var newStudentFamily = new StudentFamily
+                    if (foundUserSubscription.User.UserType == user.UserType)  // of same type
                     {
-                        StudentId = user.Id,
-                        FamilyId = foundUserSubscription.UserId
-                    };
-                    _context.ActivationKeys.Remove(aKey);
-                    _context.Families.Single(f => f.Id == foundUserSubscription.UserId).StudentFamilies.Add(newStudentFamily);
-                    await _context.SaveChangesAsync();
-                    model.Joined = true;
-                    return View(model);
+                        if (foundUserSubscription.Status == StatusTypes.Activated)  //already activated 
+                            ModelState.AddModelError("Code", "Абонемент уже активирован!");
+                        else  //activate
+                        {
+                            foundUserSubscription.Status = StatusTypes.Activated;
+                            foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                            _context.UserSubscriptions.Update(foundUserSubscription);
+                            await _context.SaveChangesAsync();
+                            model.Success = true;
+                            model.MyUserSubscription = foundUserSubscription;
+                            ModelState.AddModelError("Code", "Абонемент успешно активирован!");
+                            return View(model);
+                        }
+                    }
+                    else // was bought by me for somebody else
+                    {
+                        ModelState.AddModelError("Code", "Тип Вашего профиля не совпадает с типом абонемента!");
+                    }
                 }
 
-                if (foundUserSubscription.User.UserType == user.UserType)
+                else // not my subscriptions
                 {
-                    foundUserSubscription.UserId = user.Id;
-                    foundUserSubscription.User = user;
-                    foundUserSubscription.Status = StatusTypes.Activated;
-                    foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
-                    _context.UserSubscriptions.Update(foundUserSubscription);
-                    await _context.SaveChangesAsync();
-                    model.Activated = true;
-                    model.MyUserSubscription = foundUserSubscription;
-                    return View(model);
-                }
-                else
-                {
-                    ModelState.AddModelError("Code", "Тип Вашего профиля не подходит!");
+                    if (foundUserSubscription.User.UserType == user.UserType)  // of same type
+                    {
+                        if (foundUserSubscription.Status == StatusTypes.Activated)
+                            ModelState.AddModelError("Code", "Абонемент уже активирован!"); //  given subscription already activated
+                        else //activate given subscription
+                        {
+                            foundUserSubscription.UserId = user.Id;
+                            foundUserSubscription.Status = StatusTypes.Activated;
+                            foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                            _context.UserSubscriptions.Update(foundUserSubscription);
+                            await _context.SaveChangesAsync();
+                            model.Success = true;
+                            model.MyUserSubscription = foundUserSubscription;
+                            ModelState.AddModelError("Code", "Абонемент успешно активирован!");
+                            return View(model);
+                        }
+                    }  // join family-group
+                    else if (user.UserType == UserTypes.Student && foundUserSubscription.User.UserType == UserTypes.Parent && aKey.ActivationKeyType == ActivationKeyTypes.Student)
+                    {
+                        if (_context.StudentFamilies.Any(sf => sf.StudentId == user.Id && sf.FamilyId == foundUserSubscription.UserId)) // already joined
+                        {
+                            ModelState.AddModelError("Code", "Вы уже присоединены к этой группе!");
+                        }
+                        else  // join
+                        {
+                            var hasActiveGroup = _context.StudentClasses.Any(sc => sc.StudentId == user.Id && sc.IsActive) ||
+                                                 _context.StudentFamilies.Any(sf => sf.StudentId == user.Id && sf.IsActive);
+                            var newStudentFamily = new StudentFamily
+                            {
+                                StudentId = user.Id,
+                                FamilyId = foundUserSubscription.UserId,
+                                IsActive = !hasActiveGroup
+                            };
+                            _context.ActivationKeys.Remove(aKey);
+                            _context.Families.Single(f => f.Id == foundUserSubscription.UserId).StudentFamilies.Add(newStudentFamily);
+                            //_context.StudentFamilies.Add(newStudentFamily); ??
+                            await _context.SaveChangesAsync();
+                            model.Success = true;
+                            model.MyUserSubscription = currentUserSubscription;
+                            ModelState.AddModelError("Code", "Профиль успешно присоединён к группе СЕМЬЯ!");
+                            return View(model);
+                        }
+                    }
+                    else 
+                    {
+                        ModelState.AddModelError("Code", "Тип Вашего профиля не совпадает с типом абонемента!");
+                    }
                 }
             }
             model.MyUserSubscription = currentUserSubscription;
             return View(model);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Details()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            switch (user.UserType)
+            {
+                case UserTypes.Student:
+                    var student = await _context.Students.SingleAsync(s => s.Id == user.Id);
+
+                    var detailsVm = new DetailsViewModel
+                    {
+                        Countries =
+                            _context.Countries.Select(c => new SelectListItem() { Value = c.Title, Text = c.Title }).ToList(),
+                        MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
+                        {
+                            Value = c.Title,
+                            Text = c.Title
+                        }).ToList(),
+
+                        UserType = UserTypes.Student,
+                        Name = student.Name,
+                        Surname = student.Surname,
+                        UserName = student.UserName,
+                        Email = student.Email,
+                        RequiredEmail = student.Email,
+                        ParentEmail = student.ParentEmail,
+                        PhoneNumber = student.PhoneNumber,
+                        CityInput = student.City,
+                        MainCityRussia = student.City,
+                        SchoolInput = student.School,
+                        SchoolSelect = student.School,
+                        Parallel = student.Parallel,
+                        Password = student.Password,
+                        FullName = student.FullName
+                    };
+
+                    return View(detailsVm);
+
+            }
+
+
+            return View();
+        }
+
+
+
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)

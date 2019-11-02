@@ -48,14 +48,15 @@
                                         @if (Model.ActiveFamily != null)
                                         {
                                             <div style="padding-top: 20px; font-size: 20px; line-height: 24px;">
-                                                Группа: @Model.ActiveFamily.Grade @Model.ActiveFamily.FullName<br />
+                                                Группа: @Html.DisplayFor(m => m.ActiveFamily.Grade) класс от @Model.ActiveFamily.FullName<br />
                                             </div>
                                         }
                                         else if (Model.ActiveClass != null)
                                         {
                                             <div style="padding-top: 20px; font-size: 20px; line-height: 24px;">
                                                 Группа: @Html.DisplayFor(m => m.ActiveClass.Grade) класс от @Model.ActiveClass.FullName<br />
-                                                Имя группы: "@Model.ActiveClass.NameOfGroup"
+                                                @if (!string.IsNullOrEmpty(Model.ActiveClass.NameOfGroup))
+                                                {<text>Имя группы: "@Model.ActiveClass.NameOfGroup"</text>}
                                             </div>
                                         }
                                     }

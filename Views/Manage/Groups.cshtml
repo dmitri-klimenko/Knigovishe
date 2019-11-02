@@ -36,43 +36,43 @@
                 <table style="width: 100%;" class="group_table">
                     @for (int i = 0; i < Model.AllGroups.Count; i++)
                     {
-                    <tr>
-                        <td style="padding: 10px; padding-left: 0; width: 100%; border-bottom: 1px solid #ccc;">
-                            @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Country))
-                            {<span style="font-weight: bold">Cтрана:</span> @Model.AllGroups[i].Country<br>}
+                        <tr>
+                            <td style="padding: 10px; padding-left: 0; width: 100%; border-bottom: 1px solid #ccc;">
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Country))
+                                {<span style="font-weight: bold">Cтрана:</span> @Model.AllGroups[i].Country<br>}
 
-                            @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].City))
-                            {<span style="font-weight: bold">Город:</span> @Model.AllGroups[i].City<br>}
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].City))
+                                {<span style="font-weight: bold">Город:</span> @Model.AllGroups[i].City<br>}
 
-                            @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].School))
-                            {<span style="font-weight: bold">Школа:</span> @Model.AllGroups[i].School<br>}
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].School))
+                                {<span style="font-weight: bold">Школа:</span> @Model.AllGroups[i].School<br>}
 
-                            <span style="font-weight: bold">Учитель:</span> @Model.AllGroups[i].FullName<br>
+                                <span style="font-weight: bold">Учитель:</span> @Model.AllGroups[i].FullName<br>
 
-                            <span style="font-weight: bold">Класс:</span> @Html.DisplayFor(m => m.AllGroups[i].Grade)@if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Parallel))
-                            {<span> "@Model.AllGroups[i].Parallel"</span>}<br>
+                                <span style="font-weight: bold">Класс:</span> @Html.DisplayFor(m => m.AllGroups[i].Grade)@if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].Parallel))
+                                {<span> "@Model.AllGroups[i].Parallel"</span>}<br>
 
-                            @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].NameOfGroup))
-                            {<span style="font-weight: bold">Имя группы:</span>
-                                <text>"@Model.AllGroups[i].NameOfGroup"</text><br>}
-                        </td>
-                        @if (ViewBag.CurrentClassesIds.Contains(Model.AllGroups[i].Id))
-                        {
-                            <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
-                                <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="leave" onclick="return deleteConfirm()">Покинуть группу</a>
+                                @if (!string.IsNullOrWhiteSpace(Model.AllGroups[i].NameOfGroup))
+                                {<span style="font-weight: bold">Имя группы:</span>
+                                    <text>"@Model.AllGroups[i].NameOfGroup"</text><br>}
                             </td>
-                        }
-                        else if (ViewBag.RequestedClassesIds.Contains(Model.AllGroups[i].Id))
-                        {
-                            <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">Запрос на приём отправлен</td>
-                        }
-                        else
-                        {
-                            <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
-                                <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="request">Подать заявку на приём</a>
-                            </td>
-                        }
-                    </tr>
+                            @if (ViewBag.CurrentClassesIds.Contains(Model.AllGroups[i].Id))
+                            {
+                                <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
+                                    <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="leave" onclick="return deleteConfirm()">Покинуть группу</a>
+                                </td>
+                            }
+                            else if (ViewBag.RequestedClassesIds.Contains(Model.AllGroups[i].Id))
+                            {
+                                <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">Запрос на приём отправлен</td>
+                            }
+                            else
+                            {
+                                <td style="padding: 10px; white-space: nowrap; text-align: center; border-bottom: 1px solid #ccc;">
+                                    <a asp-controller="Manage" asp-action="Groups" asp-route-id=@Model.AllGroups[i].Id asp-route-type="request">Подать заявку на приём</a>
+                                </td>
+                            }
+                        </tr>
                     }
                 </table>
                 <br />
@@ -269,3 +269,7 @@ else if (user.UserType == UserTypes.Teacher)
         </div>
     </td>
 }
+
+
+
+

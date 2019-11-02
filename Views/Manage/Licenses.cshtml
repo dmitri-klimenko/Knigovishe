@@ -36,7 +36,7 @@
                     <td align="center">@Model[i].Subscription.CurrentPrice</td>
                     <td align="center"><a asp-comtroller="Manage" asp-action="Order" asp-route-id=@Model[i].SubscriptionId asp-route-old=@Model[i].Id>@Html.DisplayFor(m => m[i].Status)</a></td>
                     <td align="center">
-                        @if (Model[i].Status == StatusTypes.Paid)
+                        @if (Model[i].Status == StatusTypes.Paid || Model[i].Status == StatusTypes.Activated)
                         {
                             switch (Model[i].Subscription.SubscriptionType)
                             {

@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191101044718_DeleteNoteFromUserSubscription")]
+    partial class DeleteNoteFromUserSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,8 +156,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int>("Grade");
 
-                    b.Property<string>("Greeting");
-
                     b.Property<string>("LastLogin");
 
                     b.Property<bool>("LockoutEnabled");
@@ -195,8 +195,6 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("School");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<bool?>("ShowAchievements");
 
                     b.Property<string>("StudentId");
 
@@ -68454,6 +68452,8 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<int?>("AllFamiliesGroupId");
 
+                    b.Property<bool>("ShowAchievements");
+
                     b.HasIndex("AllFamiliesGroupId");
 
                     b.ToTable("Families");
@@ -68464,6 +68464,8 @@ namespace Knigosha.Persistence.Migrations
             modelBuilder.Entity("Knigosha.Core.Models.Student", b =>
                 {
                     b.HasBaseType("Knigosha.Core.Models.ApplicationUser");
+
+                    b.Property<string>("GreetingName");
 
                     b.Property<string>("ParentEmail");
 

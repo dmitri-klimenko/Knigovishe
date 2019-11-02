@@ -902,9 +902,8 @@ body.scroll #header, body:not(.hero) #header {
     }
 
 
-
 select, input[type=text], input[type=password] {
-    border-radius: 30px;
+    border-radius: 20px;
     border: 1px solid #D3502D;
     height: 36px;
     line-height: 36px;
@@ -912,6 +911,7 @@ select, input[type=text], input[type=password] {
     padding-right: 15px;
     vertical-align: middle;
 }
+
 
 .short {
     width: 80px;
@@ -3147,14 +3147,6 @@ body.mobile .invisible-mobile{display:none !important;}
     border-radius: 15px;
 }
 
-
-
-#registrationButton {
-    width: 50%;
-    margin-top: 10px;
-
-}
-
 #loginButton {
     margin: 0 auto;
     display: block;
@@ -3163,11 +3155,12 @@ body.mobile .invisible-mobile{display:none !important;}
 .centerButton {
     margin: 0 auto;
     display: block;
+    text-align: center;
+    margin-top: 20px;
 }
 
 #registration .form-control, #forgot .form-control, #login .form-control {
     display: block;
-    width: 100%;
     height: 35px;
     padding: 2px;
     padding-left: 10px;
@@ -3182,17 +3175,22 @@ body.mobile .invisible-mobile{display:none !important;}
     
 }
 
+.password {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: none !important;
+}
 
 
 .form-control:focus {
     box-shadow: none;
 }
 
-#cityDiv {
+.cityDiv {
     display: none;
 }
 
-#schoolDiv {
+.schoolDiv {
     display: none;
 }
 
@@ -3233,7 +3231,7 @@ body.mobile .invisible-mobile{display:none !important;}
     text-align: center;
 }
 
-#text {
+.text {
     font-weight: bold;
 }
 
@@ -3249,12 +3247,12 @@ form > h5 {
     padding-left: 14px !important;
 }
 
-#registerPassword .btn {
-    border-top-right-radius: 45%;
-    border-bottom-right-radius: 45%;
+.registerPassword .btn {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
     line-height: 1em !important;
-    color: darkgray;
-    border-color: darkgray;
+    color: #D3502D;
+    border-color: #D3502D;
 }
 
 /* dropdown login form */

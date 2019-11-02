@@ -19,6 +19,10 @@ namespace Knigosha.Core.Models
 
         public string Surname { get; set; }
 
+        public string Greeting { get; set; }
+
+        public bool? ShowAchievements { get; set; }
+
         public string FullName => Name + " " + Surname;
 
         public override string UserName { get; set; }

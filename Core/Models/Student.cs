@@ -21,8 +21,6 @@ namespace Knigosha.Core.Models
 
         public string ParentEmail { get; set; }
 
-        public string GreetingName { get; set; }
-
         //calculated properties
         public int PositionInFamilyAccordingToPoints
         {
