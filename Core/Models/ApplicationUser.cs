@@ -121,7 +121,6 @@ namespace Knigosha.Core.Models
 
         public IList<Message> Messages { get; set; }
 
-
         public ApplicationUser()
         {
             UserSubscriptions = new Collection<UserSubscription>();
@@ -130,9 +129,7 @@ namespace Knigosha.Core.Models
             BookNotes = new Collection<BookNote>();
             BookRatings = new Collection<BookRating>();
             MarkedBooks = new Collection<MarkedBook>();
-            DateAdded = DateTime.Now.ToString("d");
-            
+            DateAdded = DateTime.Now.ToString("dd.MM.yyyy");
         }
-
     }
 }

@@ -26,7 +26,6 @@ namespace Knigosha.Core.ViewModels.AccountViewModels
 
         [Display(Name = "Адрес электронной почты")]
         [RequiredIf("ParentEmail == null && UserType == 1", ErrorMessage = "Пожалуйста, введите адрес почты")]
-
         [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string Email { get; set; }
 

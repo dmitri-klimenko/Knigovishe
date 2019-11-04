@@ -56,7 +56,6 @@ namespace Knigosha.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -67,29 +66,6 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            if (model.Email.IndexOf('@') > -1)
-            {
-                //Validate email format
-                var emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
-                                 @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
-                                 @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-                var re = new Regex(emailRegex);
-                if (!re.IsMatch(model.Email))
-                {
-                    ModelState.AddModelError("Email", "Неверный адрес");
-                }
-            }
-            else
-            {
-                //validate Username format
-                string emailRegex = @"^[a-zA-Z0-9]*$";
-                var re = new Regex(emailRegex);
-                if (!re.IsMatch(model.Email))
-                {
-                    ModelState.AddModelError("Email", "Имя пользователя неверно");
-                }
-            }
-
             if (ModelState.IsValid)
             {
                 var userName = model.Email;
@@ -101,11 +77,29 @@ namespace Knigosha.Controllers
                         ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
                         return View(model);
                     }
-
                     userName = user.UserName;
-                    user.LastLogin = DateTime.Now.ToString("g");
-                    user.LoginTimes++;
-                    await _userManager.UpdateAsync(user);
+                    var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        user.LastLogin = DateTime.Now.ToString("g");
+                        user.LoginTimes++;
+                        var lastLoginResult = await _userManager.UpdateAsync(user);
+                        if (!lastLoginResult.Succeeded)
+                        {
+                            throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                                $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                        }
+                        _logger.LogInformation("User with Id {UserId} logged in.", user.Id);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User with ID {UserId} account locked out.", user.Id);
+                        return RedirectToAction(nameof(Lockout));
+                    }
+                    _logger.LogWarning("Invalid authenticator code entered for user with ID {UserId}.", user.Id);
+                    ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                    return View();
                 }
                 else
                 {
@@ -115,19 +109,31 @@ namespace Knigosha.Controllers
                         ModelState.AddModelError(string.Empty, "Неудачная попытка. Попробуйте еще");
                         return View(model);
                     }
-
                     userName = user.UserName;
-                    user.LastLogin = DateTime.Now.ToString("g");
-                    user.LoginTimes++;
-                    await _userManager.UpdateAsync(user);
+                    var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        user.LastLogin = DateTime.Now.ToString("g");
+                        user.LoginTimes++;
+                        var lastLoginResult = await _userManager.UpdateAsync(user);
+                        if (!lastLoginResult.Succeeded)
+                        {
+                            throw new InvalidOperationException($"Unexpected error occurred setting the last login date" +
+                                                                $" ({lastLoginResult.ToString()}) for user with ID '{user.Id}'.");
+                        }
+                        _logger.LogInformation("User with Id {UserId} logged in.", user.Id);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User with ID {UserId} account locked out.", user.Id);
+                        return RedirectToAction(nameof(Lockout));
+                    }
+                    _logger.LogWarning("Invalid authenticator code entered for user with ID {UserId}.", user.Id);
+                    ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                    return View();
                 }
-                
-                await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
-                _logger.LogInformation("User logged in.");
-                return RedirectToLocal(returnUrl);
             }
-
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -278,8 +284,6 @@ namespace Knigosha.Controllers
                     Value = c.Title, Text = c.Title
                 }).ToList()
             };
-
-
             return View(vm);
         }
 
@@ -319,7 +323,8 @@ namespace Knigosha.Controllers
                             Grade = model.Grade,
                             Parallel = model.Parallel,
                             Country = model.Country,
-                            SubscribedToNewsletter = model.SubscribedToNewsletter
+                            SubscribedToNewsletter = model.SubscribedToNewsletter,
+                            Greeting = "Привет, " + model.UserName
                         };
                         var result = await _userManager.CreateAsync(student, model.Password);
                         await _userManager.AddToRoleAsync(student, "User");
@@ -349,7 +354,8 @@ namespace Knigosha.Controllers
                             City = !string.IsNullOrWhiteSpace(model.CityInput) ? model.CityInput : model.MainCityRussia,
                             Grade = model.Grade,
                             Country = model.Country,
-                            SubscribedToNewsletter = model.SubscribedToNewsletter
+                            SubscribedToNewsletter = model.SubscribedToNewsletter,
+                            Greeting = "Привет, " + model.UserName
                         };
                         var result = await _userManager.CreateAsync(family, model.Password);
                         await _userManager.AddToRoleAsync(family, "User");
@@ -383,7 +389,8 @@ namespace Knigosha.Controllers
                             School = !string.IsNullOrWhiteSpace(model.SchoolInput) ? model.SchoolInput : model.SchoolSelect,
                             Grade = model.Grade,
                             Country = model.Country,
-                            SubscribedToNewsletter = model.SubscribedToNewsletter
+                            SubscribedToNewsletter = model.SubscribedToNewsletter,
+                            Greeting = "Привет, " + model.UserName
                         };
                         var result = await _userManager.CreateAsync(schoolClass, model.Password);
                         await _userManager.AddToRoleAsync(schoolClass, "User");

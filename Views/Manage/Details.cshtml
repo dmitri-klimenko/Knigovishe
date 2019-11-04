@@ -7,108 +7,151 @@
 
 <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:50px;padding-top:50px;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
+    @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
     <table>
         <tr>
-        <td>
-        <div id="registration" style="margin-top: 0;  width: 350px; max-width: 500px;">
-                                                                                                                                                                                                            
-            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-                <h5 style="margin-top:0;">Личные данные</h5>
-                <div asp-validation-summary="All" style="color: #D3502D"></div>
-                <input type="hidden" asp-for="UserType" value="@((int) Model.UserType)" class="userType">
-                <div class="form-group">
-                    <label asp-for="Name"></label>
-                    <input asp-for="Name" class="form-control"/>
-                    <span asp-validation-for="Name" class="text-danger"></span>
+            <td>
+                <div id="registration" style="margin-top: 0;  width: 350px; max-width: 500px;">
+                    <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+                        <h5 style="margin-top:0;">Личные данные</h5>
+                        <div asp-validation-summary="All" style="color: #D3502D"></div>
+
+                        <input type="hidden" asp-for="UserType" value="@((int) Model.UserType)" class="userType">
+                        <input type="hidden" asp-for="FullName" value="@Model.FullName">
+                        <input type="hidden" asp-for="Action" value="save">
+                        
+                        @if(Model.UserType == UserTypes.Teacher){
+                            <div class="form-group">
+                                <label asp-for="GreetingString"></label>
+                                <select asp-for="GreetingString" asp-items="@Model.Greetings" class="form-control" ></select>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label asp-for="Name"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Surname"></label>
+                            <input asp-for="Surname" class="form-control" />
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserName"></label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group emailDiv">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group requiredEmailDiv" style="display: none">
+                            <label asp-for="RequiredEmail"></label>
+                            <input asp-for="RequiredEmail" class="form-control requiredEmail" />
+                            <span asp-validation-for="RequiredEmail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group parentEmailDiv">
+                            <label asp-for="ParentEmail"></label>
+                            <input asp-for="ParentEmail" class="form-control parentEmail" />
+                            <span asp-validation-for="ParentEmail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="form-group countriesDiv">
+                            <label asp-for="Country"></label>
+                            <select asp-for="Country" asp-items="@Model.Countries" class="form-control countries">
+                            </select>
+                        </div>
+                        <div class="form-group mainCitiesRussiaDiv">
+                            <label asp-for="MainCityRussia"></label>
+                            <select asp-for="MainCityRussia" asp-items="@Model.MainCitiesRussia"
+                                    class="form-control mainCitiesRussia">
+                                <option></option>
+                                <option> - Другой город - </option>
+                            </select>
+                        </div>
+                        <div class="form-group cityInputDiv" style="display: none">
+                            <label asp-for="CityInput"></label>
+                            <input asp-for="CityInput" class="form-control cityInput" />
+                        </div>
+                        @if (Model.UserType == UserTypes.Student || Model.UserType == UserTypes.Teacher)
+                        {
+                            <div class="form-group schoolsSelectDiv">
+                                <label asp-for="SchoolSelect"></label>
+                                <select asp-for="SchoolSelect" class="form-control schoolsSelect"></select>
+                            </div>
+                            <div class="form-group schoolInputDiv" style="display: none">
+                                <label asp-for="SchoolInput"></label>
+                                <input asp-for="SchoolInput" class="form-control schoolInput" />
+                            </div>
+                        }
+                        <div class="form-group gradeDiv">
+                            <label asp-for="Grade"></label>
+                            <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control grade"></select>
+                        </div>
+                        <div class="form-group parallelDiv">
+                            <label asp-for="Parallel"></label>
+                            <input asp-for="Parallel" class="form-control" />
+                        </div>  
+                        @if(Model.UserType == UserTypes.Teacher){
+                            <div class="form-group">
+                                <label asp-for="NameOfGroup"></label>
+                                <input asp-for="NameOfGroup" class="form-control" />
+                            </div>
+                        }
+                        <div class="form-group registerPassword">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control password" data-toggle="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        @if (Model.UserType == UserTypes.Student || Model.UserType == UserTypes.Parent)
+                        {
+                            <div class="form-group">
+                                <label asp-for="GreetingRadio"></label><br />
+                                <input type="radio" asp-for="GreetingRadio" value="0" checked /><span> @Model.UserName</span>
+                                <div style="height:5px;"></div>
+                                <input type="radio" asp-for="GreetingRadio" value="1" /><span> @Model.FullName</span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ShowAchievements"></label><br />
+                                <input type="radio" asp-for="ShowAchievements" value="0" checked /><span> Да</span>
+                                <div style="height:5px;"></div>
+                                <input type="radio" asp-for="ShowAchievements" value="1" /><span> Нет</span>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label asp-for="Photo"></label>
+                            <input asp-for="Photo" accept="image/*" />
+                            <span asp-validation-for="Photo" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="button centerButton">СОХРАНИТЬ</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Surname"></label>
-                    <input asp-for="Surname" class="form-control"/>
-                    <span asp-validation-for="Surname" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserName"></label>
-                    <input asp-for="UserName" class="form-control"/>
-                    <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
-                <div class="form-group emailDiv">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control email"/>
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group requiredEmailDiv" style="display: none">
-                    <label asp-for="RequiredEmail"></label>
-                    <input asp-for="RequiredEmail" class="form-control requiredEmail"/>
-                    <span asp-validation-for="RequiredEmail" class="text-danger"></span>
-                </div>
-                <div class="form-group parentEmailDiv">
-                    <label asp-for="ParentEmail"></label>
-                    <input asp-for="ParentEmail" class="form-control parentEmail"/>
-                    <span asp-validation-for="ParentEmail" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PhoneNumber"></label>
-                    <input asp-for="PhoneNumber" class="form-control"/>
-                </div>
-                <div class="form-group countriesDiv">
-                    <label asp-for="Country"></label>
-                    <select asp-for="Country" asp-items="@Model.Countries" class="form-control countries">
-                    </select>
-                </div>
-                <div class="form-group mainCitiesRussiaDiv">
-                    <label asp-for="MainCityRussia"></label>
-                    <select asp-for="MainCityRussia" asp-items="@Model.MainCitiesRussia"
-                            class="form-control mainCitiesRussia">
-                        <option></option>
-                        <option> - Другой город - </option>
-                    </select>
-                </div>
-                <div class="form-group cityInputDiv" style="display: none">
-                    <label asp-for="CityInput"></label>
-                    <input asp-for="CityInput" class="form-control cityInput"/>
-                </div>
-                <div class="form-group schoolsSelectDiv">
-                    <label asp-for="SchoolSelect"></label>
-                    <select asp-for="SchoolSelect" class="form-control schoolsSelect"></select>
-                </div>
-                <div class="form-group schoolInputDiv" style="display: none">
-                    <label asp-for="SchoolInput"></label>
-                    <input asp-for="SchoolInput" class="form-control schoolInput"/>
-                </div>
-                <div class="form-group gradeDiv">
-                    <label asp-for="Grade"></label>
-                    <select asp-for="Grade" asp-items="Html.GetEnumSelectList<Grades>()" class="form-control grade"></select>
-                </div>
-                <div class="form-group parallelDiv">
-                    <label asp-for="Parallel"></label>
-                    <input asp-for="Parallel" class="form-control"/>
-                </div>
-                <div class="form-group registerPassword">
-                    <label asp-for="Password"></label>
-                    <input asp-for="Password" class="form-control password" data-toggle="password"/>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="GreetingRadio"></label><br />
-                    <input type="radio" asp-for="GreetingRadio" value="0" checked  /><span> @Model.UserName</span>
-                    <div style="height:5px;"></div>
-                    <input type="radio" asp-for="GreetingRadio" value="1" /><span> @Model.FullName</span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ShowAchievements"></label><br />
-                    <input type="radio" asp-for="ShowAchievements" value="0" checked  /><span> Да</span>
-                    <div style="height:5px;"></div>
-                    <input type="radio" asp-for="ShowAchievements" value="1" /><span> Нет</span>
-                </div>    
-                <div class="form-group">
-                    <label asp-for="Photo"></label>
-                    <input asp-for="Photo" accept="image/*" />
-                    <span asp-validation-for="Photo" class="text-danger"></span>
-                </div>
-                <button type="submit" class="button centerButton">СОХРАНИТЬ</button>
-            </form>
-        </div>
-    </table>
+            <td valign="top" style="padding-left:50px;">
+                <h5 style="margin-top:0px;">Подписка на новостной бюллетень</h5>
+                <form asp-controller="Manage" asp-action="Details" method="post">
+                    @if (!Model.SubscribedToNewsletter)
+                    {
+                        <input type="hidden" asp-for="Action" value="subscribe">
+                        <text>Ваш адрес <span style="font-weight: bold">@Model.Email</span> не включён в список адресов<br> для рассылки.</text>
+                        <div style="height:10px;"></div>
+                        <input type="submit" class="button" value="Я ХОЧУ ПОДПИСАТЬСЯ НА БЮЛЛЕТЕНЬ">
+                    }
+                    else
+                    {
+                        <input type="hidden" asp-for="Action" value="unsubscribe">
+                        <text>Ваш адрес <span style="font-weight: bold">@Model.Email</span> включён в список адресов<br>  для рассылки.</text>
+                        <div style="height:10px;"></div>
+                        <input type="submit" class="button" value="Я ХОЧУ ОТПИСАТЬСЯ ОТ БЮЛЛЕТЕНЯ">
+                    }
+                </form>
+            </td>
+        </tr>
+</table>
 </td>
 
 @section Scripts{ 

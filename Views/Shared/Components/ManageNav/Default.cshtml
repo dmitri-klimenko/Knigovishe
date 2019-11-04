@@ -17,7 +17,10 @@
             }
             <a href="/Manage/CreateQuiz">Создать викторину</a>
             <a href="/Manage/Points">Созданные викторины</a>
-            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/Messages">
+                Сообщения @if (Model.MessagesCount > 0)
+                {<span class="red">(@Model.MessagesCount)</span>}
+            </a>
             <a href="/Manage/Groups">Мои группы</a>
             <a href="/Manage/Order">Купить абонемент</a>
             <a href="/Manage/Licenses">Мои абонементы</a>
@@ -32,7 +35,10 @@
             <a href="/Manage/Answers?type=reset">Заявки на рестарт</a>
             <a href="/Manage/Answers">Прочитанные книги</a>
             <a href="/Manage/Help">Справка</a>
-            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/Messages">
+                Сообщения @if (Model.MessagesCount > 0)
+                {<span class="red">(@Model.MessagesCount)</span>}
+            </a>
             <a href="/Manage/CreateQuiz">Создать викторину</a>
             <a href="/Manage/Points">Созданные викторины</a>
             <a href="/Manage/Order">Купить абонемент</a>
@@ -49,7 +55,10 @@
             <a href="/Manage/Answers">Прочитанные книги</a>
             <a href="/Manage/Answers?type=group">ВМЕСТЕ</a>
             <a href="/Manage/Help">Справка</a>
-            <a href="/Manage/Messages">Сообщения </a>
+            <a href="/Manage/Messages">
+                Сообщения @if (Model.MessagesCount > 0)
+                {<span class="red">(@Model.MessagesCount)</span>}
+            </a>
             <a href="/Manage/CreateQuiz">Создать викторину</a>
             <a href="/Manage/Points">Созданные викторины</a>
             <a href="/Manage/Order">Купить абонемент</a>

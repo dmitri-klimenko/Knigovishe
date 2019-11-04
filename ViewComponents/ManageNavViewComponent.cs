@@ -7,6 +7,7 @@ using Knigosha.Core.Models.Enums;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Knigosha.ViewComponents
@@ -31,41 +32,41 @@ namespace Knigosha.ViewComponents
                 case UserTypes.Student:
                 {
                     var student = await _context.Students
-                        .Include(s => s.MarkedBooks)
                         .Include(s => s.StudentClasses)
                         .Include(s => s.StudentFamilies)
                         .SingleAsync(s => s.Id == user.Id);
-                    var hasActiveClass = student.StudentClasses.Any(sc => sc.IsActive);
-                    var hasActiveFamily = student.StudentFamilies.Any(sc => sc.IsActive);
+
+                    var messagesCount = _context.Messages.Count(m => !m.IsRead && m.RecipientId == user.Id);
+
                     var componentVm = new ManageNavViewModel()
                     {
                         User = user,
-                        HasActiveClass = hasActiveClass,
-                        HasActiveFamily = hasActiveFamily
+                        HasActiveClass = student.StudentClasses.Any(sc => sc.IsActive),
+                        HasActiveFamily = student.StudentFamilies.Any(sc => sc.IsActive),
+                        MessagesCount = messagesCount
                     };
+
                     return View(componentVm);
                 }
                 case UserTypes.Parent:
                 {
-                    var parent = await _context.Families
-                        .Include(s => s.MarkedBooks)
-                        .SingleAsync(s => s.Id == user.Id);
+                    var messagesCount = _context.Messages.Count(m => !m.IsRead && m.RecipientId == user.Id);
 
                     var componentVm2 = new ManageNavViewModel()
                     {
-                        User = parent,
+                        User = user,
+                        MessagesCount = messagesCount
                     };
                     return View(componentVm2);
                 }
                 case UserTypes.Teacher:
                 {
-                    var teacher = await _context.Classes
-                        .Include(s => s.MarkedBooks)
-                        .SingleAsync(s => s.Id == user.Id);
+                    var messagesCount = _context.Messages.Count(m => !m.IsRead && m.RecipientId == user.Id);
 
                     var componentVm3 = new ManageNavViewModel()
                     {
-                        User = teacher,
+                        User = user,
+                        MessagesCount = messagesCount
                     };
                     return View(componentVm3);
                 }
@@ -79,5 +80,6 @@ namespace Knigosha.ViewComponents
         public ApplicationUser User { get; set; }
         public bool HasActiveClass { get; set; }
         public bool HasActiveFamily { get; set; }
+        public int MessagesCount { get; set; }  
     }
 }

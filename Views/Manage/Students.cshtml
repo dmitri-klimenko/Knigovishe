@@ -1,0 +1,51 @@
+﻿@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.ViewModels.ManageViewModels.StudentsViewModel
+
+@{
+    ViewData["Title"] = "Мои дети";
+}
+
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    <div style="padding:50px;">
+
+        <h3>МОИ ДЕТИ</h3>
+        <table>
+            @for (var i = 0; i < Model.Children.Count; i++)
+            {
+                <tr>
+                    <td style="padding: 10px;">
+                        <div onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'" class="avatar" style="cursor: pointer; background-image: url(/uploads/@Model.Children[i].Photo)"></div>
+                    </td>
+                    <td style="padding: 10px; cursor: pointer" onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'">#@(i+1) @Model.Children[i]</td>
+                    <td style="padding: 10px;">
+                        @if (Model.Children[i].UserSubscriptions.Any(us => us.Subscription.SubscriptionType == SubscriptionTypes.Student))
+                        {
+                            <text>есть абонемент</text>
+                        }else
+                        {
+                            <text>нет абонемента</text>
+                        }
+                    </td>
+                    <td style="padding: 10px;"><a asp-controller="Manage" asp-action="Messages" asp-route-to="@Model.Children[i].Id" asp-route-type="send">Отправить сообщение</a></td>
+                    <td style="padding: 10px;"><a asp-controller="Manage" asp-action="Students" asp-route-remove="@Model.Children[i].Id" onclick="return deleteConfirm()">Удалить</a></td>
+                </tr>
+            }
+        </table>
+        <div style="height:50px;"></div>
+        <h3>БЕСПЛАТНЫЕ КЛЮЧИ АБОНЕМЕНТОВ</h3>
+        <table class="table" style="width:450px !important">
+            <tr>
+                <th>Ключ абонемента</th>
+                <th>Год</th>
+            </tr>
+            @foreach (var key in Model.Keys)
+            {
+                <tr>
+                    <td width="50%" align="center">@key.Code</td>
+                    <td align="center">@Model.SchoolYear</td>
+                </tr>
+            }
+        </table>
+    </div>
+</td>	

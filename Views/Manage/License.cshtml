@@ -6,7 +6,7 @@
 
 <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
-					
+    @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)		
     <div style="padding:50px;line-height:24px;">
         @if (Model.User.UserType == UserTypes.Student)
         {
@@ -31,7 +31,7 @@
                     <td><input type="submit" class="button" value="Активировать"></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><span asp-validation-for="Code" class=@(Model.Success? "text-success" : "text-danger")></span></td>
+                    <td colspan="2"><span asp-validation-for="Code" class="text-danger"></span></td>
                 </tr>
             </table>
         </form>

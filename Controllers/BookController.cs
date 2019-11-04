@@ -43,11 +43,11 @@ namespace Knigosha.Controllers
 
             if (!string.IsNullOrEmpty(keywords))
             {
-                books = books.Where(b => b.Title.Contains(keywords) ||
-                                         b.BookAuthor.Contains(keywords) ||
-                                         b.Isbn1.Contains(keywords) ||
-                                         b.Publisher.Contains(keywords) ||
-                                         b.Isbn2.Contains(keywords));
+                books = books.Where(b => b.Title.Contains(keywords, StringComparison.OrdinalIgnoreCase) ||
+                                         b.BookAuthor.Contains(keywords, StringComparison.OrdinalIgnoreCase) ||
+                                         b.Isbn1.Contains(keywords, StringComparison.OrdinalIgnoreCase) ||
+                                         b.Publisher.Contains(keywords, StringComparison.OrdinalIgnoreCase) ||
+                                         b.Isbn2.Contains(keywords, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
@@ -110,7 +110,6 @@ namespace Knigosha.Controllers
             };
 
             return View(indexVm);
-
         }
 
         public async Task<IActionResult> DetailsAdmin(int? id)

@@ -1,30 +1,25 @@
 ﻿using Knigosha.Core.Models;
+using Knigosha.Core.Models.Enums;
 using Knigosha.Core.ViewModels.ManageViewModels;
-using Microsoft.AspNetCore.Authentication;
+using Knigosha.Core.ViewModels.OrderViewModel;
+using Knigosha.Persistence;
+using Knigosha.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Knigosha.Core.Models.Enums;
-using Knigosha.Core.ViewModels.OrderViewModel;
-using Knigosha.Persistence;
-using Knigosha.Utilities;
+using Knigosha.Persistence.Migrations;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Formatters.Internal;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Knigosha.Controllers
 {
@@ -32,6 +27,7 @@ namespace Knigosha.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -49,8 +45,9 @@ namespace Knigosha.Controllers
           IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder,
-          ApplicationDbContext context
-          )
+          ApplicationDbContext context, 
+          IHostingEnvironment environment
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,71 +55,11 @@ namespace Knigosha.Controllers
             _logger = logger;
             _urlEncoder = urlEncoder;
             _context = context;
+            _hostingEnvironment = environment;
         }
 
         [TempData]
         public string StatusMessage { get; set; }
-
-        //[HttpGet]
-        //public async Task<IActionResult> Index()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var model = new IndexViewModel
-        //    {
-        //        Username = user.UserName,
-        //        Email = user.Email,
-        //        PhoneNumber = user.PhoneNumber,
-        //        IsEmailConfirmed = user.EmailConfirmed,
-        //        StatusMessage = StatusMessage,
-        //        Photo = user.Photo
-        //    };
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Index(IndexViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var email = user.Email;
-        //    if (model.Email != email)
-        //    {
-        //        var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
-        //        if (!setEmailResult.Succeeded)
-        //        {
-        //            throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
-        //        }
-        //    }
-
-        //    var phoneNumber = user.PhoneNumber;
-        //    if (model.PhoneNumber != phoneNumber)
-        //    {
-        //        var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
-        //        if (!setPhoneResult.Succeeded)
-        //        {
-        //            throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
-        //        }
-        //    }
-
-        //    StatusMessage = "Your profile has been updated";
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Dashboard()
@@ -223,6 +160,9 @@ namespace Knigosha.Controllers
                     .Include(m => m.Sender)
                     .Include(m => m.Recipient)
                     .SingleAsync(m => m.Id == id);
+                message.IsRead = true;
+                _context.Messages.Update(message);
+                await _context.SaveChangesAsync();
                 return View("MessageDetails", message);
             }
 
@@ -567,11 +507,10 @@ namespace Knigosha.Controllers
 
             if (!string.IsNullOrEmpty(groupsVm.Search) && _context.Classes.Any())
             {
-
                 var allGroups = _context.Classes
-                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search) ||
-                                c.FullName.Contains(groupsVm.Search) ||
-                                c.School != null && c.School.Contains(groupsVm.Search)).ToList();
+                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.FullName.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.School != null && c.School.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase)).ToList();
                 var currentClasses = _context.StudentClasses
                         .Where(sc => sc.StudentId == user.Id)
                         .Select(sc => sc.Class)
@@ -582,13 +521,13 @@ namespace Knigosha.Controllers
                     .ToList();
 
                 var queriedCurrentClasses = currentClasses
-                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search) ||
-                                c.FullName.Contains(groupsVm.Search) ||
-                                c.School != null && c.School.Contains(groupsVm.Search)).ToList();
+                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.FullName.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.School != null && c.School.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase)).ToList();
                 var queriedRequestedClasses = requestedClasses
-                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search) ||
-                                c.FullName.Contains(groupsVm.Search) ||
-                                c.School != null && c.School.Contains(groupsVm.Search)).ToList();
+                    .Where(c => c.NameOfGroup != null && c.NameOfGroup.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.FullName.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase) ||
+                                c.School != null && c.School.Contains(groupsVm.Search, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 ViewBag.CurrentClassesIds = queriedCurrentClasses.Select(g => g.Id).ToList();
                 ViewBag.RequestedClassesIds = queriedRequestedClasses.Select(g => g.Id).ToList();
@@ -598,7 +537,7 @@ namespace Knigosha.Controllers
 
                 groupsVm.AllGroups = allGroups.Distinct().ToList();
             }
-            // avoiding AllGroups being null to display message in view
+            // avoiding AllGroups being null 
             groupsVm.AllGroups = groupsVm.AllGroups ?? new List<Class>();
             if (groupsVm.AllGroups.Count == 0)
             {
@@ -797,6 +736,7 @@ namespace Knigosha.Controllers
             {
                 MyUserSubscription = myUserSubscription,
                 User = user,
+                StatusMessage = StatusMessage
             };
             return View(licenseVm);
         }
@@ -840,9 +780,8 @@ namespace Knigosha.Controllers
                             foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
                             _context.UserSubscriptions.Update(foundUserSubscription);
                             await _context.SaveChangesAsync();
-                            model.Success = true;
                             model.MyUserSubscription = foundUserSubscription;
-                            ModelState.AddModelError("Code", "Абонемент успешно активирован!");
+                            model.StatusMessage = "Абонемент успешно активирован!";
                             return View(model);
                         }
                     }
@@ -865,9 +804,8 @@ namespace Knigosha.Controllers
                             foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
                             _context.UserSubscriptions.Update(foundUserSubscription);
                             await _context.SaveChangesAsync();
-                            model.Success = true;
                             model.MyUserSubscription = foundUserSubscription;
-                            ModelState.AddModelError("Code", "Абонемент успешно активирован!");
+                            model.StatusMessage = "Абонемент успешно активирован!";
                             return View(model);
                         }
                     }  // join family-group
@@ -891,9 +829,8 @@ namespace Knigosha.Controllers
                             _context.Families.Single(f => f.Id == foundUserSubscription.UserId).StudentFamilies.Add(newStudentFamily);
                             //_context.StudentFamilies.Add(newStudentFamily); ??
                             await _context.SaveChangesAsync();
-                            model.Success = true;
                             model.MyUserSubscription = currentUserSubscription;
-                            ModelState.AddModelError("Code", "Профиль успешно присоединён к группе СЕМЬЯ!");
+                            model.StatusMessage = "Профиль успешно присоединён к группе СЕМЬЯ!";
                             return View(model);
                         }
                     }
@@ -929,6 +866,7 @@ namespace Knigosha.Controllers
                         }).ToList(),
 
                         UserType = UserTypes.Student,
+                        Country = student.Country,
                         Name = student.Name,
                         Surname = student.Surname,
                         UserName = student.UserName,
@@ -942,407 +880,239 @@ namespace Knigosha.Controllers
                         SchoolSelect = student.School,
                         Parallel = student.Parallel,
                         Password = student.Password,
-                        FullName = student.FullName
+                        FullName = student.FullName,
+                        SubscribedToNewsletter = student.SubscribedToNewsletter,
+                        StatusMessage = StatusMessage
                     };
-
                     return View(detailsVm);
+                
+                case UserTypes.Teacher:
+                    var teacher = await _context.Classes.SingleAsync(s => s.Id == user.Id);
 
+                    var detailsVm2 = new DetailsViewModel
+                    {
+                        Countries =
+                            _context.Countries.Select(c => new SelectListItem() { Value = c.Title, Text = c.Title }).ToList(),
+                        MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
+                        {
+                            Value = c.Title,
+                            Text = c.Title
+                        }).ToList(),
+
+                        Greetings = new List<SelectListItem>
+                        {
+                            new SelectListItem(teacher.Greeting, teacher.Greeting),
+                            new SelectListItem("Здравствуйте, госпожа " + teacher.Surname, "Здравствуйте, госпожа " + teacher.Surname),
+                            new SelectListItem("Здравствуйте, господин " + teacher.Surname, "Здравствуйте, господин " + teacher.Surname),
+                        },
+
+                        UserType = UserTypes.Teacher,
+                        Country = teacher.Country,
+                        Name = teacher.Name,
+                        Surname = teacher.Surname,
+                        UserName = teacher.UserName,
+                        Email = teacher.Email,
+                        RequiredEmail = teacher.Email,
+                        PhoneNumber = teacher.PhoneNumber,
+                        CityInput = teacher.City,
+                        MainCityRussia = teacher.City,
+                        SchoolInput = teacher.School,
+                        SchoolSelect = teacher.School,
+                        Parallel = teacher.Parallel,
+                        Password = teacher.Password,
+                        FullName = teacher.FullName,
+                        SubscribedToNewsletter = teacher.SubscribedToNewsletter,
+                        StatusMessage = StatusMessage
+                    };
+                    return View(detailsVm2);
+
+                case UserTypes.Parent:
+
+                    var parent = await _context.Families.SingleAsync(s => s.Id == user.Id);
+
+                    var detailsVm3 = new DetailsViewModel
+                    {
+                        Countries =
+                            _context.Countries.Select(c => new SelectListItem() { Value = c.Title, Text = c.Title }).ToList(),
+                        MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
+                        {
+                            Value = c.Title,
+                            Text = c.Title
+                        }).ToList(),
+
+                        UserType = UserTypes.Parent,
+                        Country = parent.Country,
+                        Name = parent.Name,
+                        Surname = parent.Surname,
+                        UserName = parent.UserName,
+                        Email = parent.Email,
+                        RequiredEmail = parent.Email,
+                        PhoneNumber = parent.PhoneNumber,
+                        CityInput = parent.City,
+                        MainCityRussia = parent.City,
+                        SchoolInput = parent.School,
+                        SchoolSelect = parent.School,
+                        Parallel = parent.Parallel,
+                        Password = parent.Password,
+                        FullName = parent.FullName,
+                        SubscribedToNewsletter = parent.SubscribedToNewsletter,
+                        StatusMessage = StatusMessage
+                    };
+                    return View(detailsVm3);
             }
-
-
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(DetailsViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            switch (model.Action)
+            {
+                case "save":
+                    if (!ModelState.IsValid) return View(model);
+                    if (model.Photo != null)
+                    {
+                        var uniqueFileName = GetUniqueFileName(model.Photo.FileName);
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                        var filePath = Path.Combine(uploads, uniqueFileName);
+                        model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        user.Photo = uniqueFileName;
+                    }
+
+                    if (user.UserName != model.UserName) user.UserName = model.UserName;
+                    if(user.Name != model.Name) user.Name = model.Name;
+                    if(user.Surname != model.Surname) user.Surname = model.Surname;
+                    if (user.City != model.CityInput && user.City != model.MainCityRussia)
+                        user.City = !string.IsNullOrEmpty(model.CityInput) ? model.CityInput : model.MainCityRussia;
+                    if(user.Country != model.Country) user.Country = model.Country;
+                    if(user.Grade != model.Grade) user.Grade = model.Grade;
+                    if(user.Parallel != model.Parallel) user.Parallel = model.Parallel;
+                    if (user.UserType == UserTypes.Student || user.UserType == UserTypes.Parent)
+                        user.Greeting = model.GreetingRadio == 0 ? "Привет, " + model.UserName : "Привет, " + model.FullName;
+                    else user.Greeting = model.GreetingString;
+                    user.DateEdited = DateTime.Now.ToString("dd.MM.yyyy");
+
+                    await _userManager.UpdateAsync(user);
+
+                    string modelEmail;
+                    if (user.UserType == UserTypes.Student)
+                        modelEmail = model.Email ?? model.ParentEmail;
+                    else modelEmail = model.RequiredEmail;
+
+                    var email = user.Email;
+                    if (modelEmail != email)
+                    {
+                        var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                        if (!setEmailResult.Succeeded)
+                        {
+                            throw new ApplicationException(
+                                $"Unexpected error occurred setting email for user with ID '{user.Id}'.");
+                        }
+                    }
+
+                    var phoneNumber = user.PhoneNumber;
+                    if (model.PhoneNumber != phoneNumber)
+                    {
+                        var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                        if (!setPhoneResult.Succeeded)
+                        {
+                            throw new ApplicationException(
+                                $"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
+                        }
+                    }
+
+                    var password = user.Password;
+                    if (model.Password != password)
+                    {
+                        var changePasswordResult = await _userManager.ChangePasswordAsync(user, user.Password, model.Password);
+                        if (!changePasswordResult.Succeeded)
+                        {
+                            AddErrors(changePasswordResult);
+                            return View(model);
+                        }
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User changed their password successfully.");
+                    }
+
+                    StatusMessage = "Данные профиля обновлены!";
+                    return RedirectToAction(nameof(Details));
+
+                case "subscribe":
+                    user.SubscribedToNewsletter = true;
+                    await _userManager.UpdateAsync(user);
+                    StatusMessage = "Данные профиля обновлены!";
+                    return RedirectToAction(nameof(Details));
+
+                case "unsubscribe":
+                    user.SubscribedToNewsletter = false;
+                    await _userManager.UpdateAsync(user);
+                    StatusMessage = "Данные профиля обновлены!";
+                    return RedirectToAction(nameof(Details));
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Students(int remove)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var children = _context.StudentFamilies
+                .Where(sf => sf.FamilyId == user.Id)
+                .Select(sf => sf.Student)
+                .Include(s => s.UserSubscriptions)
+                .ThenInclude(us => us.Subscription).ToList();
 
+            var userSubscription =  _context.UserSubscriptions
+                .Include(us => us.ActivationKeys)
+                .Include(us => us.Subscription)
+                .Last(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
 
+            var studentsVm = new StudentsViewModel
+            {
+                Keys = userSubscription.ActivationKeys.Where(ak => ak.ActivationKeyType == ActivationKeyTypes.Student).ToList(),
+                Children = children,
+                SchoolYear = userSubscription.SchoolYear
+            };
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(nameof(Dashboard), model);
-        //    }
-
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        //    var callbackUrl = Url.EmailConfirmationLink((user.Id).ToString(), code, Request.Scheme);
-        //    var email = user.Email;
-        //    await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
-
-        //    StatusMessage = "Verification email sent. Please check your email.";
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> ChangePassword()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var hasPassword = await _userManager.HasPasswordAsync(user);
-        //    if (!hasPassword)
-        //    {
-        //        return RedirectToAction(nameof(SetPassword));
-        //    }
-
-        //    var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        //    if (!changePasswordResult.Succeeded)
-        //    {
-        //        AddErrors(changePasswordResult);
-        //        return View(model);
-        //    }
-
-        //    await _signInManager.SignInAsync(user, isPersistent: false);
-        //    _logger.LogInformation("User changed their password successfully.");
-        //    StatusMessage = "Your password has been changed.";
-
-        //    return RedirectToAction(nameof(ChangePassword));
-        //}
-
-
-        //[HttpGet]
-        //public async Task<IActionResult> SetPassword()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var hasPassword = await _userManager.HasPasswordAsync(user);
-
-        //    if (hasPassword)
-        //    {
-        //        return RedirectToAction(nameof(ChangePassword));
-        //    }
-
-        //    var model = new SetPasswordViewModel { StatusMessage = StatusMessage };
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
-        //    if (!addPasswordResult.Succeeded)
-        //    {
-        //        AddErrors(addPasswordResult);
-        //        return View(model);
-        //    }
-
-        //    await _signInManager.SignInAsync(user, isPersistent: false);
-        //    StatusMessage = "Your password has been set.";
-
-        //    return RedirectToAction(nameof(SetPassword));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> ExternalLogins()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var model = new ExternalLoginsViewModel { CurrentLogins = await _userManager.GetLoginsAsync(user) };
-        //    model.OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
-        //        .Where(auth => model.CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
-        //        .ToList();
-        //    model.ShowRemoveButton = await _userManager.HasPasswordAsync(user) || model.CurrentLogins.Count > 1;
-        //    model.StatusMessage = StatusMessage;
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> LinkLogin(string provider)
-        //{
-        //    // Clear the existing external cookie to ensure a clean login process
-        //    await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-        //    // Request a redirect to the external login provider to link a login for the current user
-        //    var redirectUrl = Url.Action(nameof(LinkLoginCallback));
-        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
-        //    return new ChallengeResult(provider, properties);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> LinkLoginCallback()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var info = await _signInManager.GetExternalLoginInfoAsync((user.Id).ToString());
-        //    if (info == null)
-        //    {
-        //        throw new ApplicationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
-        //    }
-
-        //    var result = await _userManager.AddLoginAsync(user, info);
-        //    if (!result.Succeeded)
-        //    {
-        //        throw new ApplicationException($"Unexpected error occurred adding external login for user with ID '{user.Id}'.");
-        //    }
-
-        //    // Clear the existing external cookie to ensure a clean login process
-        //    await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-        //    StatusMessage = "The external login was added.";
-        //    return RedirectToAction(nameof(ExternalLogins));
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel model)
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var result = await _userManager.RemoveLoginAsync(user, model.LoginProvider, model.ProviderKey);
-        //    if (!result.Succeeded)
-        //    {
-        //        throw new ApplicationException($"Unexpected error occurred removing external login for user with ID '{user.Id}'.");
-        //    }
-
-        //    await _signInManager.SignInAsync(user, isPersistent: false);
-        //    StatusMessage = "The external login was removed.";
-        //    return RedirectToAction(nameof(ExternalLogins));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> TwoFactorAuthentication()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var model = new TwoFactorAuthenticationViewModel
-        //    {
-        //        HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null,
-        //        Is2faEnabled = user.TwoFactorEnabled,
-        //        RecoveryCodesLeft = await _userManager.CountRecoveryCodesAsync(user),
-        //    };
-
-        //    return View(model);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> Disable2faWarning()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    if (!user.TwoFactorEnabled)
-        //    {
-        //        throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
-        //    }
-
-        ////    return View(nameof(Disable2fa));
-        ////}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Disable2fa()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
-        //    if (!disable2faResult.Succeeded)
-        //    {
-        //        throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
-        //    }
-
-        //    _logger.LogInformation("User with ID {UserId} has disabled 2fa.", user.Id);
-        //    return RedirectToAction(nameof(TwoFactorAuthentication));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> EnableAuthenticator()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    var model = new EnableAuthenticatorViewModel();
-        //    await LoadSharedKeyAndQrCodeUriAsync(user, model);
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EnableAuthenticator(EnableAuthenticatorViewModel model)
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        await LoadSharedKeyAndQrCodeUriAsync(user, model);
-        //        return View(model);
-        //    }
-
-        //    // Strip spaces and hypens
-        //    var verificationCode = model.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
-
-        //    var is2faTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
-        //        user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
-
-        //    if (!is2faTokenValid)
-        //    {
-        //        ModelState.AddModelError("Code", "Verification code is invalid.");
-        //        await LoadSharedKeyAndQrCodeUriAsync(user, model);
-        //        return View(model);
-        //    }
-
-        //    await _userManager.SetTwoFactorEnabledAsync(user, true);
-        //    _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
-        //    var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-        //    TempData[RecoveryCodesKey] = recoveryCodes.ToArray();
-
-        //    return RedirectToAction(nameof(ShowRecoveryCodes));
-        //}
-
-        //[HttpGet]
-        //public IActionResult ShowRecoveryCodes()
-        //{
-        //    var recoveryCodes = (string[])TempData[RecoveryCodesKey];
-        //    if (recoveryCodes == null)
-        //    {
-        //        return RedirectToAction(nameof(TwoFactorAuthentication));
-        //    }
-
-        //    var model = new ShowRecoveryCodesViewModel { RecoveryCodes = recoveryCodes };
-        //    return View(model);
-        //}
-
-        //[HttpGet]
-        //public IActionResult ResetAuthenticatorWarning()
-        //{
-        //    return View(nameof(ResetAuthenticator));
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ResetAuthenticator()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    await _userManager.SetTwoFactorEnabledAsync(user, false);
-        //    await _userManager.ResetAuthenticatorKeyAsync(user);
-        //    _logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
-
-        //    return RedirectToAction(nameof(EnableAuthenticator));
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> GenerateRecoveryCodesWarning()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    if (!user.TwoFactorEnabled)
-        //    {
-        //        throw new ApplicationException($"Cannot generate recovery codes for user with ID '{user.Id}' because they do not have 2FA enabled.");
-        //    }
-
-        //    return View(nameof(GenerateRecoveryCodes));
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> GenerateRecoveryCodes()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //    {
-        //        throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        //    }
-
-        //    if (!user.TwoFactorEnabled)
-        //    {
-        //        throw new ApplicationException($"Cannot generate recovery codes for user with ID '{user.Id}' as they do not have 2FA enabled.");
-        //    }
-
-        //    var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-        //    _logger.LogInformation("User with ID {UserId} has generated new 2FA recovery codes.", user.Id);
-
-        //    var model = new ShowRecoveryCodesViewModel { RecoveryCodes = recoveryCodes.ToArray() };
-
-        //    return View(nameof(ShowRecoveryCodes), model);
-        //}
-
-        #region Helpers
+            if (remove == 0) return View(studentsVm);
+            var thisStudentFamily = _context.StudentFamilies.Single(uf => uf.Id == remove);
+            _context.StudentFamilies.Remove(thisStudentFamily);
+            await _context.SaveChangesAsync();
+            return View(studentsVm);
+        }
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            #region Helpers
+
+            private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                   + "_"
+                   + Guid.NewGuid().ToString().Substring(0, 4)
+                   + Path.GetExtension(fileName);
+        }
 
         private void AddErrors(IdentityResult result)
         {

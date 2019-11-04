@@ -32,9 +32,9 @@
                     <th></th>
                     <th></th>
                 </tr>
-                @for (int i = 0; i < Model.Messages.Count; i++)
+                @for(int i = 0; i < Model.Messages.Count; i++)
                 {
-                    <tr>
+                    <tr style="font-weight: @(!Model.Messages[i].IsRead? "bold" : "normal")">
                         <td align="center">@Model.Messages[i].DateTime</td>
                         <td align="center">@Model.Messages[i].Sender.Name @Model.Messages[i].Sender.Surname [@Model.Messages[i].Sender.UserName]</td>
                         <td align="center">@Model.Messages[i].Recipient.Name @Model.Messages[i].Recipient.Surname [@Model.Messages[i].Recipient.UserName]</td>

@@ -125,6 +125,38 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            switch (user.UserType)
+            {
+                case UserTypes.Student:
+                var countSc = await _context.StudentClasses.CountAsync(sc => sc.StudentId == user.Id);
+                var countSf = await _context.StudentFamilies.CountAsync(sc => sc.StudentId == user.Id);
+                if (countSc == 1)
+                    _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.StudentId == user.Id));
+                else if (countSc > 1)
+                    _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.StudentId == user.Id).ToList());
+                if (countSf == 1)
+                    _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sc => sc.StudentId == user.Id));
+                else if (countSf > 1)
+                    _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sc => sc.StudentId == user.Id).ToList());
+                break;
+
+                case UserTypes.Parent:
+                    var countSf2 = await _context.StudentFamilies.CountAsync(sc => sc.FamilyId == user.Id);
+                    if (countSf2 == 1)
+                        _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sf => sf.FamilyId == user.Id));
+                    else if (countSf2 > 1)
+                        _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sf => sf.FamilyId == user.Id).ToList());
+                    break;
+
+                case UserTypes.Teacher:
+                    var countSf3 = await _context.StudentClasses.CountAsync(sc => sc.ClassId == user.Id);
+                    if (countSf3 == 1)
+                        _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.ClassId == user.Id));
+                    else if (countSf3 > 1)
+                        _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.ClassId == user.Id).ToList());
+                    break;
+            }
             await _userManager.DeleteAsync(user);
             return RedirectToAction(nameof(Index));
         }

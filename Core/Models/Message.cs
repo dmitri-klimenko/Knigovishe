@@ -16,6 +16,7 @@ namespace Knigosha.Core.Models
         public string Body { get; set; }
         public ApplicationUser Recipient { get; set; }
         public string RecipientId { get; set; }
+        public bool IsRead { get; set; }
 
         public Message()
         {

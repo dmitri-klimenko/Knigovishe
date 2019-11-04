@@ -12,7 +12,10 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
 {
     public class DetailsViewModel
     {
+        //public string Id { get; set; }
         public string Action { get; set; }
+
+        public string StatusMessage { get; set; }
 
         public UserTypes UserType { get; set; }
 
@@ -82,6 +85,7 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
 
         public List<SelectListItem> Greetings { get; set; }
 
+        [Display(Name = "Обращение:")]
         public string GreetingString { get; set; }
 
         [Display(Name = "Хотите, чтобы Ваши комментарии и достижения отображались в рейтинге игроков?")]
@@ -90,7 +94,10 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         [Display(Name = "Аватар:")]
         public IFormFile Photo { get; set; }
 
+        [Display(Name = "Название группы:")]
         public string NameOfGroup { get; set; }
 
+        public bool SubscribedToNewsletter { get; set; }
+        
     }
 }

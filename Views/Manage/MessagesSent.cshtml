@@ -24,27 +24,27 @@
         <div style="height: 10px;"></div>
         @if (Model.Messages.Count > 0)
         {
-            <table class="table">
-                <tr>
-                    <th>Дата</th>
-                    <th>От</th>
-                    <th>Кому</th>
-                    <th>Тема</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                @for (int i = 0; i < Model.Messages.Count; i++)
-                {
-                    <tr>
-                        <td align="center">@Model.Messages[i].DateTime</td>
-                        <td align="center">@Model.Messages[i].Sender.FullName [@Model.Messages[i].Sender.UserName]</td>
-                        <td align="center">@Model.Messages[i].Recipient.FullName [@Model.Messages[i].Recipient.UserName]</td>
-                        <td align="center">@Model.Messages[i].Topic</td>
-                        <td align="center"><a asp-controller="Manage" asp-action="Messages" asp-route-id="@Model.Messages[i].Id">Прочесть</a></td>
-                        <td align="center"><a href="/manage/Messages?to=@Model.Messages[i].RecipientId&subject=@Model.Messages[i].Topic&type=send">Ответить</a></td>
-                    </tr>
-                }
-            </table>
+    <table class="table">
+        <tr>
+            <th>Дата</th>
+            <th>От</th>
+            <th>Кому</th>
+            <th>Тема</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @for (int i = 0; i < Model.Messages.Count; i++)
+        {
+            <tr style="font-weight: @(!Model.Messages[i].IsRead? "bold" : "normal")">
+                <td align="center">@Model.Messages[i].DateTime</td>
+                <td align="center">@Model.Messages[i].Sender.FullName [@Model.Messages[i].Sender.UserName]</td>
+                <td align="center">@Model.Messages[i].Recipient.FullName [@Model.Messages[i].Recipient.UserName]</td>
+                <td align="center">@Model.Messages[i].Topic</td>
+                <td align="center"><a asp-controller="Manage" asp-action="Messages" asp-route-id="@Model.Messages[i].Id">Прочесть</a></td>
+                <td align="center"><a href="/manage/Messages?to=@Model.Messages[i].RecipientId&subject=@Model.Messages[i].Topic&type=send">Ответить</a></td>
+            </tr>
+        }
+    </table>
         }
 
     </div>
