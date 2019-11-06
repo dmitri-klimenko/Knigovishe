@@ -1,89 +1,94 @@
 ﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
 @model  Knigosha.ViewComponents.ManageNavViewModel
 <div class="invisible-smartphone">
     <div class="logged_menu">
+    
         @if (Model.User.UserType == UserTypes.Student)
         {
-            <a href="/Manage/Dashboard">Мои достижения</a>
-            <a href="/Manage/Answers">Прочитанные книги</a>
-            <a href="/Manage/MarkedBooks">Отмеченные книги</a>
+            <a href="/Manage/Dashboard" style="font-weight: @ManageNavPages.DashboardNavClass(ViewContext)">Мои достижения</a>
+            <a href="/Manage/Answers" style="font-weight: @ManageNavPages.AnswersNavClass(ViewContext)">Прочитанные книги</a>
+            <a href="/Manage/MarkedBooks" style="font-weight: @ManageNavPages.MarkedBooksNavClass(ViewContext)">Отмеченные книги</a>
             @if (Model.HasActiveFamily)
             {
-                <a href="/Manage/Answers?type=family">Что читает моя семья</a>
+                <a href="/Manage/Answers?type=family" style="font-weight: @ManageNavPages.AnswersGroupNavClass(ViewContext)">Что читает моя семья</a>
             }
             @if (Model.HasActiveClass)
             {
-                <a href="/Manage/Answers?type=class">Что читает мой класс</a>
+                <a href="/Manage/Answers?type=class" style="font-weight: @ManageNavPages.AnswersGroupNavClass(ViewContext)">Что читает мой класс</a>
             }
-            <a href="/Manage/CreateQuiz">Создать викторину</a>
-            <a href="/Manage/Points">Созданные викторины</a>
-            <a href="/Manage/Messages">
-                Сообщения @if (Model.MessagesCount > 0)
+            <a href="/Manage/CreateQuiz" style="font-weight: @ManageNavPages.CreateQuizNavClass(ViewContext)">Создать викторину</a>
+            <a href="/Manage/Points" style="font-weight: @ManageNavPages.PointsNavClass(ViewContext)">Созданные викторины</a>
+            <a href="/Manage/Messages" style="font-weight: @ManageNavPages.MessagesNavClass(ViewContext)">Сообщения
+                @if(Model.MessagesCount > 0)
                 {<span class="red">(@Model.MessagesCount)</span>}
             </a>
-            <a href="/Manage/Groups">Мои группы</a>
-            <a href="/Manage/Order">Купить абонемент</a>
-            <a href="/Manage/Licenses">Мои абонементы</a>
-            <a href="/Manage/License">Активировать абонемент</a>
-            <a href="/Manage/Details">Редактировать профиль</a>
+            <a href="/Manage/Groups" style="font-weight: @ManageNavPages.GroupsNavClass(ViewContext)">Мои группы</a>
+            <a href="/Manage/Order" style="font-weight: @ManageNavPages.OrderNavClass(ViewContext)">Купить абонемент</a>
+            <a href="/Manage/Licenses" style="font-weight: @ManageNavPages.LicensesNavClass(ViewContext)">Мои абонементы</a>
+            <a href="/Manage/License" style="font-weight: @ManageNavPages.LicenseNavClass(ViewContext)">Активировать абонемент</a>
+            <a href="/Manage/Details" style="font-weight: @ManageNavPages.DetailsNavClass(ViewContext)">Редактировать профиль</a>
         }
         else if (Model.User.UserType == UserTypes.Parent)
         {
-            <a href="/Manage/Dashboard">Моя семья</a>
-            <a href="/Manage/Details">Мой профиль</a>
-            <a href="/Manage/Students">Мои дети</a>
-            <a href="/Manage/Answers?type=reset">Заявки на рестарт</a>
-            <a href="/Manage/Answers">Прочитанные книги</a>
-            <a href="/Manage/Help">Справка</a>
-            <a href="/Manage/Messages">
-                Сообщения @if (Model.MessagesCount > 0)
+            <a href="/Manage/Dashboard" style="font-weight: @ManageNavPages.DashboardNavClass(ViewContext)">Моя семья</a>
+            <a href="/Manage/Details" style="font-weight: @ManageNavPages.DetailsNavClass(ViewContext)">Мой профиль</a>
+            <a href="/Manage/Students" style="font-weight:@ManageNavPages.StudentsNavClass(ViewContext)">Мои дети</a>
+            <a href="/Manage/Answers?type=reset" style="font-weight:@ManageNavPages.ResetNavClass(ViewContext)">Заявки на рестарт</a>
+            <a href="/Manage/Answers" style="font-weight: @ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
+            <a href="/Manage/Help"style="font-weight: @ManageNavPages.HelpNavClass(ViewContext)">Справка</a>
+            <a href="/Manage/Messages" style="font-weight:@ManageNavPages.MessagesNavClass(ViewContext)">
+                Сообщения
+                @if (Model.MessagesCount > 0)
                 {<span class="red">(@Model.MessagesCount)</span>}
             </a>
-            <a href="/Manage/CreateQuiz">Создать викторину</a>
-            <a href="/Manage/Points">Созданные викторины</a>
-            <a href="/Manage/Order">Купить абонемент</a>
-            <a href="/Manage/Licenses">Мои абонементы</a>
-            <a href="/Manage/License">Активировать абонемент</a>
+            <a href="/Manage/CreateQuiz" style="font-weight:@ManageNavPages.CreateQuizNavClass(ViewContext)">Создать викторину</a>
+            <a href="/Manage/Points" style="font-weight:@ManageNavPages.PointsNavClass(ViewContext)">Созданные викторины</a>
+            <a href="/Manage/Order" style="font-weight:@ManageNavPages.OrderNavClass(ViewContext)">Купить абонемент</a>
+            <a href="/Manage/Licenses" style="font-weight:@ManageNavPages.LicensesNavClass(ViewContext)">Мои абонементы</a>
+            <a href="/Manage/License" style="font-weight:@ManageNavPages.LicenseNavClass(ViewContext)">Активировать абонемент</a>
         }
         else
         {
-            <a href="/Manage/Dashboard">Мой класс</a>
-            <a href="/Manage/Details">Мой профиль</a>
-            <a href="/Manage/Students">Мои ученики</a>
-            <a href="/Manage/Groups">Заявки на приём</a>
-            <a href="/Manage/Answers?type=reset">Заявки на рестарт</a>
-            <a href="/Manage/Answers">Прочитанные книги</a>
-            <a href="/Manage/Answers?type=group">ВМЕСТЕ</a>
-            <a href="/Manage/Help">Справка</a>
-            <a href="/Manage/Messages">
-                Сообщения @if (Model.MessagesCount > 0)
+            <a href="/Manage/Dashboard"  style="font-weight:@ManageNavPages.DashboardNavClass(ViewContext)">Мой класс</a>
+            <a href="/Manage/Details" style="font-weight:@ManageNavPages.DetailsNavClass(ViewContext)">Мой профиль</a>
+            <a href="/Manage/Students" style="font-weight:@ManageNavPages.StudentsNavClass(ViewContext)">Мои ученики</a>
+            <a href="/Manage/Groups" style="font-weight:@ManageNavPages.GroupsNavClass(ViewContext)">Заявки на приём</a>
+            <a href="/Manage/Answers?type=reset" style="font-weight:@ManageNavPages.ResetNavClass(ViewContext)">Заявки на рестарт</a>
+            <a href="/Manage/Answers" style="font-weight:@ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
+            <a href="/Manage/Answers?type=group" style="font-weight:@ManageNavPages.AnswersNavClass(ViewContext)">ВМЕСТЕ</a>
+            <a href="/Manage/Help" style="font-weight:@ManageNavPages.HelpNavClass(ViewContext)">Справка</a>
+            <a href="/Manage/Messages" style="font-weight:@ManageNavPages.MessagesNavClass(ViewContext)">
+                Сообщения
+                @if (Model.MessagesCount > 0)
                 {<span class="red">(@Model.MessagesCount)</span>}
             </a>
-            <a href="/Manage/CreateQuiz">Создать викторину</a>
-            <a href="/Manage/Points">Созданные викторины</a>
-            <a href="/Manage/Order">Купить абонемент</a>
-            <a href="/Manage/Licenses">Мои абонементы</a>
-            <a href="/Manage/License">Активировать абонемент</a>
+            <a href="/Manage/CreateQuiz" style="font-weight:@ManageNavPages.CreateQuizNavClass(ViewContext)">Создать викторину</a>
+            <a href="/Manage/Points" style="font-weight:@ManageNavPages.PointsNavClass(ViewContext)">Созданные викторины</a>
+            <a href="/Manage/Order" style="font-weight: @ManageNavPages.OrderNavClass(ViewContext)">Купить абонемент</a>
+            <a href="/Manage/Licenses" style="font-weight:@ManageNavPages.LicensesNavClass(ViewContext)">Мои абонементы</a>
+            <a href="/Manage/License" style="font-weight:@ManageNavPages.LicenseNavClass(ViewContext)">Активировать абонемент</a>
         }
 
         @if (Model.User.MarkedBooks.Count > 0)
         {
-            <div class="yellow_border" style="padding:20px;margin-top:20px;">
-                <b class="yellow" style="font-size:16px;">Отмеченные книги</b><div style="height:30px;"></div>
+            <div class="yellow_border" style="padding: 20px; margin-top: 20px;">
+                <b class="yellow" style="font-size: 16px;">Отмеченные книги</b>
+                <div style="height: 30px;"></div>
 
                 @for (var i = 0; i < Model.User.MarkedBooks.Count; i++)
                 {
-                    <div style="cursor:pointer;" onclick="window.location='/Book/Details?id=@Model.User.MarkedBooks[i].BookId'">
-                        <div class="dark" style="font-weight:bold;font-size:14px;line-height:18px;">@Model.User.MarkedBooks[i].Book.Title</div>
-                        <div style="color:#707070;font-size:14px;font-style:italic;">@Model.User.MarkedBooks[i].Book.BookAuthor</div>
+                    <div style="cursor: pointer;" onclick="window.location = '/Book/Details?id=@Model.User.MarkedBooks[i].BookId'">
+                        <div class="dark" style="font-weight: bold; font-size: 14px; line-height: 18px;">@Model.User.MarkedBooks[i].Book.Title</div>
+                        <div style="color: #707070; font-size: 14px; font-style: italic;">@Model.User.MarkedBooks[i].Book.BookAuthor</div>
                     </div>
-                    <div style="height:20px;"></div>
+                    <div style="height: 20px;"></div>
                 }
-                <div style="height:10px;"></div>
-                <a href="" class="a1" style="font-size:14px;">СМОТРЕТЬ КНИГИ</a>
+                <div style="height: 10px;"></div>
+                <a href="" class="a1" style="font-size: 14px;">СМОТРЕТЬ КНИГИ</a>
             </div>
         }
-
+    
     </div>
 
 </div>

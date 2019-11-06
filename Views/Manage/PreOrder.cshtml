@@ -1,7 +1,9 @@
-﻿@model Knigosha.Core.ViewModels.OrderViewModel.OrderViewModel
+﻿@using Knigosha.Views.Manage
+@model Knigosha.Core.ViewModels.OrderViewModel.OrderViewModel
 
 @{
     ViewData["Title"] = "Абонементы";
+    ViewData.AddActivePage(ManageNavPages.Order);
 }
 
 

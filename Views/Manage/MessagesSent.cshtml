@@ -1,6 +1,8 @@
-﻿@model Knigosha.Core.ViewModels.ManageViewModels.MessagesViewModel
+﻿@using Knigosha.Views.Manage
+@model Knigosha.Core.ViewModels.ManageViewModels.MessagesViewModel
 @{
     ViewData["Title"] = "Отправленные сообщения";
+    ViewData.AddActivePage(ManageNavPages.Messages);
 }
 
 <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">

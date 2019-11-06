@@ -1,6 +1,8 @@
-﻿@model List<Knigosha.Core.Models.Book>
+﻿@using Knigosha.Views.Manage
+@model List<Knigosha.Core.Models.Book>
 @{
     ViewBag.Title = "Очки";
+    ViewData.AddActivePage(ManageNavPages.Points);
 }
 
 <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">

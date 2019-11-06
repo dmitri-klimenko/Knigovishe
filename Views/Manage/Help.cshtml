@@ -1,0 +1,37 @@
+﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
+@model  Knigosha.Core.ViewModels.ManageViewModels.HelpViewModel
+
+@{
+    ViewData["Title"] = "Справка";
+    ViewData.AddActivePage(ManageNavPages.Help);
+}
+
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    <div style="padding:50px;">
+        <div style="line-height:22px;">
+            @if (Model.User.UserType == UserTypes.Teacher)
+            {
+                <p>Здесь Вы найдете информацию о том, как активировать группу КЛАСС, а также о том, как использовать Книговище в работе с Вашими учениками.</p>
+                <hr />
+            <p><a asp-controller="Home" asp-action="CreateClass" target="_blank">Как создать и использовать группу КЛАСС в Книговище</a></p>
+            <hr />
+            <p><a asp-controller="Home" asp-action="ForParents" target="_blank">Письмо родителям об активации группы КЛАСС в Книговище</a></p>
+            <hr />
+            <p><a asp-controller="Home" asp-action="UseClass" target="_blank">Идеи для учителя: как изпользовать Книговище в работе с детьми</a></p> 
+            }
+            else if (Model.User.UserType == UserTypes.Parent)
+            {
+                <hr />
+            <p><a asp-controller="Home" asp-action="CreateFamily" target="_blank">Как создать группу СЕМЬЯ в Книговище</a></p>
+            <hr />
+                <p><a asp-controller="Home" asp-action="UseFamily" target="_blank">Как
+                    использовать группу СЕМЬЯ</a></p>
+            <hr />
+            <p><a asp-controller="Home" asp-action="Activate" target="_blank">Как активировать подписку с помощью ключа подписки</a></p>
+            }
+
+        </div>
+    </div>
+</td>

@@ -1,10 +1,11 @@
 ﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
 @model  Knigosha.Core.ViewModels.ManageViewModels.DetailsViewModel
 
 @{
     ViewData["Title"] = "Редактировать профиль";
+    ViewData.AddActivePage(ManageNavPages.Details);
 }
-
 <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:50px;padding-top:50px;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
     @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)

@@ -1,6 +1,11 @@
 ﻿@using Knigosha.Core.Models
+@using Knigosha.Views.Manage
 @model Knigosha.Core.ViewModels.ManageViewModels.DashboardViewModel
  
+@{
+    ViewData["Title"] = "О профиле";
+    ViewData.AddActivePage(ManageNavPages.Dashboard);
+}
 
 @*@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)*@
 

@@ -1,6 +1,8 @@
-﻿@model List<Knigosha.Core.Models.MarkedBook>
+﻿@using Knigosha.Views.Manage
+@model List<Knigosha.Core.Models.MarkedBook>
 @{
     ViewData["Title"] = "Отмеченные книги";
+    ViewData.AddActivePage(ManageNavPages.MarkedBooks);
 }
 
 @functions{

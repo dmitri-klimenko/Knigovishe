@@ -1,21 +1,29 @@
 ﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
 @model Knigosha.Core.ViewModels.ManageViewModels.StudentsViewModel
 
 @{
-    ViewData["Title"] = "Мои дети";
+    ViewData["Title"] = Model.User.UserType == UserTypes.Parent? "Мои дети" : "Мои ученики";
+    ViewData.AddActivePage(ManageNavPages.Students);
 }
 
 <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
     <div style="padding:50px;">
-
-        <h3>МОИ ДЕТИ</h3>
+        <h3>МОИ @(Model.User.UserType == UserTypes.Parent? "ДЕТИ" : "УЧЕНИКИ")</h3>
         <table>
             @for (var i = 0; i < Model.Children.Count; i++)
             {
                 <tr>
                     <td style="padding: 10px;">
-                        <div onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'" class="avatar" style="cursor: pointer; background-image: url(/uploads/@Model.Children[i].Photo)"></div>
+                        <div  onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'" class="avatar"
+                             @if (Model.Children[i].Photo != null)
+                             {
+                                 <text> style="cursor: pointer; background-image: url(/uploads/@Model.Children[i].Photo)"</text>}
+                             else
+                             {
+                                 <text> style="cursor: pointer; background-image: url(/skin/avatar.png)"</text>}>
+                        </div>
                     </td>
                     <td style="padding: 10px; cursor: pointer" onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'">#@(i+1) @Model.Children[i]</td>
                     <td style="padding: 10px;">
@@ -32,20 +40,24 @@
                 </tr>
             }
         </table>
-        <div style="height:50px;"></div>
-        <h3>БЕСПЛАТНЫЕ КЛЮЧИ АБОНЕМЕНТОВ</h3>
-        <table class="table" style="width:450px !important">
-            <tr>
-                <th>Ключ абонемента</th>
-                <th>Год</th>
-            </tr>
-            @foreach (var key in Model.Keys)
-            {
+        @if(Model.User.UserType == UserTypes.Parent)
+        {
+            <div style="height:50px;"></div>
+            <h3>БЕСПЛАТНЫЕ КЛЮЧИ АБОНЕМЕНТОВ</h3>
+            <table class="table" style="width:450px !important">
                 <tr>
-                    <td width="50%" align="center">@key.Code</td>
-                    <td align="center">@Model.SchoolYear</td>
+                    <th>Ключ абонемента</th>
+                    <th>Год</th>
                 </tr>
-            }
-        </table>
+                @foreach (var key in Model.Keys)
+                {
+                    <tr>
+                        <td width="50%" align="center">@key.Code</td>
+                        <td align="center">@Model.SchoolYear</td>
+                    </tr>
+                }
+            </table>
+        }
+        
     </div>
 </td>	

@@ -1690,8 +1690,8 @@ input::placeholder {
 
 .licenseLabel {
     position: absolute;
-    width: 154px;
-    height: 154px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     top: -77px;
     left: -77px;
@@ -1701,9 +1701,9 @@ input::placeholder {
 .licensePrice {
     position: absolute;
     z-index: 1;
-    top: 23px;
+    top: 15px;
     left: 0px;
-    width: 60px;
+    width: 55px;
     text-align: center;
     font-weight: bold;
     color: #fff;
@@ -3614,4 +3614,4 @@ dt {
     }
 }
 
-.twoButtons{}
+ 

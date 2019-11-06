@@ -3,8 +3,9 @@
 
 @{
     ViewData["Title"] = "Ответы";
-    ViewData.AddActivePage(ManageNavPages.Answers);
+    ViewData.AddActivePage(ManageNavPages.AnswersGroup);
 }
+
 @functions{
     public string GetClassFromGrade(int grade)
     {
@@ -80,7 +81,8 @@
                                                     <div class="quiz_inner_right">
                                                         <div class="answers" style="margin-bottom: 20px;">
                                                             Викторина решена
-                                                            <span style="font-weight: bold">@Model[i].Book.Answers.Count</span><span> раз</span>
+                                                            <span style="font-weight: bold">@Model[i].Book.Answers.Where(a => ViewBag.Ids.Contains(a.UserId)).ToList().Count</span><span> учениками</span>
+
                                                         </div>
                                                     </div>
                                                     <div class="bookTitle">@Model[i].Book.Title</div>
@@ -97,10 +99,8 @@
                                             <td colspan="2" class="bg @(GetClassFromGrade((int) Model[i].Book.Grade))" style="padding: 20px; vertical-align: top;">
                                                 <table style="width: 100%; font-size: 20px;">
                                                     <tr>
-                                                        <td>Процент: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
-                                                        <td style="text-align: right;">Очки: <span style="font-weight: bold">@Model[i].Points</span></td>
+                                                        <td style="text-align: right;">Верных ответов: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
                                                     </tr>
-
                                                 </table>
                                             </td>
                                         </tr>
@@ -141,8 +141,7 @@
                                         <td colspan="2" class="bg @(GetClassFromGrade((int) Model[i].Book.Grade))" style="padding: 20px; vertical-align: top;">
                                             <table style="width: 100%; font-size: 20px;">
                                                 <tr>
-                                                    <td>Процент: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
-                                                    <td style="text-align: right;">Очки: <span style="font-weight: bold">@Model[i].Points</span></td>
+                                                    <td style="text-align: right;">Верных ответов: <span style="font-weight: bold">@Model[i].PercentageOfRightResponses%</span></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -154,10 +153,9 @@
                     }
                 }
             }
-
-
         </table>
     </div>
 </td>
+
 
 

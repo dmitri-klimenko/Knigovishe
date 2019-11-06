@@ -83,40 +83,106 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Answers(string type)
         {
             var user = await _userManager.GetUserAsync(User);
+            ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year 
+                                     + "/" + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year;
+
+            if (type == "reset")
+            {
+                // sth
+                return View("Reset");
+            }
 
             if (type == "family")
             {
-                ViewBag.HasQueryString = true;
                 var meStudent = await _context.Students.SingleOrDefaultAsync(s => s.Id == user.Id);
-                var myActiveStudentFamily = await _context.StudentFamilies.SingleOrDefaultAsync(sf => sf.StudentId == meStudent.Id && sf.IsActive);
-                var myFamily = myActiveStudentFamily.Family;
-                List<Answer> answers = null;
-                if (myFamily != null)
+                var myActiveFamily = _context.StudentFamilies
+                    .Single(sf => sf.StudentId == meStudent.Id && sf.IsActive).Family;
+                if (myActiveFamily == null) return View("AnswersGroup");
                 {
                     var ids = _context.StudentFamilies
-                        .Where(sf => sf.FamilyId == myFamily.Id)
+                        .Where(sf => sf.FamilyId == myActiveFamily.Id)
                         .Select(sf => sf.StudentId)
                         .ToList();
-                    answers = _context.Answers
+                    var answers = _context.Answers
                         .Include(a => a.Book)
                         .ThenInclude(b => b.Answers)
                         .Where(a => ids.Contains(a.UserId))
                         .ToList();
                     ViewBag.Ids = ids;
-                    return View(answers);
+                    return View("AnswersGroup", answers);
                 }
+            }
+
+            if (type == "class")
+            {
+                var meStudent = await _context.Students.SingleOrDefaultAsync(s => s.Id == user.Id);
+                var myActiveClass = _context.StudentClasses
+                    .Single(sf => sf.StudentId == meStudent.Id && sf.IsActive).Class;
+                if (myActiveClass == null) return View("AnswersGroup");
+                {
+                    var ids = _context.StudentClasses
+                        .Where(sf => sf.ClassId == myActiveClass.Id)
+                        .Select(sf => sf.StudentId)
+                        .ToList();
+                    var answers = _context.Answers
+                        .Include(a => a.Book)
+                        .ThenInclude(b => b.Answers)
+                        .Where(a => ids.Contains(a.UserId))
+                        .ToList();
+                    ViewBag.Ids = ids;
+                    return View("AnswersGroup", answers);
+                }
+            }
+
+            if (type == "group") // "VMESTE"
+            {
+                var answers = await _context.Answers
+                    .Include(a => a.Book)
+                    .ThenInclude(b => b.Answers)
+                    .Where(a => a.UserId == user.Id)
+                    .ToListAsync();
+
                 return View(answers);
             }
 
-            var answers2 = await _context.Answers
-                .Include(a => a.Book)
-                .ThenInclude(b => b.Answers)
-                .Where(a => a.UserId == user.Id)
-                .ToListAsync();
-            ViewBag.HasQueryString = false;
-            ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year + "/"
-                                     + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year;
-            return View(answers2);
+            switch (user.UserType)
+            {
+                case UserTypes.Student:
+                    var answers = await _context.Answers
+                        .Include(a => a.Book)
+                        .ThenInclude(b => b.Answers)
+                        .Where(a => a.UserId == user.Id)
+                        .ToListAsync();
+
+                    return View(answers);
+
+                case UserTypes.Teacher:
+                    var myStudents = _context.StudentClasses
+                        .Where(sc => sc.ClassId == user.Id).Select(sc => sc.StudentId).ToList();
+                    if (myStudents.Count == 0) return View("AnswersGroup");
+                
+                    var answers2 = _context.Answers
+                        .Include(a => a.Book)
+                        .ThenInclude(b => b.Answers)
+                        .Where(a => myStudents.Contains(a.UserId))
+                        .ToList();
+                    ViewBag.Ids = myStudents;
+                    return View("AnswersGroup", answers2);
+
+                case UserTypes.Parent:
+                    var myChildren = _context.StudentFamilies
+                        .Where(sc => sc.FamilyId == user.Id).Select(sc => sc.StudentId).ToList();
+                    if (myChildren.Count == 0) return View("AnswersGroup");
+                
+                    var answers3 = _context.Answers
+                        .Include(a => a.Book)
+                        .ThenInclude(b => b.Answers)
+                        .Where(a => myChildren.Contains(a.UserId))
+                        .ToList();
+                    ViewBag.Ids = myChildren;
+                    return View("AnswersGroup", answers3);
+            }
+            return View();
         }
 
         [HttpGet]
@@ -772,9 +838,17 @@ namespace Knigosha.Controllers
                 {
                     if (foundUserSubscription.User.UserType == user.UserType)  // of same type
                     {
-                        if (foundUserSubscription.Status == StatusTypes.Activated)  //already activated 
-                            ModelState.AddModelError("Code", "Абонемент уже активирован!");
-                        else  //activate
+                        if (foundUserSubscription.Status == StatusTypes.Activated) //already activated 
+                            ModelState.AddModelError("Code", "Абонемент уже активирован другим пользователем!");
+
+                        else if ((currentUserSubscription.Subscription.SubscriptionType == SubscriptionTypes.Student ||
+                                  currentUserSubscription.Subscription.SubscriptionType == SubscriptionTypes.Family ||
+                                  currentUserSubscription.Subscription.SubscriptionType == SubscriptionTypes.Class) &&
+                                 currentUserSubscription.Status == StatusTypes.Activated)
+                        {    // already has paid active userSubscription
+                            ModelState.AddModelError("Code", "У Вас уже есть текущий абонемент!");
+                        }
+                        else //activate
                         {
                             foundUserSubscription.Status = StatusTypes.Activated;
                             foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
@@ -1056,9 +1130,17 @@ namespace Knigosha.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Students(int remove)
+        public async Task<IActionResult> Students(int remove, string id)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (id != null)
+            {
+                var student = _context.Students.Single(s => s.Id == id);
+                var countOfAnswers = _context.Answers.Count(a => a.UserId == id);
+                ViewBag.CountOfAnswers = countOfAnswers;
+                return View("StudentDetails", student);
+            }
+
             var children = _context.StudentFamilies
                 .Where(sf => sf.FamilyId == user.Id)
                 .Select(sf => sf.Student)
@@ -1074,7 +1156,8 @@ namespace Knigosha.Controllers
             {
                 Keys = userSubscription.ActivationKeys.Where(ak => ak.ActivationKeyType == ActivationKeyTypes.Student).ToList(),
                 Children = children,
-                SchoolYear = userSubscription.SchoolYear
+                SchoolYear = userSubscription.SchoolYear,
+                User = user
             };
 
             if (remove == 0) return View(studentsVm);
@@ -1084,6 +1167,16 @@ namespace Knigosha.Controllers
             return View(studentsVm);
         }
 
+        public async Task<IActionResult> Help()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var helpVm = new HelpViewModel
+            {
+                User = user
+            };
+
+            return View(helpVm);
+        }
 
       
 

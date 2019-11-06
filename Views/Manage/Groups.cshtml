@@ -1,10 +1,12 @@
 ﻿@using Knigosha.Core.Models
 @using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
 @using Microsoft.AspNetCore.Identity
 @model Knigosha.Core.ViewModels.ManageViewModels.GroupsViewModel
 
 @{
     ViewData["Title"] = "Группы";
+    ViewData.AddActivePage(ManageNavPages.Groups);
 }
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -231,42 +233,47 @@ else if (user.UserType == UserTypes.Teacher)
     <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;">
         <a href="" name="s" style="position:relative;top:-100px;"></a>
 
-        <div style="padding:50px;">
+       
             @if (Model.MyRequests != null)
             {
+                <div style="padding:50px;">
                 <h3>Заявки на приём в группу</h3>
-                <table>
-                    @for (int i = 0; i < Model.MyRequests.Count; i++)
-                    {
-                        <tr>
-                            <td style="padding: 10px;">
-                                @if (!string.IsNullOrWhiteSpace(Model.MyRequests[i].Student.Photo))
-                                {
-                                    <div class="avatar" style="background-image: url(/uploads/@Model.MyRequests[i].Student.Photo)"></div>
-                                }
-                                else
-                                {
-                                    <div class="avatar" style="background-image: url(/skin/avatar.png)"></div>
-                                }
-                            </td>
-                            <td style="padding: 10px;">@Model.MyRequests[i].Student.FullName</td>
-                            <td style="padding: 10px;">
-                                <a asp-controller="Manage"
-                                   asp-action="Groups"
-                                   asp-route-id=@Model.MyRequests[i].Student.Id
-                                   asp-route-type="accept">Принять</a>
-                            </td>
-                            <td style="padding: 10px;">
-                                <a asp-controller="Manage"
-                                   asp-action="Groups"
-                                   asp-route-id=@Model.MyRequests[i].Student.Id
-                                   asp-route-type="deny">Отклонить</a>
-                            </td>
-                        </tr>
-                    }
-                </table>
+            <table>
+                @for (int i = 0; i < Model.MyRequests.Count; i++)
+                {
+                    <tr>
+                        <td style="padding: 10px;">
+                            @if (!string.IsNullOrWhiteSpace(Model.MyRequests[i].Student.Photo))
+                            {
+                                <div class="avatar" style="background-image: url(/uploads/@Model.MyRequests[i].Student.Photo)"></div>
+                            }
+                            else
+                            {
+                                <div class="avatar" style="background-image: url(/skin/avatar.png)"></div>
+                            }
+                        </td>
+                        <td style="padding: 10px;">@Model.MyRequests[i].Student.FullName</td>
+                        <td style="padding: 10px;">
+                            <a asp-controller="Manage"
+                               asp-action="Groups"
+                               asp-route-id=@Model.MyRequests[i].Student.Id
+                               asp-route-type="accept">Принять</a>
+                        </td>
+                        <td style="padding: 10px;">
+                            <a asp-controller="Manage"
+                               asp-action="Groups"
+                               asp-route-id=@Model.MyRequests[i].Student.Id
+                               asp-route-type="deny">Отклонить</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+                </div>
             }
-        </div>
+            else
+            {
+                <div style="padding-left: 20px; padding-top: 20px;">Нет заявок на приём в группу.</div>
+            }
     </td>
 }
 

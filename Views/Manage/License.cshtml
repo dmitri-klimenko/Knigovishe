@@ -1,7 +1,9 @@
 ﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
 @model  Knigosha.Core.ViewModels.ManageViewModels.LicenseViewModel
 @{
     ViewData["Title"] = "Активация";
+    ViewData.AddActivePage(ManageNavPages.License);
 }
 
 <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">

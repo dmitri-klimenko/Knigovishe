@@ -109,5 +109,10 @@ namespace Knigosha.Controllers
         {
             return View();
         }
+
+        public IActionResult ForParents()
+        {
+            return View();
+        }
     }
 }

@@ -420,11 +420,11 @@
         <table class="container sc tc mc" style="width:100%;">
             <tr>
                 <td style="vertical-align:top;width:23%;">
-                    <div class="license license1" style="cursor:pointer;" onclick="window.location='/Account/Register'">
-                        <div style="height:60px;">
+                    <div class="license license1" style="cursor:pointer; padding-top: 35px" onclick="window.location='/Account/Register'">
+                        <div style="height:75px;">
                             <div class="license_text">
                                 <h4>
-                                    @Html.DisplayFor(m => m.Subscriptions[0].Name)
+                                    @Html.DisplayFor(m => m.Subscriptions[0].SubscriptionType)
                                 </h4>
                             </div>
                         </div>
@@ -460,7 +460,7 @@
                         <div class="licensePrice">@Model.Subscriptions[1].Discount</div>
                         <div style="height:60px;">
                             <div class="license_text">
-                                <h4 style="font-size:22px; line-height:26px;"> @Html.DisplayFor(m => m.Subscriptions[1].Name)</h4>
+                                <h4 style="font-size:22px; line-height:26px;"> @Html.DisplayFor(m => m.Subscriptions[1].SubscriptionType)</h4>
                             </div>
                         </div>
                         <div class="license_center" style="height: 237px">
@@ -501,7 +501,7 @@
                         <div class="licensePrice">@Model.Subscriptions[2].Discount</div>
                         <div style="height:60px;">
                             <div class="license_text">
-                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[2].Name)</h4>
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[2].SubscriptionType)</h4>
                             </div>
                         </div>
                         <div class="license_center" style="height: 237px">
@@ -542,7 +542,7 @@
                         <div class="licensePrice">@Model.Subscriptions[3].Discount</div>
                         <div style="height:60px;">
                             <div class="license_text">
-                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[3].Name)</h4>
+                                <h4 style="font-size:22px;line-height:26px;">@Html.DisplayFor(m => m.Subscriptions[3].SubscriptionType)</h4>
                             </div>
                         </div>
                         <div class="license_center" style="height: 237px">

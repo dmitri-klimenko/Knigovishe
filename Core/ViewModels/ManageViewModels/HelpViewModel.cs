@@ -6,11 +6,8 @@ using Knigosha.Core.Models;
 
 namespace Knigosha.Core.ViewModels.ManageViewModels
 {
-    public class StudentsViewModel
+    public class HelpViewModel
     {
-        public List<Student> Children { get; set; }
-        public List<ActivationKey> Keys { get; set; }
-        public string SchoolYear { get; set; }
         public ApplicationUser User { get; set; }
     }
 }
