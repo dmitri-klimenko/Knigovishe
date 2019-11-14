@@ -12,5 +12,6 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         public List<ActivationKey> Keys { get; set; }
         public string SchoolYear { get; set; }
         public ApplicationUser User { get; set; }
+        public string StatusMessage { get; set; }
     }
 }

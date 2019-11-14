@@ -20,6 +20,8 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Knigosha.Persistence.Migrations;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Internal;
+using Remotion.Linq.Clauses;
 
 namespace Knigosha.Controllers
 {
@@ -45,7 +47,7 @@ namespace Knigosha.Controllers
           IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder,
-          ApplicationDbContext context, 
+          ApplicationDbContext context,
           IHostingEnvironment environment
         )
         {
@@ -62,28 +64,632 @@ namespace Knigosha.Controllers
         public string StatusMessage { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Dashboard(DashboardGroupViewModel model)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var paidSubscriptions = user.UserSubscriptions.Where(us =>
-                us.Subscription.SubscriptionType == SubscriptionTypes.Class ||
-                us.Subscription.SubscriptionType == SubscriptionTypes.Family ||
-                us.Subscription.SubscriptionType == SubscriptionTypes.Student);
-
-            var vm = new DashboardViewModel()
+            if (user.UserType == UserTypes.Student)
             {
-                User = user,
-                HasPaidSubscriptions = paidSubscriptions.Any()
-            };
-            return View(vm);
+                var recommended = _context.Books.Take(4).ToList(); // change it later
+                var pointsLeft = 0;
+                switch (user.Level)
+                {
+                    case Levels.Null:
+                        pointsLeft = 45 - user.Points;
+                        break;
+                    case Levels.One:
+                        pointsLeft = 90 - user.Points;
+                        break;
+                    case Levels.Two:
+                        pointsLeft = 135 - user.Points;
+                        break;
+                    case Levels.Three:
+                        pointsLeft = 180 - user.Points;
+                        break;
+                    case Levels.Four:
+                        pointsLeft = 225 - user.Points;
+                        break;
+                    case Levels.Five:
+                        pointsLeft = 260 - user.Points;
+                        break;
+                    case Levels.Six:
+                        pointsLeft = 305 - user.Points;
+                        break;
+                    case Levels.Seven:
+                        pointsLeft = 350 - user.Points;
+                        break;
+                }
+
+                var dsVm = new DashboardStudentViewModel()
+                {
+                    User = user,
+                    HasAccess = HasAccess(user),
+                    Recommended = recommended,
+                    PointsTillNextLevel = pointsLeft
+                };
+                return View("DashboardStudent", dsVm);
+            }
+
+            if (user.UserType == UserTypes.Parent)
+            {
+                var family = _context.Families
+                    .Include(f => f.CreatedBooks)
+                    .Include(f => f.StudentFamilies)
+                    .ThenInclude(cb => cb.Student)
+                    .Single(f => f.Id == user.Id);
+
+                var dgVm = new DashboardGroupViewModel()
+                {
+                    User = user,
+                    HasAccess = HasAccess(user),
+                    CountOfChildren = family.StudentFamilies.Count,
+                    Periods = new List<SelectListItem>
+                    {
+                        new SelectListItem("учебный год", "year", true),
+                        new SelectListItem("последний месяц", "month", false),
+                        new SelectListItem("последняя неделя", "week", false)
+                    },
+                    ChartLocations = new List<SelectListItem>
+                    {
+                        new SelectListItem("в семье", "class", true),
+                        new SelectListItem("в классах в школе", "school", false),
+                        new SelectListItem("в классах в городе", "city", false),
+                        new SelectListItem("в классах в стране", "country", false)
+                    }
+                };
+
+
+                if (model.Period == "year" || string.IsNullOrWhiteSpace(model.Period))
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                        {
+                            new SelectListItem("учебный год", "year", true),
+                            new SelectListItem("последний месяц", "month", false),
+                            new SelectListItem("последняя неделя", "week", false)
+                        };
+                    // 1 call to db
+                    dgVm.PointsForCreatedBooks = _context.CreatedBooks
+                        .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = family.StudentFamilies.Select(sf => sf.StudentId).ToList();
+                        // 2 call to db
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?.Sum(a => a.Points) ?? 0;
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allReadBooks?.Count ?? 0;
+
+                        dgVm.Students = family.StudentFamilies.Select(sf => sf.Student).ToList();
+                        // 3 call to db
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                            .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                            .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents + 
+                                           dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+                      
+                        var totalPercentage = allAnswers?.Sum(s => s.PercentageOfRightResponses)?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+
+                        user.TotalAnswers = dgVm.CountOfAnswers;
+
+                        user.TotalPercentage = dgVm.TotalPercentageOfRightResponses;
+                    }
+
+                    user.TotalPoints = dgVm.TotalPoints;
+                    await _userManager.UpdateAsync(user);
+                }
+                else if (model.Period == "month")
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                        {
+                            new SelectListItem("учебный год", "year", false),
+                            new SelectListItem("последний месяц", "month", true),
+                            new SelectListItem("последняя неделя", "week", false)
+                        };
+
+                    dgVm.PointsForCreatedBooks = family.CreatedBooks
+                        .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
+                        .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = family.StudentFamilies.Select(sf => sf.StudentId).ToList();
+                        // 2
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allAnswers?.Count(a => DateTime.Now.AddMonths(-1) <= a.DateTime) ?? 0;
+
+                        dgVm.Students = family.StudentFamilies.Select(sf => sf.Student).ToList();
+                        // 3
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                                                                   .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                                                                   .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                                                                   .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?
+                                                              .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                              .Sum(a => a.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents + dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+                     
+                        var totalPercentage = allAnswers?
+                                                  .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                  .Sum(s => s.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+
+                    }
+                }
+                else if (model.Period == "week")
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                    {
+                        new SelectListItem("учебный год", "year", false),
+                        new SelectListItem("последний месяц", "month", false),
+                        new SelectListItem("последняя неделя", "week", true)
+                    };
+
+                    dgVm.PointsForCreatedBooks = family.CreatedBooks
+                        .Where(a => DateTime.Now.AddDays(-7) <= a.DateTime)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = family.StudentFamilies.Select(sf => sf.StudentId).ToList();
+                        // 2
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allAnswers?.Count(a => DateTime.Now.AddDays(-7) <= a.DateTime) ?? 0;
+
+                        dgVm.Students = family.StudentFamilies.Select(sf => sf.Student).ToList();
+                        // 3
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                                                                   .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                                                                   .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                                                                   .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?
+                                                              .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                              .Sum(a => a.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents + dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+
+                        var totalPercentage = allAnswers?
+                                                  .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                  .Sum(s => s.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+                    }
+                }
+
+                if (model.ChartLocation == "class" || string.IsNullOrEmpty(model.ChartLocation))
+                {
+                    dgVm.ChartLocations = new List<SelectListItem>
+                        {
+                            new SelectListItem("в семье", "class", true),
+                            new SelectListItem("в классах в школе", "school", false),
+                            new SelectListItem("в классах в городе", "city", false),
+                            new SelectListItem("в классах в стране", "country", false)
+                        };
+
+                    if(family.StudentFamilies.Count > 0)
+                    {
+                        var totalPercentage = _context.Answers?
+                                                  .Include(a => a.Book)
+                                                  .Where(a => family.StudentFamilies
+                                                                  .Select(sf => sf.StudentId).ToList()
+                                                                  .Contains(a.UserId) && !a.IsArchive)
+                                                  .Sum(a => a.PercentageOfRightResponses) ?? 0;
+                            
+                       dgVm.Average = totalPercentage / family.StudentFamilies.Count;
+                    }
+                   
+                }
+                else if (model.ChartLocation == "school")
+                {
+                    dgVm.ChartLocations = new List<SelectListItem>
+                        {
+                            new SelectListItem("в семье", "class", false),
+                            new SelectListItem("в классах в школе", "school", true),
+                            new SelectListItem("в классах в городе", "city", false),
+                            new SelectListItem("в классах в стране", "country", false)
+                        };
+
+                    if (family.StudentFamilies.Count > 0)
+                    {
+                        var answers = _context.Answers?
+                                                  .Include(a => a.Book)
+                                                  .Include(a => a.User)
+                                                  .Where(a => a.User.School == user.School && !a.IsArchive).ToList();
+
+                        var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.Average = totalPercentage / family.StudentFamilies.Count;
+                    }
+
+                }
+                else if (model.ChartLocation == "city" && !string.IsNullOrEmpty(family.City))
+                {
+                    dgVm.ChartLocations = new List<SelectListItem>
+                        {
+                            new SelectListItem("в семье", "class", false),
+                            new SelectListItem("в классах в школе", "school", false),
+                            new SelectListItem("в классах в городе", "city", true),
+                            new SelectListItem("в классах в стране", "country", false)
+                        };
+
+                    if (family.StudentFamilies.Count > 0)
+                    {
+                        var answers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Include(a => a.User)
+                            .Where(a => a.User.City == user.City && !a.IsArchive).ToList();
+
+                        var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.Average = totalPercentage / family.StudentFamilies.Count;
+                    }
+                }
+                else if (model.ChartLocation == "country")
+                {
+                    dgVm.ChartLocations = new List<SelectListItem>
+                        {
+                            new SelectListItem("в семье", "class", false),
+                            new SelectListItem("в классах в школе", "school", false),
+                            new SelectListItem("в классах в городе", "city", false),
+                            new SelectListItem("в классах в стране", "country", true)
+                        };
+
+                    if (family.StudentFamilies.Count > 0)
+                    {
+                        var answers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Include(a => a.User)
+                            .Where(a => a.User.Country == user.Country && !a.IsArchive).ToList();
+
+                        var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.Average = totalPercentage / family.StudentFamilies.Count;
+                    }
+                }
+
+                if (model.Location == "country" || string.IsNullOrEmpty(model.Location))
+                {
+                    dgVm.Locations = new List<SelectListItem>
+                    {
+                        new SelectListItem(user.Country, "country", true),
+                        new SelectListItem("Мир", "world", false),
+                    };
+                    var numberOfFamiliesInAgeGroupInCountry = _context.Families.Count(f => f.AgeGroup == family.AgeGroup && 
+                                                                                           f.Country == user.Country);
+                    dgVm.NumberOfGroupsInTable = numberOfFamiliesInAgeGroupInCountry;
+
+                    dgVm.PositionInTableAccordingToPoints = GetPositionInFamiliesAccordingToPoints(family, true);
+                    dgVm.PositionInTableAccordingToAnswers = GetPositionInFamiliesAccordingToAnswers(family, true);
+                    dgVm.PositionInTableAccordingToRightResponses = GetPositionInFamiliesAccordingToRightResponses(family, true);
+
+                    dgVm.TopInTableAccordingToPoints = TopInFamiliesAccordingToPoints(family, numberOfFamiliesInAgeGroupInCountry);
+                    dgVm.TopInTableAccordingToAnswers = TopInFamiliesAccordingToAnswers(family, numberOfFamiliesInAgeGroupInCountry);
+                    dgVm.TopInTableAccordingToRightResponses = TopInFamiliesAccordingToRightResponses(family, numberOfFamiliesInAgeGroupInCountry);
+
+                }
+                else if (model.Location == "world")
+                {
+                    dgVm.Locations = new List<SelectListItem>
+                    {
+                        new SelectListItem(user.Country, "country", false),
+                        new SelectListItem("Мир", "world", true),
+                    };
+                    var numberOfFamiliesInAgeGroup = _context.Families.Count(f => f.AgeGroup == family.AgeGroup);
+                    dgVm.NumberOfGroupsInTable = numberOfFamiliesInAgeGroup;
+
+                    dgVm.PositionInTableAccordingToPoints = GetPositionInFamiliesAccordingToPoints(family, false);
+                    dgVm.PositionInTableAccordingToAnswers = GetPositionInFamiliesAccordingToAnswers(family, false);
+                    dgVm.PositionInTableAccordingToRightResponses = GetPositionInFamiliesAccordingToRightResponses(family, false);
+
+                    dgVm.TopInTableAccordingToPoints = TopInFamiliesAccordingToPoints(family, numberOfFamiliesInAgeGroup);
+                    dgVm.TopInTableAccordingToAnswers = TopInFamiliesAccordingToAnswers(family, numberOfFamiliesInAgeGroup);
+                    dgVm.TopInTableAccordingToRightResponses = TopInFamiliesAccordingToRightResponses(family, numberOfFamiliesInAgeGroup);
+
+                }
+      
+                return View("DashboardGroup", dgVm);
+            }
+
+            if (user.UserType == UserTypes.Teacher)
+            {
+                var schoolClass = _context.Classes
+                    .Include(c => c.StudentClasses)
+                    .ThenInclude(sc => sc.Student)
+                    .Include(s => s.CreatedBooks)
+                    .Include(s => s.Answers)
+                    .ThenInclude(a => a.Book)
+                    .Single(c => c.Id == user.Id);
+
+                var dgVm = new DashboardGroupViewModel()
+                {
+                    User = user,
+                    HasAccess = HasAccess(user),
+                    CountOfChildren = schoolClass.StudentClasses.Count,
+                    Periods = new List<SelectListItem>
+                    {
+                        new SelectListItem("учебный год", "year", true),
+                        new SelectListItem("последний месяц", "month", false),
+                        new SelectListItem("последняя неделя", "week", false)
+                    },
+                    ChartLocations = new List<SelectListItem>
+                    {
+                        new SelectListItem("в классе", "class", true),
+                        new SelectListItem("в классах в школе", "school", false),
+                        new SelectListItem("в классах в городе", "city", false),
+                        new SelectListItem("в классах в стране", "country", false)
+                    }
+                };
+
+                if (model.Period == "year" || string.IsNullOrWhiteSpace(model.Period))
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                        {
+                            new SelectListItem("учебный год", "year", true),
+                            new SelectListItem("последний месяц", "month", false),
+                            new SelectListItem("последняя неделя", "week", false)
+                        };
+                    // 1 call to db
+                    dgVm.PointsForCreatedBooks = _context.CreatedBooks
+                        .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = schoolClass.StudentClasses.Select(sf => sf.StudentId).ToList();
+                        // 2 call to db
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?.Sum(a => a.Points) ?? 0;
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allReadBooks?.Count ?? 0;
+
+                        dgVm.Students = schoolClass.StudentClasses.Select(sf => sf.Student).ToList();
+                        // 3 call to db
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                            .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                            .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents +
+                                           dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+
+                        var totalPercentage = allAnswers?.Sum(s => s.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+
+                        user.TotalAnswers = dgVm.CountOfAnswers;
+
+                        user.TotalPercentage = dgVm.TotalPercentageOfRightResponses;
+                    }
+
+                    user.TotalPoints = dgVm.TotalPoints;
+                    await _userManager.UpdateAsync(user);
+                }
+                else if (model.Period == "month")
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                        {
+                            new SelectListItem("учебный год", "year", false),
+                            new SelectListItem("последний месяц", "month", true),
+                            new SelectListItem("последняя неделя", "week", false)
+                        };
+
+                    dgVm.PointsForCreatedBooks = schoolClass.CreatedBooks
+                        .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
+                        .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = schoolClass.StudentClasses.Select(sf => sf.StudentId).ToList();
+                        // 2
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allAnswers?.Count(a => DateTime.Now.AddMonths(-1) <= a.DateTime) ?? 0;
+
+                        dgVm.Students = schoolClass.StudentClasses.Select(sf => sf.Student).ToList();
+                        // 3
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                                                                   .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                                                                   .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                                                                   .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?
+                                                              .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                              .Sum(a => a.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents + dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+
+                        var totalPercentage = allAnswers?
+                                                  .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                  .Sum(s => s.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+
+                    }
+                }
+                else if (model.Period == "week")
+                {
+                    dgVm.Periods = new List<SelectListItem>
+                    {
+                        new SelectListItem("учебный год", "year", false),
+                        new SelectListItem("последний месяц", "month", false),
+                        new SelectListItem("последняя неделя", "week", true)
+                    };
+
+                    dgVm.PointsForCreatedBooks = schoolClass.CreatedBooks
+                        .Where(a => DateTime.Now.AddDays(-7) <= a.DateTime)
+                        .Sum(cb => cb.Points);
+
+                    if (dgVm.CountOfChildren == 0)
+                    {
+                        dgVm.TotalPoints = dgVm.PointsForCreatedBooks;
+                    }
+                    else
+                    {
+                        var listOfStudentIds = schoolClass.StudentClasses.Select(sf => sf.StudentId).ToList();
+                        // 2
+                        var allAnswers = _context.Answers?
+                            .Include(a => a.Book)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .ToList();
+
+                        var allReadBooks = allAnswers?.Select(a => a.Book).ToList();
+
+                        if (allReadBooks != null)
+                            dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
+
+                        dgVm.CountOfAnswers = allAnswers?.Count(a => DateTime.Now.AddDays(-7) <= a.DateTime) ?? 0;
+
+                        dgVm.Students = schoolClass.StudentClasses.Select(sf => sf.Student).ToList();
+                        // 3
+                        dgVm.PointsForBooksCreatedByStudents = _context.CreatedBooks?
+                                                                   .Where(cb => listOfStudentIds.Contains(cb.UserId))
+                                                                   .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
+                                                                   .Sum(cb => cb.Points) ?? 0;
+
+                        dgVm.PointsForAnswersByStudents = allAnswers?
+                                                              .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                              .Sum(a => a.Points) ?? 0;
+
+                        dgVm.TotalPoints = dgVm.PointsForBooksCreatedByStudents + dgVm.PointsForAnswersByStudents +
+                                           dgVm.PointsForCreatedBooks;
+
+                        var totalPercentage = allAnswers?
+                                                  .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
+                                                  .Sum(s => s.PercentageOfRightResponses) ?? 0;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren;
+                    }
+                }
+
+
+                if (model.Location == "school" || string.IsNullOrEmpty(model.Location))
+                {
+                    dgVm.Locations = new List<SelectListItem>
+                    {
+                        new SelectListItem("Школа", "school", true),
+                        new SelectListItem(schoolClass.Country, "country", false),
+                    };
+                    var numberOfClassesInAgeGroup = _context.Classes.Count(f => f.AgeGroup == schoolClass.AgeGroup); // quering all schoolClasses, not only in school
+                    dgVm.NumberOfGroupsInTable = numberOfClassesInAgeGroup;
+
+                    dgVm.PositionInTableAccordingToPoints = GetPositionInClassesAccordingToPoints(schoolClass, false);
+                    dgVm.PositionInTableAccordingToAnswers = GetPositionInClassesAccordingToAnswers(schoolClass, false);
+                    dgVm.PositionInTableAccordingToRightResponses = GetPositionInClassesAccordingToRightResponses(schoolClass, false);
+
+                    dgVm.TopInTableAccordingToPoints = TopInClassesAccordingToPoints(schoolClass, numberOfClassesInAgeGroup);
+                    dgVm.TopInTableAccordingToAnswers = TopInClassesAccordingToAnswers(schoolClass, numberOfClassesInAgeGroup);
+                    dgVm.TopInTableAccordingToRightResponses = TopInClassesAccordingToRightResponses(schoolClass, numberOfClassesInAgeGroup);
+
+                }
+                else if (model.Location == "country")
+                {
+                    dgVm.Locations = new List<SelectListItem>
+                    {
+                        new SelectListItem("Школа", "school", false),
+                        new SelectListItem(schoolClass.Country, "country", true),
+                    };
+                    var numberOfClassesInAgeGroupInCountry = _context.Classes.Count(f => f.AgeGroup == schoolClass.AgeGroup
+                                                                                          && f.Country == schoolClass.Country);
+                    dgVm.NumberOfGroupsInTable = numberOfClassesInAgeGroupInCountry;
+
+                    dgVm.PositionInTableAccordingToPoints = GetPositionInClassesAccordingToPoints(schoolClass, true);
+                    dgVm.PositionInTableAccordingToAnswers = GetPositionInClassesAccordingToAnswers(schoolClass, true);
+                    dgVm.PositionInTableAccordingToRightResponses = GetPositionInClassesAccordingToRightResponses(schoolClass, true);
+
+                    dgVm.TopInTableAccordingToPoints = TopInClassesAccordingToPoints(schoolClass, numberOfClassesInAgeGroupInCountry);
+                    dgVm.TopInTableAccordingToAnswers = TopInClassesAccordingToAnswers(schoolClass, numberOfClassesInAgeGroupInCountry);
+                    dgVm.TopInTableAccordingToRightResponses = TopInClassesAccordingToRightResponses(schoolClass, numberOfClassesInAgeGroupInCountry);
+                }
+
+                return View("DashboardGroup", dgVm);
+            }
+
+            return NotFound();
         }
 
-        [HttpGet]
+
         public async Task<IActionResult> Answers(string type)
         {
             var user = await _userManager.GetUserAsync(User);
-            ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year 
+            ViewData["SchoolYear"] = DateTime.Parse(DateTime.Today.ToString(CultureInfo.CurrentCulture)).Year
                                      + "/" + DateTime.Parse(DateTime.Today.AddYears(1).ToString(CultureInfo.CurrentCulture)).Year;
 
             if (type == "reset")
@@ -160,7 +766,7 @@ namespace Knigosha.Controllers
                     var myStudents = _context.StudentClasses
                         .Where(sc => sc.ClassId == user.Id).Select(sc => sc.StudentId).ToList();
                     if (myStudents.Count == 0) return View("AnswersGroup");
-                
+
                     var answers2 = _context.Answers
                         .Include(a => a.Book)
                         .ThenInclude(b => b.Answers)
@@ -173,7 +779,7 @@ namespace Knigosha.Controllers
                     var myChildren = _context.StudentFamilies
                         .Where(sc => sc.FamilyId == user.Id).Select(sc => sc.StudentId).ToList();
                     if (myChildren.Count == 0) return View("AnswersGroup");
-                
+
                     var answers3 = _context.Answers
                         .Include(a => a.Book)
                         .ThenInclude(b => b.Answers)
@@ -206,13 +812,89 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Points()
         {
             var user = await _userManager.GetUserAsync(User);
-            var createdByUserBooks = _context.Books
+
+            //same for all profile types
+            var booksCreatedByMe = _context.Books
                 .Where(b => String
-                    .Equals(b.QuestionsAuthor, (user.Name + " " + user.Surname), StringComparison.CurrentCultureIgnoreCase))
+                    .Equals(b.QuestionsAuthor, user.FullName, StringComparison.CurrentCultureIgnoreCase))?
                 .ToList();
-            ViewData["CreatedBooks"] = createdByUserBooks.Count;
-            ViewData["PointsForCreatedBooks"] = user.PointsForCreatedBooks;
-            return View(createdByUserBooks);
+
+            switch (user.UserType)
+            {
+                case UserTypes.Student:
+
+                    var numberOfCreatedBooks = booksCreatedByMe.Count;
+                    var pointsForCreatedBooks = user.PointsForCreatedBooks;
+
+                    var pointsVm = new PointsViewModel
+                    {
+                        User = user,
+                        NumberOfBooksCreatedByMe = numberOfCreatedBooks,
+                        PointsForBooksCreatedByMe = pointsForCreatedBooks,
+                        BooksCreatedByMe = booksCreatedByMe
+                    };
+
+                    return View(pointsVm);
+
+                case UserTypes.Parent:
+
+                    var family = await _context.Families
+                        .Include(f => f.StudentFamilies)
+                        .ThenInclude(sf => sf.Student)
+                        .SingleAsync(f => f.Id == user.Id);
+
+                    var myStudentsNames = _context.StudentFamilies?.Where(sf => sf.FamilyId == user.Id)
+                        .Select(sf => sf.Student.FullName).ToList();
+
+
+                    var pointsVm2 = new PointsViewModel
+                    {
+                        User = family,
+                        BooksCreatedByMe = booksCreatedByMe,
+                        NumberOfBooksCreatedByMe = booksCreatedByMe.Count,
+                        PointsForBooksCreatedByMe = user.PointsForCreatedBooks,
+                    };
+                    if (myStudentsNames != null)
+                    {
+                        pointsVm2.BooksCreatedByStudents = _context.Books
+                            .Where(b => myStudentsNames.Contains(b.QuestionsAuthor))
+                            .ToList();
+                        pointsVm2.NumberOfBooksCreatedByStudents = pointsVm2.BooksCreatedByStudents.Count;
+                        pointsVm2.PointsForBooksCreatedByStudents =
+                            family.StudentFamilies.Sum(sf => sf.Student.PointsForCreatedBooks);
+
+                    }
+                    return View(pointsVm2);
+
+                case UserTypes.Teacher:
+
+                    var schoolClass = await _context.Classes
+                        .Include(f => f.StudentClasses)
+                        .ThenInclude(sc => sc.Student)
+                        .SingleAsync(c => c.Id == user.Id);
+
+                    var myStudentsNames2 = _context.StudentClasses.Where(sc => sc.ClassId == user.Id)
+                        .Select(sf => sf.Student.FullName)?.ToList();
+
+                    var booksCreatedByMyStudents2 = _context.Books
+                        .Where(b => myStudentsNames2.Contains(b.QuestionsAuthor))?
+                        .ToList();
+
+
+                    var pointsVm3 = new PointsViewModel
+                    {
+                        User = schoolClass,
+
+                        BooksCreatedByStudents = booksCreatedByMyStudents2,
+                        NumberOfBooksCreatedByStudents = booksCreatedByMyStudents2.Count,
+                        PointsForBooksCreatedByStudents = schoolClass.StudentClasses.Sum(sf => sf.Student.PointsForCreatedBooks),
+                        BooksCreatedByMe = booksCreatedByMe,
+                        NumberOfBooksCreatedByMe = booksCreatedByMe.Count,
+                        PointsForBooksCreatedByMe = user.PointsForCreatedBooks,
+                    };
+                    return View(pointsVm3);
+            }
+            return View();
         }
 
 
@@ -851,7 +1533,7 @@ namespace Knigosha.Controllers
                         else //activate
                         {
                             foundUserSubscription.Status = StatusTypes.Activated;
-                            foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                            foundUserSubscription.ActivatedOn = DateTime.Today;
                             _context.UserSubscriptions.Update(foundUserSubscription);
                             await _context.SaveChangesAsync();
                             model.MyUserSubscription = foundUserSubscription;
@@ -875,7 +1557,7 @@ namespace Knigosha.Controllers
                         {
                             foundUserSubscription.UserId = user.Id;
                             foundUserSubscription.Status = StatusTypes.Activated;
-                            foundUserSubscription.ActivatedOn = DateTime.Now.ToString("dd.MM.yyyy");
+                            foundUserSubscription.ActivatedOn = DateTime.Today;
                             _context.UserSubscriptions.Update(foundUserSubscription);
                             await _context.SaveChangesAsync();
                             model.MyUserSubscription = foundUserSubscription;
@@ -908,7 +1590,7 @@ namespace Knigosha.Controllers
                             return View(model);
                         }
                     }
-                    else 
+                    else
                     {
                         ModelState.AddModelError("Code", "Тип Вашего профиля не совпадает с типом абонемента!");
                     }
@@ -959,7 +1641,7 @@ namespace Knigosha.Controllers
                         StatusMessage = StatusMessage
                     };
                     return View(detailsVm);
-                
+
                 case UserTypes.Teacher:
                     var teacher = await _context.Classes.SingleAsync(s => s.Id == user.Id);
 
@@ -975,7 +1657,7 @@ namespace Knigosha.Controllers
 
                         Greetings = new List<SelectListItem>
                         {
-                            new SelectListItem(teacher.Greeting, teacher.Greeting),
+                            new SelectListItem("Привет, " + teacher.UserName, "Привет, " + teacher.UserName),
                             new SelectListItem("Здравствуйте, госпожа " + teacher.Surname, "Здравствуйте, госпожа " + teacher.Surname),
                             new SelectListItem("Здравствуйте, господин " + teacher.Surname, "Здравствуйте, господин " + teacher.Surname),
                         },
@@ -1056,13 +1738,13 @@ namespace Knigosha.Controllers
                     }
 
                     if (user.UserName != model.UserName) user.UserName = model.UserName;
-                    if(user.Name != model.Name) user.Name = model.Name;
-                    if(user.Surname != model.Surname) user.Surname = model.Surname;
+                    if (user.Name != model.Name) user.Name = model.Name;
+                    if (user.Surname != model.Surname) user.Surname = model.Surname;
                     if (user.City != model.CityInput && user.City != model.MainCityRussia)
                         user.City = !string.IsNullOrEmpty(model.CityInput) ? model.CityInput : model.MainCityRussia;
-                    if(user.Country != model.Country) user.Country = model.Country;
-                    if(user.Grade != model.Grade) user.Grade = model.Grade;
-                    if(user.Parallel != model.Parallel) user.Parallel = model.Parallel;
+                    if (user.Country != model.Country) user.Country = model.Country;
+                    if (user.Grade != model.Grade) user.Grade = model.Grade;
+                    if (user.Parallel != model.Parallel) user.Parallel = model.Parallel;
                     if (user.UserType == UserTypes.Student || user.UserType == UserTypes.Parent)
                         user.Greeting = model.GreetingRadio == 0 ? "Привет, " + model.UserName : "Привет, " + model.FullName;
                     else user.Greeting = model.GreetingString;
@@ -1147,7 +1829,7 @@ namespace Knigosha.Controllers
                 .Include(s => s.UserSubscriptions)
                 .ThenInclude(us => us.Subscription).ToList();
 
-            var userSubscription =  _context.UserSubscriptions
+            var userSubscription = _context.UserSubscriptions
                 .Include(us => us.ActivationKeys)
                 .Include(us => us.Subscription)
                 .Last(us => us.UserId == user.Id && us.Status == StatusTypes.Activated);
@@ -1157,13 +1839,15 @@ namespace Knigosha.Controllers
                 Keys = userSubscription.ActivationKeys.Where(ak => ak.ActivationKeyType == ActivationKeyTypes.Student).ToList(),
                 Children = children,
                 SchoolYear = userSubscription.SchoolYear,
-                User = user
+                User = user,
+                StatusMessage = StatusMessage
             };
 
             if (remove == 0) return View(studentsVm);
             var thisStudentFamily = _context.StudentFamilies.Single(uf => uf.Id == remove);
             _context.StudentFamilies.Remove(thisStudentFamily);
             await _context.SaveChangesAsync();
+            studentsVm.StatusMessage = "Профиль ребёнка успешно удалён из группы!";
             return View(studentsVm);
         }
 
@@ -1178,27 +1862,275 @@ namespace Knigosha.Controllers
             return View(helpVm);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Data(string action, string id, int book, byte rate)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            switch (action)
+            {
+                case "rateBook":
+                    var bookInDb = _context.Books.Single(b => b.Id == book);
+                    var bookRating = new BookRating
+                    {
+                        UserId = user.Id,
+                        User = user,
+                        BookId = bookInDb.Id,
+                        Book = bookInDb,
+                        Rating = rate
+                    };
+                    _context.BookRatings.Add(bookRating);
+                    await _context.SaveChangesAsync();
+                    break;
+            }
+
+            return NoContent();
+        }
+
+
+        #region Helpers for quering tables
+        //For Families
+
+        public int? GetPositionInFamiliesAccordingToPoints(Family family, bool inCountry)
+        {
+            
+            var allFamiliesOfThisAgeGroup = _context.Families.Where(f => f.AgeGroup == family.AgeGroup).ToList();
+
+            if (inCountry)
+                allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(f => f.Country == family.Country).ToList();
+
+            var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(f => f.TotalPoints);
+            return familiesInOrder.IndexOf(family) + 1;
+
+        }
+
+        public int? GetPositionInFamiliesAccordingToAnswers(Family family, bool inCountry)
+        {
+            var allFamiliesOfThisAgeGroup = _context.Families
+                .Where(f => f.AgeGroup == family.AgeGroup).ToList();
+
+            if (inCountry)
+                allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(f => f.Country == family.Country).ToList();
+
+            var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(f => f.TotalAnswers);
+           return familiesInOrder.IndexOf(family) + 1;
+
+        }
+
+        public int? GetPositionInFamiliesAccordingToRightResponses(Family family, bool inCountry)
+        {
       
+            var allFamiliesOfThisAgeGroup = _context.Families
+                .Where(f => f.AgeGroup == family.AgeGroup).ToList();
+
+                if (inCountry)
+                    allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(f => f.Country == family.Country).ToList();
+
+                var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(f => f.TotalPercentage);
+                return familiesInOrder.IndexOf(family) + 1;
+        
+        }
+
+        public string TopInFamiliesAccordingToPoints(Family family, int numberOfFamiliesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Families
+                .OrderBy(f => f.TotalPoints)
+                .ToList();
+
+            var number = itemsInOrder.IndexOf(family) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+        public string TopInFamiliesAccordingToAnswers(Family family, int numberOfFamiliesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Families
+                .OrderBy(f => f.TotalAnswers)
+                .ToList();
+            var number = itemsInOrder.IndexOf(family) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+        public string TopInFamiliesAccordingToRightResponses(Family family, int numberOfFamiliesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfFamiliesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Families
+                .OrderBy(f => f.TotalPercentage)
+                .ToList();
+            var number = itemsInOrder.IndexOf(family) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+        //For Classes
+        public int? GetPositionInClassesAccordingToPoints(Class schoolClass, bool inCountry)
+        {
+            var allFamiliesOfThisAgeGroup = _context.Classes.Where(c => c.AgeGroup == schoolClass.AgeGroup).ToList();
+
+            if (inCountry)
+                allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(c => c.Country == schoolClass.Country).ToList();
+
+            var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(c => c.TotalPoints);
+            return familiesInOrder.IndexOf(schoolClass) + 1;
+        }
+
+        public int? GetPositionInClassesAccordingToAnswers(Class schoolClass, bool inCountry)
+        {
+            var allFamiliesOfThisAgeGroup = _context.Classes
+                .Where(c => c.AgeGroup == schoolClass.AgeGroup).ToList();
+
+            if (inCountry)
+                allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(c => c.Country == schoolClass.Country).ToList();
+
+            var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(c => c.TotalAnswers);
+            return familiesInOrder.IndexOf(schoolClass) + 1;
+        }
+
+        public int? GetPositionInClassesAccordingToRightResponses(Class schoolClass, bool inCountry)
+        {
+            var allFamiliesOfThisAgeGroup = _context.Classes
+                .Where(c => c.AgeGroup == schoolClass.AgeGroup).ToList();
+
+            if (inCountry)
+                allFamiliesOfThisAgeGroup = allFamiliesOfThisAgeGroup.TakeWhile(c => c.Country == schoolClass.Country).ToList();
+
+            var familiesInOrder = allFamiliesOfThisAgeGroup.OrderBy(f => f.TotalPercentage);
+            return familiesInOrder.IndexOf(schoolClass) + 1;
+        }
+
+        public string TopInClassesAccordingToPoints(Class schoolClass, int numberOfClassesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfClassesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Classes
+                .OrderBy(c => c.TotalPoints)
+                .ToList();
+
+            var number = itemsInOrder.IndexOf(schoolClass) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+        public string TopInClassesAccordingToAnswers(Class schoolClass, int numberOfClassesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfClassesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Classes
+                .OrderBy(c => c.TotalAnswers)
+                .ToList();
+            var number = itemsInOrder.IndexOf(schoolClass) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+        public string TopInClassesAccordingToRightResponses(Class schoolClass, int numberOfClassesInAgeGroup)
+        {
+            string label = null;
+
+            var onePercent = Math.Ceiling(numberOfClassesInAgeGroup * 0.01);
+            var twoPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.02);
+            var threePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.03);
+            var fourPercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.04);
+            var fivePercents = Math.Ceiling(numberOfClassesInAgeGroup * 0.05);
+            var itemsInOrder = _context.Classes
+                .OrderBy(c => c.TotalPercentage)
+                .ToList();
+            var number = itemsInOrder.IndexOf(schoolClass) + 1;
+            if (number <= onePercent) label = "TOП 1%";
+            else if (number > onePercent || number <= twoPercents) label = "TOП 2%";
+            else if (number > twoPercents || number <= threePercents) label = "TOП 3%";
+            else if (number > threePercents || number <= fourPercents) label = "TOП 4%";
+            else if (number > fourPercents || number <= fivePercents) label = "TOП 5%";
+            return label;
+        }
+
+
+        // Check if User has access according to business requirements
+        public bool HasAccess(ApplicationUser user)
+        {
+            var activeSubscriptions = _context.UserSubscriptions.Include(us => us.Subscription)
+                .Where(us => us.UserId == user.Id && us.ActivatedOn != null).ToList();
+
+            var freeSubscription = activeSubscriptions
+                .Find(us => us.Subscription.SubscriptionType == SubscriptionTypes.FreeClass ||
+                            us.Subscription.SubscriptionType == SubscriptionTypes.FreeFamily ||
+                            us.Subscription.SubscriptionType == SubscriptionTypes.FreeStudent);
+
+            var duration = DateTime.Today.Subtract((DateTime)freeSubscription.ActivatedOn);
+            TimeSpan maxDuration = TimeSpan.FromDays(14);
+
+            var count = _context.Answers.Count(a => a.UserId == user.Id);
+
+            var hasValidFreeSubscription = TimeSpan.Compare(duration, maxDuration) < 0 && count < 3;
+
+            var paidSubscription = activeSubscriptions
+                .Find(us => us.Subscription.SubscriptionType == SubscriptionTypes.Class ||
+                            us.Subscription.SubscriptionType == SubscriptionTypes.Family ||
+                            us.Subscription.SubscriptionType == SubscriptionTypes.Student);
+
+            var hasValidPaidSubscription = paidSubscription != null && DateTime.Compare((DateTime)paidSubscription.ActivatedOn,
+                                                DateTime.Parse(paidSubscription.Subscription.ValidUntil)) < 0;
+
+            return (hasValidFreeSubscription || hasValidPaidSubscription);
+        }
+
+        #endregion
 
 
 
+        #region Helpers
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            #region Helpers
-
-            private string GetUniqueFileName(string fileName)
+        private string GetUniqueFileName(string fileName)
         {
             fileName = Path.GetFileName(fileName);
             return Path.GetFileNameWithoutExtension(fileName)

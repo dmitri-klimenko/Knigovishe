@@ -362,9 +362,6 @@ namespace Knigosha.Controllers
                         if (result.Succeeded)
                         {
                             await new UserSubscriptionController(_context).CreateFree(family);
-                            var group = await _context.AllFamiliesGroup.FirstAsync();
-                            group.Families.Add(family);
-                            await _context.SaveChangesAsync();
                             await _signInManager.SignInAsync(family, isPersistent: false);
                             _logger.LogInformation("Family created a new account with password.");
                             return RedirectToLocal(returnUrl);
@@ -397,9 +394,6 @@ namespace Knigosha.Controllers
                         if (result.Succeeded)
                         {
                             await new UserSubscriptionController(_context).CreateFree(schoolClass);
-                            var group = await _context.AllClassesGroup.FirstAsync();
-                            group.Classes.Add(schoolClass);
-                            await _context.SaveChangesAsync();
                             await _signInManager.SignInAsync(schoolClass, isPersistent: false);
                             _logger.LogInformation("Family created a new account with password.");
                             return RedirectToLocal(returnUrl);

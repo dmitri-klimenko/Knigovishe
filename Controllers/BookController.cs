@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
@@ -37,7 +39,10 @@ namespace Knigosha.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(string keywords, string bookPublisher, BookCategories category, AgeGroups ageGroup, string yearFrom, string yearTo, string sortField)
         {
-            var books = _context.Books.Include(b => b.Answers).AsQueryable();
+            var books = _context.Books
+                .Include(b => b.Answers)
+                .Include(b => b.BookRatings)
+                .AsQueryable();
 
             var publishers = books.Select(b => b.Publisher);
 
@@ -51,30 +56,18 @@ namespace Knigosha.Controllers
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
-            {
                 books = books.Where(b => b.Publisher == bookPublisher);
-            }
+            
+            if (category != 0) books = books.Where(b => b.BookCategory == category);
 
-            if (category != 0)
-            {
-                books = books.Where(b => b.BookCategory == category);
-            }
+            if (ageGroup != 0) books = books.Where(b => b.AgeGroup == ageGroup);
 
-            if (ageGroup != 0)
-            {
-                books = books.Where(b => b.AgeGroup == ageGroup);
-
-            }
-            if (!string.IsNullOrEmpty(yearFrom))
-            {
-                books = books.Where(b => int.Parse(b.YearPublished) >= int.Parse(yearFrom));
-            }
-
-            if (!string.IsNullOrEmpty(yearTo))
-            {
-                books = books.Where(b => int.Parse(b.YearPublished) <= int.Parse(yearTo));
-            }
-
+            if (!string.IsNullOrEmpty(yearFrom) && int.TryParse(yearFrom, out int n))
+                books = books.Where(b => int.Parse(b.YearPublished) >= n);
+            
+            if (!string.IsNullOrEmpty(yearTo) && int.TryParse(yearTo, out int m))
+                books = books.Where(b => int.Parse(b.YearPublished) <= m);
+            
             switch (sortField)
             {
                 case "latest":
@@ -129,25 +122,74 @@ namespace Knigosha.Controllers
                 .Include(b => b.Answers)
                 .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var recommended = _context.Books.Take(4).ToList();
+
+            var recommended = _context.Books.Take(4).ToList(); // change it later
+
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
-                var bookNote = await _context.BookNotes.SingleOrDefaultAsync(bn => bn.UserId == user.Id && bn.BookId == book.Id) ??
-                               new BookNote()
-                               {
-                                   Book = book,
-                                   BookId = book.Id,
-                                   User = user,
-                                   UserId = user.Id
-                               };
+                var bookNote =
+                    await _context.BookNotes.SingleOrDefaultAsync(bn => bn.UserId == user.Id && bn.BookId == book.Id) ??
+                    new BookNote()
+                    {
+                        Book = book,
+                        BookId = book.Id,
+                        User = user,
+                        UserId = user.Id
+                    };
+
+                var rating = _context.BookRatings.SingleOrDefault(br => br.UserId == user.Id && br.BookId == id)?.Rating;
+            
                 var vm1 = new DetailsViewModel()
                 {
                     Book = book,
                     BookId = book.Id,
                     Recommended = recommended,
-                    BookNote = bookNote
+                    BookNote = bookNote,
+                    MyRating = rating,
+                    UserType = user.UserType
                 };
+
+                if (user.UserType == UserTypes.Parent)
+                {
+                    var studentIds = _context.StudentFamilies
+                        .Where(uf => uf.FamilyId == user.Id)
+                        .Select(uf => uf.StudentId)?.ToList();
+                    var answers = _context.Answers.Where(
+                        a => a.BookId == book.Id && studentIds.Contains(a.UserId))?.ToList();
+                    var count = answers?.Count;
+                    if (count == 0)
+                    {
+                        vm1.PercentageOfStudentsRightResponses = 0;
+                        vm1.CountOfStudentsAnswers = 0;
+                    }
+                    else
+                    {
+                        vm1.PercentageOfStudentsRightResponses = answers.Sum(a => a.PercentageOfRightResponses) / count;
+                        vm1.CountOfStudentsAnswers = count;
+                    }
+                }
+
+                else if (user.UserType == UserTypes.Teacher)
+                {
+                    var studentIds = _context.StudentClasses
+                        .Where(uf => uf.ClassId == user.Id)
+                        .Select(uf => uf.StudentId)?.ToList();
+                    var answers = _context.Answers.Where(
+                        a => a.BookId == book.Id && studentIds.Contains(a.UserId))?.ToList();
+                    var count = answers?.Count;
+                    if (count == 0)
+                    {
+                        vm1.PercentageOfStudentsRightResponses = 0;
+                        vm1.CountOfStudentsAnswers = 0;
+                    }
+                    else
+                    {
+                        vm1.PercentageOfStudentsRightResponses = answers.Sum(a => a.PercentageOfRightResponses) / count;
+                        vm1.CountOfStudentsAnswers = count;
+                    }
+
+                }
                 return View(vm1);
             }
             var vm2 = new DetailsViewModel() 

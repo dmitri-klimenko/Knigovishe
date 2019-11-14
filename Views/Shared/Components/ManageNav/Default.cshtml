@@ -34,7 +34,11 @@
             <a href="/Manage/Dashboard" style="font-weight: @ManageNavPages.DashboardNavClass(ViewContext)">Моя семья</a>
             <a href="/Manage/Details" style="font-weight: @ManageNavPages.DetailsNavClass(ViewContext)">Мой профиль</a>
             <a href="/Manage/Students" style="font-weight:@ManageNavPages.StudentsNavClass(ViewContext)">Мои дети</a>
-            <a href="/Manage/Answers?type=reset" style="font-weight:@ManageNavPages.ResetNavClass(ViewContext)">Заявки на рестарт</a>
+            <a href="/Manage/Answers?type=reset" style="font-weight: @ManageNavPages.ResetNavClass(ViewContext)">
+                Заявки на рестарт
+                @*@if (Model.ResetsCount > 0)
+                {<span class="red">(@Model.ResetsCount)</span>}*@
+            </a>
             <a href="/Manage/Answers" style="font-weight: @ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
             <a href="/Manage/Help"style="font-weight: @ManageNavPages.HelpNavClass(ViewContext)">Справка</a>
             <a href="/Manage/Messages" style="font-weight:@ManageNavPages.MessagesNavClass(ViewContext)">
@@ -53,7 +57,11 @@
             <a href="/Manage/Dashboard"  style="font-weight:@ManageNavPages.DashboardNavClass(ViewContext)">Мой класс</a>
             <a href="/Manage/Details" style="font-weight:@ManageNavPages.DetailsNavClass(ViewContext)">Мой профиль</a>
             <a href="/Manage/Students" style="font-weight:@ManageNavPages.StudentsNavClass(ViewContext)">Мои ученики</a>
-            <a href="/Manage/Groups" style="font-weight:@ManageNavPages.GroupsNavClass(ViewContext)">Заявки на приём</a>
+            <a href="/Manage/Groups" style="font-weight: @ManageNavPages.GroupsNavClass(ViewContext)">
+                Заявки на приём
+                @if (Model.RequestsCount > 0)
+                {<span class="red">(@Model.RequestsCount)</span>}
+            </a>
             <a href="/Manage/Answers?type=reset" style="font-weight:@ManageNavPages.ResetNavClass(ViewContext)">Заявки на рестарт</a>
             <a href="/Manage/Answers" style="font-weight:@ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
             <a href="/Manage/Answers?type=group" style="font-weight:@ManageNavPages.AnswersNavClass(ViewContext)">ВМЕСТЕ</a>

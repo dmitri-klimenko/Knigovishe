@@ -35,7 +35,8 @@ namespace Knigosha.Core.Models
                 var numberOfBookRatings = BookRatings.Count;
                 var sumOfBookRatings = BookRatings.Sum(bookRating => bookRating.Rating);
                 var averageRating = (numberOfBookRatings != 0) ? ((double)sumOfBookRatings / numberOfBookRatings) : 0;
-                return Math.Round(averageRating, 1);
+                var retVal = Math.Round(averageRating, 1);
+                return retVal;
             }
         }
 

@@ -6,18 +6,19 @@ namespace Knigosha.Core.Models.Enums
     {
         [Display(Name = "новичок")]
         Null = 0,
-        [Display(Name = "освоившийся")]
+        [Display(Name = "безстрашный")]
         One = 1,
-        [Display(Name = "поднаторелый")]
+        [Display(Name = "путешественик")]
         Two = 2,
-        [Display(Name = "умелый")]
+        [Display(Name = "открыватель")]
         Three = 3,
-        [Display(Name = "профи")]
+        [Display(Name = "изобретатель")]
         Four = 4,
-        [Display(Name = "мастер")]
+        [Display(Name = "шаман")]
         Five = 5,
-        [Display(Name = "герой")]
-        Six = 6
-      
+        [Display(Name = "сенсей")]
+        Six = 6,
+        [Display(Name= "творец")]
+        Seven = 7
     }
 }

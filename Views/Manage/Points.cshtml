@@ -1,25 +1,59 @@
-﻿@using Knigosha.Views.Manage
-@model List<Knigosha.Core.Models.Book>
+﻿@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
+@model Knigosha.Core.ViewModels.ManageViewModels.PointsViewModel
 @{
     ViewBag.Title = "Очки";
     ViewData.AddActivePage(ManageNavPages.Points);
 }
 
-<td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
+<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
-    <div style="line-height:24px;font-size:20px;padding-bottom:20px;">
-        Созданных викторин: <span style="font-weight: bold">@ViewData["CreatedBooks"]</span><br>
-        Очков за созданные викторины: <span style="font-weight: bold">@ViewData["PointsForCreatedBooks"]</span>
-        <br>
-    </div>
-    <h3>Созданные викторины</h3>
-    @if (@Model.Count == 0)
+    @if (Model.User.UserType == UserTypes.Student)
     {
-        <span> Все еще нет созданных викторин.</span>
+        <div style="line-height:24px;font-size:20px;padding-bottom:20px;">
+            Созданных викторин: <span style="font-weight: bold">@Model.NumberOfBooksCreatedByMe</span><br>
+            Очков за созданные викторины: <span style="font-weight: bold">@Model.PointsForBooksCreatedByMe</span>
+            <br>
+        </div>
+        <h3>Созданные викторины</h3>
+        @if (@Model.NumberOfBooksCreatedByMe == 0)
+        {
+            <span> Все еще нет созданных викторин.</span>
+        }
+        else
+        {
+
+        }
+        <br><br>
     }
     else
     {
+        <div style="line-height:24px;font-size:20px;padding-bottom:20px;">
+            Викторин, созданных @(Model.User.UserType == UserTypes.Parent ? "детьми:" : "учениками:") <span style="font-weight: bold">@Model.NumberOfBooksCreatedByStudents</span><br>
+            Очков за викторины, созданные @(Model.User.UserType == UserTypes.Parent ? "детьми:" : "учениками:") <span style="font-weight: bold">@Model.PointsForBooksCreatedByStudents</span><br>
 
+            Викторин, созданных групповым профилем: <span style="font-weight: bold">@Model.NumberOfBooksCreatedByMe</span><br>
+            Очков за викторины, созданные групповым профилем: <span style="font-weight: bold">@Model.PointsForBooksCreatedByMe</span><br>
+        </div>
+
+        <h3>Викторины, созданные @(Model.User.UserType == UserTypes.Parent ? "детьми:" : "учениками:")</h3>
+        @if (Model.NumberOfBooksCreatedByStudents == 0)
+        {
+            <span>Твои @(Model.User.UserType == UserTypes.Parent ? "дети" : "ученики") еще не создали викторин.</span>
+        }
+        else
+        {
+
+        }
+        <br><br>
+        <h3>Викторины, созданные груповым профилем</h3>
+        @if (Model.NumberOfBooksCreatedByMe == 0)
+        {
+            <span>Все еще нет викторин, созданных групповым профилем.</span>
+        }
+        else
+        {
+
+        }
     }
-    <br><br>
 </td>

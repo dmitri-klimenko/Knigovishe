@@ -6,9 +6,12 @@ using Knigosha.Core.Models;
 
 namespace Knigosha.Core.ViewModels.ManageViewModels
 {
-    public class DashboardViewModel
+    public class DashboardStudentViewModel
     {
         public ApplicationUser User { get; set; }
-        public bool HasPaidSubscriptions { get; set; }
+        public bool HasAccess { get; set; }
+        public List<Book> Recommended { get; set; }
+        public int PointsTillNextLevel { get; set; }
+
     }
 }

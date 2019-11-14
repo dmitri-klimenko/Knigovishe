@@ -13,13 +13,13 @@
         <div style="line-height:22px;">
             @if (Model.User.UserType == UserTypes.Teacher)
             {
-                <p>Здесь Вы найдете информацию о том, как активировать группу КЛАСС, а также о том, как использовать Книговище в работе с Вашими учениками.</p>
+                <p>Здесь ты найдешь информацию о том, как активировать группу КЛАСС, а также о том, как использовать Книговище в работе с учениками.</p>
                 <hr />
             <p><a asp-controller="Home" asp-action="CreateClass" target="_blank">Как создать и использовать группу КЛАСС в Книговище</a></p>
             <hr />
             <p><a asp-controller="Home" asp-action="ForParents" target="_blank">Письмо родителям об активации группы КЛАСС в Книговище</a></p>
             <hr />
-            <p><a asp-controller="Home" asp-action="UseClass" target="_blank">Идеи для учителя: как изпользовать Книговище в работе с детьми</a></p> 
+            <p><a asp-controller="Home" asp-action="UseClass" target="_blank">Идеи для учителя: как использовать Книговище в работе с детьми</a></p> 
             }
             else if (Model.User.UserType == UserTypes.Parent)
             {

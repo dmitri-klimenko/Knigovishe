@@ -14,7 +14,7 @@
         <section>
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginForm">
                 <h5><strong>Вход в профиль</strong></h5>
-                <p>Пожалуйста, введите Ваши данные.</p>
+                <p>Пожалуйста, введи свои данные.</p>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group" id="loginEmailDiv">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="form-group" id="forgotPasswordDiv">
                     <p id="forgotPassword">
-                        <a asp-action="ForgotPassword">Забыли пароль?</a>
+                        <a asp-action="ForgotPassword">Забыл пароль?</a>
                     </p>
                 </div>
             </form>

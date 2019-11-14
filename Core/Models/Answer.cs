@@ -16,13 +16,15 @@ namespace Knigosha.Core.Models
 
         public int BookId { get; set; }
 
+        public bool  IsArchive { get; set; }
+
         public int NumberOfWriteResponses { get; set; }
 
         public int NumberOfWrongResponses { get; set; }
 
         public int NumberOfSkippedQuestions { get; set; }
 
-        public string DateTime { get; set; }
+        public DateTime DateTime { get; set; }
 
         public string ReasonForRestart { get; set; }
 
@@ -35,7 +37,7 @@ namespace Knigosha.Core.Models
             get
             {
                 var result = NumberOfWriteResponses * Book.PointsForRightAnswer -
-                             NumberOfWriteResponses * Book.PointsForWrongAnswer;
+                             NumberOfWrongResponses * Book.PointsForWrongAnswer;
                 return result > 0 ? result : 0;
             }
         }
@@ -52,7 +54,7 @@ namespace Knigosha.Core.Models
         {
             User = user ?? throw new ArgumentNullException(nameof(User));
             Book = book ?? throw new ArgumentNullException(nameof(Book));
-            DateTime = System.DateTime.Now.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
+            DateTime = System.DateTime.Today;
         }
 
     }

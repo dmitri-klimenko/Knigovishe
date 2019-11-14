@@ -17,7 +17,9 @@ namespace Knigosha.Persistence
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<CreatedBook> CreatedBooks { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<BookNote> BookNotes { get; set; }
         public DbSet<BookRating> BookRatings { get; set; }
@@ -36,16 +38,11 @@ namespace Knigosha.Persistence
         public DbSet<City> Cities { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<Text> Texts { get; set; }
-        public DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
-        public DbSet<AllClassesGroup> AllClassesGroup { get; set; }
         public DbSet<Request> Requests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<AllClassesGroup>().HasData(new AllClassesGroup { Id = 1 });
-            builder.Entity<AllFamiliesGroup>().HasData(new AllFamiliesGroup { Id = 1 });
 
             var jsonStateList = MyAppResources.CountriesJson;
             var states = JsonConvert.DeserializeObject<List<Country>>(jsonStateList);
@@ -153,8 +150,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new CityConfiguration());
             builder.ApplyConfiguration(new SchoolConfiguration());
             builder.ApplyConfiguration(new TextConfiguration());
-            builder.ApplyConfiguration(new AllFamiliesGroupConfiguration());
-            builder.ApplyConfiguration(new AllClassesGroupConfiguration());
+            builder.ApplyConfiguration(new CreatedBookConfiguration());
         }
     }
 }

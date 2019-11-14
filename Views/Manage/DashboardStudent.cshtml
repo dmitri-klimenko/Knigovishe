@@ -1,0 +1,192 @@
+﻿@using Knigosha.Core.Models
+@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
+@model Knigosha.Core.ViewModels.ManageViewModels.DashboardStudentViewModel
+ 
+@{
+    ViewData["Title"] = "Мой профиль";
+    ViewData.AddActivePage(ManageNavPages.Dashboard);
+}
+
+
+    <td colspan="2" valign="top" class="desktop-top-border">
+        <a href="" name="s" style="position:relative;top:-100px;"></a>
+        @if (!Model.HasAccess)
+        {
+            <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+                Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
+                Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
+            </div>
+        }
+        else
+        {
+            <div class="profile_dashboard">
+                <div class="visible-mobile">
+                    <table class="sc">
+                        <tr>
+                            <td style="width:500px;">
+                                <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">@Model.User.Greeting</div>
+                                <div style="font-size:20px;line-height:30px;">
+                                    У тебя <span style="font-weight: bold">@Model.User.Points</span>
+                                    @if (Model.User.Points == 0 || Model.User.Points > 4)
+                                    {<text>очков</text>}
+                                else if (Model.User.Points == 1)
+                                {
+                                    <text>очко</text>
+                                }
+                                else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                                {<text>очка</text>} 
+                                    и ты находишься на уровне <span style="font-weight: bold">
+                                        @Html.DisplayFor(m => m.User.Level).</span>
+                                Тебе нехватает <span style="font-weight: bold">@Model.PointsTillNextLevel</span>
+                                @if (Model.User.Points == 0 || Model.User.Points > 4)
+                                {<text>очков</text>}
+                            else if (Model.User.Points == 1)
+                            {
+                                <text>очко</text>
+                            }
+                            else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                            {<text>очка</text>} до следующего уровня.
+                            </div>
+                            <div class="visible-mobile" style="height:40px;"></div>
+                            </td>
+                            <td style="padding-left:50px;padding-top:50px;">
+                                <div style="position:relative;padding-left:30px;">
+                                    <div class="vline" style="border-radius:10px;width:15px;height:100%;
+											position:absolute;left:0px;top:0px;background:#fbf7eb;overflow:hidden;">
+                                        <div style="border-radius:10px;width:15px;height:100%;position:absolute;
+												left:0px;bottom:0px;background:#f8ae00;height:20px;"></div>
+                                    </div>
+                                    <div style="@(Model.User.Level == Levels.Seven? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 7 - творец</div>
+                                    <div style="@(Model.User.Level == Levels.Six? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 6 - сенсей</div>
+                                    <div style="@(Model.User.Level == Levels.Five? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 5 - шаман</div>
+                                    <div style="@(Model.User.Level == Levels.Four? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 4 - изобретатель</div>
+                                    <div style="@(Model.User.Level == Levels.Three? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 3 - открыватель</div>
+                                    <div style="@(Model.User.Level == Levels.Two? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 2 - путешественик</div>
+                                    <div style="@(Model.User.Level == Levels.One? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 1 - безстрашный</div>
+                                    <div style="@(Model.User.Level == Levels.Null? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 0 - новичок</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="invisible-mobile">
+                    <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">
+                        @Model.User.Greeting
+                    </div>
+                    <div style="font-size:20px;line-height:30px;">
+                        У тебя <span style="font-weight: bold">@Model.User.Points</span>
+                        @if (Model.User.Points == 0 || Model.User.Points > 4)
+                        {<text>очков</text>}
+                        else if (Model.User.Points == 1)
+                        {
+                            <text>очко</text>
+                        }
+                        else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                        {<text>очка</text>} 
+                        и ты находишься на уровне <span style="font-weight: bold">
+                            @Html.DisplayFor(m => m.User.Level)</span>.
+                        Тебе нехватает <span style="font-weight: bold">@Model.PointsTillNextLevel</span>
+                        @if (Model.User.Points == 0 || Model.User.Points > 4)
+                        {<text>очков</text>}
+                        else if (Model.User.Points == 1)
+                        {
+                            <text>очко</text>
+                        }
+                        else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                        {<text>очка</text>} до следующего уровня.
+                    </div>
+                    <div style="position:relative;">
+                        <div style="margin-top:10px;background:#fbf7eb;overflow:hidden;border-radius:10px;">
+                            <div style="height:15px;background:#f8ae00;width:0%;"></div>
+                        </div>
+                        <div style="position: absolute; top: 25px; font-size: 12px; line-height: 14px; transform: rotate(-30deg); left: 0; @(Model.User.Level == Levels.Null? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;0<br><span style="font-size:10px;">новичок</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(14.285714285714% - 30px); @(Model.User.Level == Levels.One? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;1<br><span style="font-size:10px;">безстрашный</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(28.571428571429% - 30px); @(Model.User.Level == Levels.Two? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;2<br><span style="font-size:10px;">путешественник</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(42.857142857143% - 30px); @(Model.User.Level == Levels.Three? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;3<br><span style="font-size:10px;">открыватель</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(57.142857142857% - 30px); @(Model.User.Level == Levels.Four? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;4<br><span style="font-size:10px;">изобретатель</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(71.428571428571% - 30px); @(Model.User.Level == Levels.Five? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;5<br><span style="font-size:10px;">шаман</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(85.714285714286% - 30px); @(Model.User.Level == Levels.Six? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;6<br><span style="font-size:10px;">сенсей</span>
+                        </div>
+                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);right:0; @(Model.User.Level == Levels.Seven? "color:#000;font-weight:bold;" : "color:gray;")">
+                            Уровень&nbsp;7<br><span style="font-size:10px;">творец</span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="" name="s1"></a>
+
+                <div style="height:100px;"></div>
+                <div style="height:150px;"></div>
+
+                <div id="books">
+                    <h1 class="section_title" onclick="window.location='/Book/Index'">Рекомендовано для тебя</h1>
+                    <table class="sc" cellspacing="0" cellpadding="0" style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td style="vertical-align:top;width:23.125%;">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[0].Id'" class="book_div">
+                                        <div class="wishlist "
+                                             data-book="@Model.Recommended[0].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
+                                        <img src="/uploads//@Model.Recommended[0].CoverPhoto">							
+                                        <div style="height:15px;"></div>
+                                        <h3>@Model.Recommended[0].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[0].BookAuthor</div>
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Recommended[0].Id">ВИЖ ПОВЕЧЕ</a>
+                                    </div>
+                                </td>
+                                <td style="width:2.5%">&nbsp;</td>
+                                <td style="vertical-align:top;width:23.125%;">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[1].Id'" class="book_div">
+                                        <div class="wishlist "
+                                             data-book="@Model.Recommended[1].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
+                                        <img src="/uploads/@Model.Recommended[1].CoverPhoto">							
+                                        <div style="height:15px;"></div>
+                                        <h3>@Model.Recommended[1].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[1].BookAuthor</div>
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Recommended[1].Id">ВИЖ ПОВЕЧЕ</a>
+                                    </div>
+                                </td>
+                                <td style="width:2.5%">&nbsp;</td>
+                                <td style="vertical-align:top;width:23.125%;">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[2].Id'" class="book_div">
+                                        <div class="wishlist "
+                                             data-book="@Model.Recommended[2].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
+                                        <img src="/uploads//@Model.Recommended[2].CoverPhoto">							
+                                        <div style="height:15px;"></div>
+                                        <h3>@Model.Recommended[2].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[2].BookAuthor</div>
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Recommended[2].Id">ВИЖ ПОВЕЧЕ</a>
+                                    </div>
+                                </td>
+                                <td style="width:2.5%">&nbsp;</td>
+                                <td style="vertical-align:top;width:23.125%;">
+                                    <div onclick="window.location='/Book/Details?id=@Model.Recommended[3].Id'" class="book_div">
+                                        <div class="wishlist "
+                                             data-book="@Model.Recommended[3].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
+                                        <img src="/uploads//@Model.Recommended[3].CoverPhoto">							
+                                        <div style="height:15px;"></div>
+                                        <h3>@Model.Recommended[3].Title</h3>
+                                        <div class="bookAuthor">@Model.Recommended[3].BookAuthor</div>
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Recommended[3].Id">ВИЖ ПОВЕЧЕ</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }

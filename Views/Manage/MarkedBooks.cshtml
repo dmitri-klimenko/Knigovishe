@@ -48,21 +48,64 @@
         return returnVal;
     }
 }
-<td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
-    <a href="" name="s" style="position:relative;top:-100px;"></a>
-    <table class="tc sc mc">
-        @for (int i = 0; i < Model.Count; i++)
-        {
-            var cells = 4;
-            var item = Model[i];
-            if ((i % cells) == 0)
+    <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
+        <a href="" name="s" style="position:relative;top:-100px;"></a>
+        @if (Model.Count == 0)
+        {<text>Всё ещё нет отмеченных книг.</text>}
+        <table class="tc sc mc">
+            @for (int i = 0; i < Model.Count; i++)
             {
-                @:<tr>
+                var cells = 4;
+                var item = Model[i];
+                if ((i % cells) == 0)
+                {
+                    @:<tr>
+                    }
+                    if ((i % cells) == (cells - 1))
+                    {
+                        <td style="vertical-align: top; width: 200px;" class="book_quiz">
+                            <div class="cover @(GetClassFromGrade((int)Model[i].Book.Grade))"
+                                 style="background-image: url(/uploads/@Model[i].Book.CoverPhoto);"
+                                 onclick="window.location = '/Book/Details?id=@Model[i].Book.Id'">
+                                <div class="hover bg @(GetClassFromGrade((int)item.Book.Grade))"></div>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <div class="wishlist" data-book="@Model[i].Book.Id"
+                                         onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                }
+                                <div class="details">
+                                    <div style="display: table; width: 100%;">
+                                        <div style="display: table-row">
+                                            <div class="in">
+                                                <div style="font-size: 18px; padding-bottom: 5px; font-weight: bold;">
+                                                    @Model[i].Book.Title
+                                                    <div style="font-size: 14px;">@Model[i].Book.BookAuthor</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="quizLabel"></div>
+                                <div class="quizYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
+                            </div>
+                            <div class="rating">
+                                <span style="font-weight: bold">@Model[i].Book.AverageRating</span>/5 &nbsp;
+                                <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            </div>
+                            <div class="bl"></div>
+                            <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
+                        </td>
+                    @:</tr>
+                    <tr><td colspan="7" style="height: 40px;">&nbsp;</td></tr>
                 }
-                if ((i % cells) == (cells - 1))
+                else
                 {
                     <td style="vertical-align: top; width: 200px;" class="book_quiz">
-                        <div class="cover @(GetClassFromGrade((int)Model[i].Book.Grade))"
+                        <div class="cover @(GetClassFromGrade((int)item.Book.Grade))"
                              style="background-image: url(/uploads/@Model[i].Book.CoverPhoto);"
                              onclick="window.location = '/Book/Details?id=@Model[i].Book.Id'">
                             <div class="hover bg @(GetClassFromGrade((int)item.Book.Grade))"></div>
@@ -97,51 +140,10 @@
                         <div class="bl"></div>
                         <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
                     </td>
-                @:</tr>
-                <tr><td colspan="7" style="height: 40px;">&nbsp;</td></tr>
+                    <td width="30">&nbsp;</td>
+                }
             }
-            else
-            {
-                <td style="vertical-align: top; width: 200px;" class="book_quiz">
-                    <div class="cover @(GetClassFromGrade((int)item.Book.Grade))"
-                         style="background-image: url(/uploads/@Model[i].Book.CoverPhoto);"
-                         onclick="window.location = '/Book/Details?id=@Model[i].Book.Id'">
-                        <div class="hover bg @(GetClassFromGrade((int)item.Book.Grade))"></div>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <div class="wishlist" data-book="@Model[i].Book.Id"
-                                 onclick="setMarkedlist(this); event.stopPropagation();"></div>
-                        }
-                        <div class="details">
-                            <div style="display: table; width: 100%;">
-                                <div style="display: table-row">
-                                    <div class="in">
-                                        <div style="font-size: 18px; padding-bottom: 5px; font-weight: bold;">
-                                            @Model[i].Book.Title
-                                            <div style="font-size: 14px;">@Model[i].Book.BookAuthor</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quizLabel"></div>
-                        <div class="quizYear">@Html.DisplayFor(m => m[i].Book.AgeGroup)</div>
-                    </div>
-                    <div class="rating">
-                        <span style="font-weight: bold">@Model[i].Book.AverageRating</span>/5 &nbsp;
-                        <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                        <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                        <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                        <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                        <i class="@(Model[i].Book.AverageRating == 0? "fa fa-star-o" : (Model[i].Book.AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                    </div>
-                    <div class="bl"></div>
-                    <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
-                </td>
-                <td width="30">&nbsp;</td>
-            }
-        }
 
-    </table>
+        </table>
 
-</td>
+    </td>

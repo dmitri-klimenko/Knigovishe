@@ -23,17 +23,17 @@ namespace Knigosha
         }
         public IConfiguration Configuration { get; }
 
-        private async Task CreateUserRoles(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleCheck = await roleManager.RoleExistsAsync("Admin");
-            var roleCheck2 = await roleManager.RoleExistsAsync("User");
-            if (!roleCheck) await roleManager.CreateAsync(new ApplicationRole("Admin"));
-            if (!roleCheck2) await roleManager.CreateAsync(new ApplicationRole("User"));
-            var user = await userManager.FindByEmailAsync("a@a.com");
-            await userManager.AddToRoleAsync(user, "Admin");
-        }
+        //private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        //{
+        //    var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+        //    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        //    var roleCheck = await roleManager.RoleExistsAsync("Admin");
+        //    var roleCheck2 = await roleManager.RoleExistsAsync("User");
+        //    if (!roleCheck) await roleManager.CreateAsync(new ApplicationRole("Admin"));
+        //    if (!roleCheck2) await roleManager.CreateAsync(new ApplicationRole("User"));
+        //    var user = await userManager.FindByEmailAsync("a@a.com");
+        //    await userManager.AddToRoleAsync(user, "Admin");
+        //}
         //This method gets called by the runtime.Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -95,7 +95,7 @@ namespace Knigosha
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            CreateUserRoles(serviceProvider).Wait();
+            //CreateUserRoles(serviceProvider).Wait();
         }
     }
 }

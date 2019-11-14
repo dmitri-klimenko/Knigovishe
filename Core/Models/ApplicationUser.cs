@@ -47,9 +47,9 @@ namespace Knigosha.Core.Models
 
         public Grades Grade { get; set; }
 
-        public int NumberOfCreatedBooks { get; set; }
+        public int NumberOfCreatedBooks => CreatedBooks.Count; 
 
-        public int PointsForCreatedBooks { get; set; }
+        public int PointsForCreatedBooks => CreatedBooks.Sum(cb => cb.Points);
 
         public AgeGroups AgeGroup
         {
@@ -93,7 +93,8 @@ namespace Knigosha.Core.Models
                 else if (Points > 135  || Points <= 180) levelName = Levels.Three;
                 else if (Points > 180  || Points <= 225) levelName = Levels.Four;
                 else if (Points > 225  || Points <= 270) levelName = Levels.Five;
-                else if (Points > 270) levelName = Levels.Six;
+                else if (Points > 270 || Points <= 315) levelName = Levels.Six;
+                else if (Points > 315) levelName = Levels.Seven; 
                 return levelName;
             }
 
@@ -113,6 +114,8 @@ namespace Knigosha.Core.Models
 
         public ICollection<Answer> Answers { get; set; }
 
+        public ICollection<CreatedBook> CreatedBooks { get; set; }
+
         public ICollection<BookNote> BookNotes { get; set; }
 
         public ICollection<BookRating> BookRatings { get; set; }
@@ -121,11 +124,16 @@ namespace Knigosha.Core.Models
 
         public IList<Message> Messages { get; set; }
 
+        public int TotalAnswers { get; set; }
+        public int TotalPercentage { get; set; }
+        public int TotalPoints { get; set; }
+
         public ApplicationUser()
         {
             UserSubscriptions = new Collection<UserSubscription>();
             Messages = new List<Message>();
             Answers = new Collection<Answer>();
+            CreatedBooks = new Collection<CreatedBook>();
             BookNotes = new Collection<BookNote>();
             BookRatings = new Collection<BookRating>();
             MarkedBooks = new Collection<MarkedBook>();

@@ -21,12 +21,11 @@ namespace Knigosha.Persistence
         DbSet<City> Cities { get; set; }
         DbSet<School> Schools { get; set; }
         DbSet<Text> Texts { get; set; }
-        DbSet<AllFamiliesGroup> AllFamiliesGroup { get; set; }
-        DbSet<AllClassesGroup> AllClassesGroup { get; set; }
         DbSet<Request> Requests { get; set; }
         DbSet<Message> Messages { get; set; }
         DbSet<StudentClass> StudentClasses { get; set; }
         DbSet<StudentFamily> StudentFamilies { get; set; }
+        DbSet<CreatedBook> CreatedBooks { get; set; }
 
 
     }

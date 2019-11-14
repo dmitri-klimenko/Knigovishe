@@ -138,14 +138,14 @@
                     @if (!Model.SubscribedToNewsletter)
                     {
                         <input type="hidden" asp-for="Action" value="subscribe">
-                        <text>Ваш адрес <span style="font-weight: bold">@Model.Email</span> не включён в список адресов<br> для рассылки.</text>
+                        <text>Твой адрес <span style="font-weight: bold">@Model.Email</span> не включён в список адресов для рассылки.</text>
                         <div style="height:10px;"></div>
                         <input type="submit" class="button" value="Я ХОЧУ ПОДПИСАТЬСЯ НА БЮЛЛЕТЕНЬ">
                     }
                     else
                     {
                         <input type="hidden" asp-for="Action" value="unsubscribe">
-                        <text>Ваш адрес <span style="font-weight: bold">@Model.Email</span> включён в список адресов<br>  для рассылки.</text>
+                        <text>Твой адрес <span style="font-weight: bold">@Model.Email</span> включён в список адресов<br> для рассылки.</text>
                         <div style="height:10px;"></div>
                         <input type="submit" class="button" value="Я ХОЧУ ОТПИСАТЬСЯ ОТ БЮЛЛЕТЕНЯ">
                     }

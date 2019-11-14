@@ -1,10 +1,14 @@
-﻿@model Knigosha.Core.ViewModels.BookViewModels.DetailsViewModel
+﻿
+@using System.Globalization
+@using Knigosha.Core.Models.Enums
+@model Knigosha.Core.ViewModels.BookViewModels.DetailsViewModel
 
 @{
     ViewBag.Title = "Книга";
 }
 
 @functions{
+
     public string GetClassFromGrade(int grade)
     {
         var returnVal = String.Empty;
@@ -54,7 +58,13 @@
             <div style="padding:20px;">
                 <div style="font-size:30px;font-weight:bold;padding-bottom:10px;">@Model.Book.Title</div>
                 <div style="font-size:25px;padding-bottom:40px;">@Model.Book.BookAuthor</div>
-                <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
+                @if (Model.UserType == UserTypes.Student)
+                {
+                    <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
+                }else if (Model.UserType == UserTypes.Teacher)
+                {
+                    <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ - ВМЕСТЕ</a>
+                }
             </div>
         </div>
     </div>
@@ -83,12 +93,12 @@
                         <div style="padding-bottom:10px;">Автор викторины: <span style="font-weight: bold">@Model.Book.QuestionsAuthor</span></div>
                         <br>
                         <div class="rating">
-                            <span style="font-weight: bold">@Model.Book.AverageRating</span>/5&nbsp;
-                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 0.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 1.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 2.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 3.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
-                            <i class="@(Model.Book.AverageRating == 0? "fa fa-star-o" : (Model.Book.AverageRating < 4.5? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <span style="font-weight: bold">@Model.Book.AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5&nbsp;
+                            <i class="@(Model.Book.AverageRating < 0.3? "fa fa-star-o" : (Model.Book.AverageRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating < 1.3? "fa fa-star-o" : (Model.Book.AverageRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating < 2.3? "fa fa-star-o" : (Model.Book.AverageRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating < 3.3? "fa fa-star-o" : (Model.Book.AverageRating < 3.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            <i class="@(Model.Book.AverageRating < 4.3? "fa fa-star-o" : (Model.Book.AverageRating < 4.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                         </div>
                         <div class="yellow">Викторина решена <span style="font-weight: bold">@Model.Book.Answers.Count</span> раз</div>
                     </div>
@@ -97,24 +107,59 @@
                     <h2>Аннотация</h2>
                     @Model.Book.Description
                     <div style="height:40px;"></div>
-                    <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
-                    <div style="height:40px;"></div>
+                    @if (Model.UserType == UserTypes.Student)
+                    {
+                        <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ</a>
+                        <div style="height:40px;"></div>
+                    }
+                    else if (Model.UserType == UserTypes.Teacher)
+                    {
+                        <a href="/user/quiz?id=522" class="button">РЕШИТЬ ВИКТОРИНУ - ВМЕСТЕ</a>
+                        <div style="height:40px;"></div>
+                        <div style="font-size:20px;line-height:30px;padding-bottom:30px;">
+                            Результаты твоих учеников:<br>
+                            Раз решена: <span style="font-weight: bold">@Model.CountOfStudentsAnswers</span><br>
+                            Верных ответов: <span style="font-weight: bold">@Model.PercentageOfStudentsRightResponses%</span><br>
+                        </div>
+                    }
+                    else if(Model.UserType == UserTypes.Parent)
+                    {
+                        <div style="font-size:20px;line-height:30px;padding-bottom:30px;">
+                            Результаты твоих детей:<br>
+                            Раз решена: <span style="font-weight: bold">@Model.CountOfStudentsAnswers</span><br>
+                            Верных ответов: <span style="font-weight: bold">@Model.PercentageOfStudentsRightResponses%</span><br>
+                        </div>
+                    }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <div class="rate_book" data-book="@Model.Book.Id">Как Вы оцениваете книгу?&nbsp;&nbsp;
-                            <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="1"></i>
-                            <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="2"></i>
-                            <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="3"></i>
-                            <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="4"></i>
-                            <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="5"></i>	</div>
+                        @if (Model.MyRating == null)
+                        {<div class="rate_book" data-book="@Model.Book.Id">
+                                Как ты оцениваешь книгу?&nbsp;&nbsp;
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="1"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="2"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="3"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="4"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="5"></i>
+                            </div>}
+                        else
+                        {
+                            <div class="rated_book">
+                                Твоя оценка книги:&nbsp;&nbsp;
+                                <i class="@(Model.MyRating < 0.3? "fa fa-star-o" : (Model.MyRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 1.3? "fa fa-star-o" : (Model.MyRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 2.3? "fa fa-star-o" : (Model.MyRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 3.3? "fa fa-star-o" : (Model.MyRating < 3.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 4.3? "fa fa-star-o" : (Model.MyRating < 4.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            </div>
+                        }
                         <div style="height:30px;"></div>
                         <a href="javascript:;" class="a1" onclick="$('#notes').show(); $(this).remove();">МОИ ЗАМЕТКИ<i style="margin-left:5px;" class="fa fa-angle-down"></i></a>
                         <div id="notes" style="display:none;">
                             <form method="post" asp-controller="Book" asp-action="Details">
                                 <textarea asp-for="@Model.BookNote.Text" placeholder="Личные заметки о книге" style="width:100%;height:200px;"></textarea>
-                                <input type="hidden" asp-for="@Model.BookId"/>
-                                <br/>
-                                <br/>
+                                <input type="hidden" asp-for="@Model.BookId" />
+                                <br />
+                                <br />
                                 <input type="submit" class="button" value="Запомнить">
                             </form>
                         </div>
@@ -122,7 +167,7 @@
                     }
                     <div style="height:80px;"></div>
                     <div id="books">
-                        <h1 class="section_title">Рекомендовано для Вас</h1>
+                        <h1 class="section_title">Рекомендовано для тебя</h1>
                         <table style="width:100%;" class="tc sc">
                             <tr>
                                 <td style="vertical-align:top;width:23%;">

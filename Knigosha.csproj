@@ -59,6 +59,10 @@
     <Compile Remove="Persistence\Migrations\20191025065323_CheckingEverthing.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191029021714_AddStudentFamilyModelAndTable.cs" />
     <Compile Remove="Persistence\Migrations\20191029021714_AddStudentFamilyModelAndTable.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191108061021_AddOneMoreLevel.cs" />
+    <Compile Remove="Persistence\Migrations\20191108061021_AddOneMoreLevel.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191111003541_Remove2Tables.cs" />
+    <Compile Remove="Persistence\Migrations\20191111003541_Remove2Tables.Designer.cs" />
   </ItemGroup>
 
 

@@ -18,8 +18,6 @@ namespace Knigosha.Core.Models
 
         public Subscription Subscription { get; set; }
 
-    
-
         public int SubscriptionId { get; set; }
 
         public bool Myself { get; set; }
@@ -44,7 +42,7 @@ namespace Knigosha.Core.Models
 
         public string OrderedOn { get; set; }
 
-        public string ActivatedOn { get; set; }
+        public DateTime? ActivatedOn { get; set; }
 
         public PaymentType? PaymentType { get; set; }
 

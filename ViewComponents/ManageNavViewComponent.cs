@@ -62,11 +62,13 @@ namespace Knigosha.ViewComponents
                 case UserTypes.Teacher:
                 {
                     var messagesCount = _context.Messages.Count(m => !m.IsRead && m.RecipientId == user.Id);
+                    var requestsCount = _context.Requests.Count(r => /*!r.IsRead && */r.ClassId == user.Id);
 
                     var componentVm3 = new ManageNavViewModel()
                     {
                         User = user,
-                        MessagesCount = messagesCount
+                        MessagesCount = messagesCount,
+                        RequestsCount = requestsCount
                     };
                     return View(componentVm3);
                 }
@@ -80,6 +82,8 @@ namespace Knigosha.ViewComponents
         public ApplicationUser User { get; set; }
         public bool HasActiveClass { get; set; }
         public bool HasActiveFamily { get; set; }
-        public int MessagesCount { get; set; }  
+        public int MessagesCount { get; set; }
+        public int RequestsCount { get; set; }
+        public int ResetsCount { get; set; }
     }
 }

@@ -1,0 +1,270 @@
+﻿@using Knigosha.Core.Models
+@using Knigosha.Core.Models.Enums
+@using Knigosha.Views.Manage
+@model Knigosha.Core.ViewModels.ManageViewModels.DashboardGroupViewModel
+
+@{
+    ViewData["Title"] = "Мой профиль";
+    ViewData.AddActivePage(ManageNavPages.Dashboard);
+}
+
+@functions{
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
+        {
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
+        }
+        return returnVal;
+    }
+}
+
+
+<td colspan="2" valign="top" class="desktop-top-border">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    @if (!Model.HasAccess)
+    {
+        <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+            Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
+            Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
+        </div>
+    }
+    else
+    {
+    <td colspan="2" valign="top" class="desktop-top-border" style="padding-left:50px;padding-top:50px;">
+        <div style="padding-bottom:50px;font-size:18px;">
+            <form name="stats_form" asp-controller="Manage" asp-action="Dashboard" method="get">
+                <h3>@(Model.User.UserType == UserTypes.Parent ? "МОЯ СЕМЬЯ" : "МОЙ КЛАСС")</h3>
+                @(Model.User.UserType == UserTypes.Parent ? "Твоя семья" : "Твой класс") может похвалиться книжными достижениями
+                <div style="height:10px;"></div>
+                за следующий период:
+                <div style="margin-left:10px;display:inline-block;position:relative;">
+                    <select asp-for="@Model.Period" asp-items="@Model.Periods" id="chartSelect"
+                            onchange="document.stats_form.submit()" class="s1" style="width:260px;">
+                    </select>
+                </div>
+            </form>
+        </div>
+        <table>
+            <tr>
+                <td style="cursor:pointer;" onclick="window.location='/Manage/Students'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.CountOfChildren</td>
+                            <td style="padding-left:10px;">профиля<br>читающих детей</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding-left:20px;cursor:pointer;" onclick="window.location='/Manage/Answers'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.CountOfAnswers</td>
+                            <td style="padding-left:10px;">решенных<br>викторины</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding-left:40px;cursor:pointer;" onclick="window.location='/Manage/Dashboard?chartLocation=class#s1'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.TotalPercentageOfRightResponses%</td>
+                            <td style="padding-left:10px;">правильных<br>ответов</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr><td colspan="3" style="height:20px;">&nbsp;</td></tr>
+            <tr>
+                <td style="cursor:pointer;" onclick="window.location='/Manage/Answers#s'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.PointsForAnswersByStudents</td>
+                            <td style="padding-left:10px;">очков за<br>решенные викторины </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding-left:20px;cursor:pointer;" onclick="window.location='/Manage/Points#s'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.PointsForBooksCreatedByStudents</td>
+                            <td style="padding-left:10px;">очков за созданные<br>детьми викторины</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding-left:40px;cursor:pointer;" onclick="window.location='/Manage/Points#s'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.PointsForCreatedBooks</td>
+                            <td style="padding-left:10px;">очков за викторины <br>созданные групповым профилем</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr><td colspan="3" style="height:20px;">&nbsp;</td></tr>
+            <tr>
+                <td style="cursor:pointer;" onclick="window.location='/Manage/Answers#s'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.TotalPoints</td>
+                            <td style="padding-left:10px;">очков<br>общий результат</td>
+                        </tr>
+                    </table>
+                </td>
+                <td colspan="2" style="padding-left:20px;cursor:pointer;" onclick="window.location='/Manage/Dashboard#s2'">
+                    <table>
+                        <tr>
+                            <td class="yellow" style="font-weight:bold;font-size:40px;">@Model.PositionInTableAccordingToPoints</td>
+                            <td style="padding-left:10px;">
+                                позиция
+                                @(Model.User.UserType == UserTypes.Parent ? "семьи" : "класса")<br>в возрастной группе
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <a href="" name="s1"></a>
+
+        <div style="height:100px;"></div>
+        <h2>Результаты учеников в @(Model.User.UserType == UserTypes.Parent ? "семье" : "классе")</h2>
+        <div style="padding-bottom:20px;">Средняя успеваемость детей, в алфавитном порядке</div>
+        <table style="width:100%;">
+            <tr>
+                <td></td>
+                <td style="text-align:right;">
+                    <div style="position:relative;">
+                        По сравнению со средним уровнем
+                        <select asp-for="@Model.ChartLocation" asp-items="@Model.ChartLocations" onchange="window.location = '?chartLocation=' + this.value + '#s1'" class="s1" style="width: 260px;"></select>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="height:10px;"></div>
+        <div class="rc mobile_chart">
+            <div class="chartArea compare">
+                <div class="chartTop">100%</div>
+                <div class="chartBottom">0%</div>
+
+                @if (Model.Students != null)
+                {
+                    for (var i = 0; i < Model.Students.Count; i++)
+                    {
+                        <div class="chartGroup" style="left:10px;cursor:pointer;"
+                             onclick="window.location='/Manage/Students?id=@Model.Students[i].Id&archive=0'">
+                            <div class="chartRow bg @GetClassFromGrade((int)Model.Students[i].Grade)" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
+                            <div class="chartRow" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
+                            <div class="chartInfo" style="bottom:calc(@Model.Students[i].PercentageOfRightResponses% - 50px)">
+                                <div class="chartTitle" style="line-height:150%;">
+                                    <span style="text-transform:capitalize">@Model.Students[i].FullName</span><br>
+                                    <div style="font-weight:normal;">
+                                        Уровень: <span style="font-weight: bold">@((int)Model.Students[i].Level)</span><br>
+                                        Очков: <span style="font-weight: bold">@Model.Students[i].Points</span><br>
+                                        Решённых&nbsp;викторин:&nbsp;<span style="font-weight: bold">@Model.Students[i].NumberOfAnswers</span><br>
+                                        Верных&nbsp;ответов:&nbsp;<span style="font-weight: bold">@Model.Students[i].PercentageOfRightResponses%</span><br>
+                                        Средний уровень: <span style="font-weight: bold">@Model.Average%</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="chartNum">@(i + 1)</div>
+                            <div class="chartPercent @GetClassFromGrade((int)Model.Students[i].Grade)" style="bottom:41%">@Model.Students[i].PercentageOfRightResponses%</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <a href="" name="s2"></a>
+        <div style="height:100px;"></div>
+        <h2>Место в рейтинге</h2>
+        <div style="padding-bottom:20px;">
+            Браво, @(Model.User.UserType == UserTypes.Parent ? "твоя семья" : "твой класс") участвует в рейтинге всех @(Model.User.UserType == UserTypes.Parent ? "читающих семей" : "классов") в (пожалуйста, выберите)
+        </div>
+        <div style="text-align:right;padding-bottom:50px;">
+            <select id="chartSelect" onchange="window.location='?location='+this.value+'#s2'" class="s1" style="width:260px;"
+                    asp-items="@Model.Locations" asp-for="@Model.Location">
+            </select>
+        </div>
+        <table style="font-size:18px;">
+            <tr>
+                <td style="font-weight:bold;">Место @(Model.User.UserType == UserTypes.Parent ? "семьи" : "класса") по количеству очков:</td>
+                <td class="yellow" style="padding-left:70px;font-size:40px; font-weight:bold">@Model.PositionInTableAccordingToPoints</td>
+                <td style="padding-left:20px;">место из <span style="font-weight: bold">@Model.NumberOfGroupsInTable</span></td>
+                <td class="yellow" style="padding-left:20px;font-size:30px;font-weight:bold">@Model.TopInTableAccordingToPoints</td>
+            </tr>
+            <tr><td colspan="3" style="height:50px;">&nbsp;</td></tr>
+            <tr>
+                <td style="font-weight:bold;">Место @(Model.User.UserType == UserTypes.Parent ? "семьи" : "класса") по % верных ответов:</td>
+                <td class="yellow" style="padding-left:70px;font-size:40px;font-weight:bold">@Model.PositionInTableAccordingToRightResponses</td>
+                <td style="padding-left:20px;">место из <span style="font-weight: bold">@Model.NumberOfGroupsInTable</span></td>
+                <td class="yellow" style="padding-left:20px;font-size:30px;font-weight:bold">@Model.TopInTableAccordingToRightResponses</td>
+            </tr>
+            <tr><td colspan="3" style="height:50px;">&nbsp;</td></tr>
+            <tr>
+                <td style="font-weight:bold;">Место @(Model.User.UserType == UserTypes.Parent ? "семьи" : "класса") по количеству решенных викторин:</td>
+                <td class="yellow" style="padding-left:70px;font-size:40px;font-weight:bold">@Model.PositionInTableAccordingToAnswers</td>
+                <td style="padding-left:20px;">место из <span style="font-weight: bold">@Model.NumberOfGroupsInTable</span></td>
+                <td class="yellow" style="padding-left:20px;font-size:30px;font-weight:bold">@Model.TopInTableAccordingToAnswers</td>
+        </table>
+        <div style="height:100px;"></div>
+        @if (Model.JustReadBooks != null)
+        {
+            <h2>Недавно прочитали мои @(Model.User.UserType == UserTypes.Parent ? "дети" : "ученики")</h2>
+            <div id="books">
+                <table class="sc" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr>
+                        @foreach (var book in Model.JustReadBooks)
+                        {
+                            <td style="vertical-align: top; width: 31.666666666667%;">
+                                <div onclick="window.location = '/Book/Details?id=@book.Id'" class="book_div">
+                                    <div class="wishlist "
+                                         data-book="@book.Id" onclick="setWishlist(this);event.stopPropagation();"></div>
+                                    <img src="/uploads/@book.CoverPhoto">
+                                    <div style="height: 15px;"></div>
+                                    <h3>@book.Title</h3>
+                                    <div class="bookAuthor">@book.BookAuthor</div>
+                                    <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id">СМОТРЕТЬ КНИГУ</a>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    </td>
+}
+

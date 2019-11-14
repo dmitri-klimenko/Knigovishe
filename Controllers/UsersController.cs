@@ -68,8 +68,6 @@ namespace Knigosha.Controllers
             var editUserVm = new EditUserViewModel
             {
                 Id = user.Id,
-               PointsForCreatedBooks = user.PointsForCreatedBooks,
-               NumberOfCreatedBooks = user.NumberOfCreatedBooks
             };
 
             return View(editUserVm);
@@ -82,9 +80,15 @@ namespace Knigosha.Controllers
             {
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == editUserVm.Id);
 
-                user.PointsForCreatedBooks = editUserVm.PointsForCreatedBooks;
-                user.NumberOfCreatedBooks = editUserVm.NumberOfCreatedBooks;
+                var newCreatedBook = new CreatedBook()
+                {
+                    Points = editUserVm.PointsForCreatedBook
+                };
+
                 user.DateEdited = DateTime.Now.ToString("d");
+                user.CreatedBooks.Add(newCreatedBook);
+                _context.CreatedBooks.Add(newCreatedBook);
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -129,32 +133,40 @@ namespace Knigosha.Controllers
             switch (user.UserType)
             {
                 case UserTypes.Student:
-                var countSc = await _context.StudentClasses.CountAsync(sc => sc.StudentId == user.Id);
-                var countSf = await _context.StudentFamilies.CountAsync(sc => sc.StudentId == user.Id);
-                if (countSc == 1)
-                    _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.StudentId == user.Id));
-                else if (countSc > 1)
-                    _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.StudentId == user.Id).ToList());
-                if (countSf == 1)
-                    _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sc => sc.StudentId == user.Id));
-                else if (countSf > 1)
-                    _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sc => sc.StudentId == user.Id).ToList());
-                break;
+                    var countSc = await _context.StudentClasses.CountAsync(sc => sc.StudentId == user.Id);
+                    var countSf = await _context.StudentFamilies.CountAsync(sc => sc.StudentId == user.Id);
+                    var messages = await _context.Messages.CountAsync(m => m.SenderId == user.Id || m.RecipientId == user.Id);
+
+                    if (messages == 1) _context.Messages.Remove(_context.Messages.Single(m => m.SenderId == user.Id || m.RecipientId == user.Id));
+                    else if (messages > 1) _context.Messages.RemoveRange(_context.Messages.Where(m => m.SenderId == user.Id || m.RecipientId == user.Id).ToList());
+
+                    if (countSc == 1) _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.StudentId == user.Id));
+                    else if (countSc > 1) _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.StudentId == user.Id).ToList());
+
+                    if (countSf == 1) _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sc => sc.StudentId == user.Id));
+                    else if (countSf > 1) _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sc => sc.StudentId == user.Id).ToList());
+                    break;
 
                 case UserTypes.Parent:
                     var countSf2 = await _context.StudentFamilies.CountAsync(sc => sc.FamilyId == user.Id);
-                    if (countSf2 == 1)
-                        _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sf => sf.FamilyId == user.Id));
-                    else if (countSf2 > 1)
-                        _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sf => sf.FamilyId == user.Id).ToList());
+                    var messages2 = await _context.Messages.CountAsync(m => m.SenderId == user.Id || m.RecipientId == user.Id);
+
+                    if (messages2 == 1) _context.Messages.Remove(_context.Messages.Single(m => m.SenderId == user.Id));
+                    else if (messages2 > 1) _context.Messages.RemoveRange(_context.Messages.Where(m => m.SenderId == user.Id || m.RecipientId == user.Id).ToList());
+
+                    if (countSf2 == 1) _context.StudentFamilies.Remove(_context.StudentFamilies.Single(sf => sf.FamilyId == user.Id));
+                    else if (countSf2 > 1) _context.StudentFamilies.RemoveRange(_context.StudentFamilies.Where(sf => sf.FamilyId == user.Id).ToList());
                     break;
 
                 case UserTypes.Teacher:
                     var countSf3 = await _context.StudentClasses.CountAsync(sc => sc.ClassId == user.Id);
-                    if (countSf3 == 1)
-                        _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.ClassId == user.Id));
-                    else if (countSf3 > 1)
-                        _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.ClassId == user.Id).ToList());
+                    var messages3 = await _context.Messages.CountAsync(m => m.SenderId == user.Id || m.RecipientId == user.Id);
+
+                    if (messages3 == 1) _context.Messages.Remove(_context.Messages.Single(m => m.SenderId == user.Id));
+                    else if (messages3 > 1) _context.Messages.RemoveRange(_context.Messages.Where(m => m.SenderId == user.Id || m.RecipientId == user.Id).ToList());
+
+                    if (countSf3 == 1) _context.StudentClasses.Remove(_context.StudentClasses.Single(sc => sc.ClassId == user.Id));
+                    else if (countSf3 > 1) _context.StudentClasses.RemoveRange(_context.StudentClasses.Where(sc => sc.ClassId == user.Id).ToList());
                     break;
             }
             await _userManager.DeleteAsync(user);

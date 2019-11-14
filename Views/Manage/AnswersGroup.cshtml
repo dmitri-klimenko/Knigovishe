@@ -54,8 +54,16 @@
 <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
     <div id="profile_answers">
+        @if (Model == null)
+        {<text>Всё ещё нет решённых викторин.</text>}
+    else
+    {
         <table style="width: 100%;" class="sc tc" id="quiz_results">
-            <tr><td colspan="3"><h3>@ViewData["SchoolYear"] учебный год</h3></td></tr>
+            <tr>
+                <td colspan="3">
+                    <h3>@ViewData["SchoolYear"] учебный год</h3>
+                </td>
+            </tr>
             @if (Model != null)
             {
                 @for (int i = 0; i < Model.Count; i++)
@@ -77,7 +85,7 @@
                                                      style="width: 120px; height: 200px; margin: 0; display: block;">
                                             </td>
                                             <td style="vertical-align: top;">
-                                                <div class="quiz_inner @(GetClassFromGrade((int)Model[i].Book.Grade))">
+                                                <div class="quiz_inner @(GetClassFromGrade((int) Model[i].Book.Grade))">
                                                     <div class="quiz_inner_right">
                                                         <div class="answers" style="margin-bottom: 20px;">
                                                             Викторина решена
@@ -154,6 +162,7 @@
                 }
             }
         </table>
+    }
     </div>
 </td>
 
