@@ -22,27 +22,27 @@ namespace Knigosha.Core.Models
         public string ParentEmail { get; set; }
 
         //calculated properties
-        public int PositionInFamilyAccordingToPoints
-        {
-            get
-            {
-                var activeFamily = StudentFamilies.Single(sc => sc.IsActive).Family;
-                var studentsInOrder = activeFamily.StudentFamilies.OrderBy(cs => cs.Student.Points);
-                var number = studentsInOrder.IndexOf(StudentFamilies.Single(sc => sc.StudentId == Id)) + 1;
-                return number > 0 ? number : 0;
-            }
-        }
+        //public int PositionInFamilyAccordingToPoints
+        //{
+        //    get
+        //    {
+        //        var activeFamily = StudentFamilies.Single(sc => sc.IsActive).Family;
+        //        var studentsInOrder = activeFamily.StudentFamilies.OrderBy(cs => cs.Student.Points);
+        //        var number = studentsInOrder.IndexOf(StudentFamilies.Single(sc => sc.StudentId == Id)) + 1;
+        //        return number > 0 ? number : 0;
+        //    }
+        //}
 
-        public int PositionInClassAccordingToPoints
-        {
-            get
-            {
-                var activeClass = StudentClasses.Single(sc => sc.IsActive).Class;
-                var studentsInOrder = activeClass.StudentClasses.OrderBy(cs => cs.Student.Points);
-                var number = studentsInOrder.IndexOf(StudentClasses.Single(sc => sc.StudentId == Id)) + 1;
-                return number > 0 ? number : 0;
-            }
-        }
+        //public int PositionInClassAccordingToPoints
+        //{
+        //    get
+        //    {
+        //        var activeClass = StudentClasses.Single(sc => sc.IsActive).Class;
+        //        var studentsInOrder = activeClass.StudentClasses.OrderBy(cs => cs.Student.Points);
+        //        var number = studentsInOrder.IndexOf(StudentClasses.Single(sc => sc.StudentId == Id)) + 1;
+        //        return number > 0 ? number : 0;
+        //    }
+        //}
 
         public int PositionInFamilyAccordingToNumberOfAnswers
         {

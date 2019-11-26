@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Knigosha.Core.Models;
 using Knigosha.Persistence;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,20 +25,22 @@ namespace Knigosha
         }
         public IConfiguration Configuration { get; }
 
-        //private async Task CreateUserRoles(IServiceProvider serviceProvider)
-        //{
-        //    var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-        //    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        //    var roleCheck = await roleManager.RoleExistsAsync("Admin");
-        //    var roleCheck2 = await roleManager.RoleExistsAsync("User");
-        //    if (!roleCheck) await roleManager.CreateAsync(new ApplicationRole("Admin"));
-        //    if (!roleCheck2) await roleManager.CreateAsync(new ApplicationRole("User"));
-        //    var user = await userManager.FindByEmailAsync("a@a.com");
-        //    await userManager.AddToRoleAsync(user, "Admin");
-        //}
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleCheck = await roleManager.RoleExistsAsync("Admin");
+            var roleCheck2 = await roleManager.RoleExistsAsync("User");
+            if (!roleCheck) await roleManager.CreateAsync(new ApplicationRole("Admin"));
+            if (!roleCheck2) await roleManager.CreateAsync(new ApplicationRole("User"));
+            var user = await userManager.FindByEmailAsync("a@a.com");
+            await userManager.AddToRoleAsync(user, "Admin");
+        }
         //This method gets called by the runtime.Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddExpressiveAnnotations();
 
@@ -44,7 +48,7 @@ namespace Knigosha
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                //options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -63,6 +67,11 @@ namespace Knigosha
             }).AddErrorDescriber<CustomIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en-US");
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -85,9 +94,8 @@ namespace Knigosha
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseAuthentication();
-
+            app.UseRequestLocalization();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -95,7 +103,8 @@ namespace Knigosha
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //CreateUserRoles(serviceProvider).Wait();
+            CreateUserRoles(serviceProvider).Wait();
+        
         }
     }
 }

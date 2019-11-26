@@ -21,7 +21,11 @@
                 <tr>
                     <td style="padding: 10px;">
                         <div onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'" class="avatar"
-                             @if (Model.Children[i].Photo != null) { <text> style="cursor: pointer; background-image: url(/uploads/@Model.Children[i].Photo)" </text>  } else { <text> style="cursor: pointer; background-image: url(/skin/avatar.png)" </text> }>
+                             @if (Model.Children[i].Photo != null)
+                             {
+                                 <text> style="cursor: pointer; background-image: url(/uploads/@Model.Children[i].Photo)" </text>  
+
+                             } else { <text> style="cursor: pointer; background-image: url(/skin/avatar.png)" </text> }>
                         </div>
                     </td>
                     <td style="padding: 10px; cursor: pointer" onclick="window.location = '/Manage/Students?id=@Model.Children[i].Id'">#@(i + 1) @Model.Children[i]</td>

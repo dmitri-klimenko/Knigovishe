@@ -13,10 +13,10 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.HasKey(q => q.Id);
 
             builder.Property(q => q.BookId).IsRequired();
-            builder.Property(q => q.RightAnswer).IsRequired().HasMaxLength(255);
+            builder.Property(q => q.RightAnswer).HasMaxLength(255);
             builder.Property(q => q.QuestionType).IsRequired();
-            builder.Property(q => q.WrongAnswer1).IsRequired().HasMaxLength(255);
-            builder.Property(q => q.WrongAnswer2).IsRequired().HasMaxLength(255);
+            builder.Property(q => q.WrongAnswer1).HasMaxLength(255);
+            builder.Property(q => q.WrongAnswer2).HasMaxLength(255);
             builder.Property(q => q.Text).IsRequired().HasMaxLength(255);
         }
     }

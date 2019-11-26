@@ -1832,7 +1832,7 @@ input::placeholder {
     padding-bottom: 50px;
     line-height: 140%;
     font-weight: 100;
-    min-height: calc(100vh - 360px);
+    
 }
 
 #banner {
@@ -2118,7 +2118,7 @@ input::placeholder {
 
 .questionTitle {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 23px;
     line-height: 26px;
     margin-bottom: 10px;
 }
@@ -2130,7 +2130,7 @@ input::placeholder {
 .quizAnswer {
     cursor: pointer;
     display: block;
-    font-size: 20px;
+    font-size: 23px;
     line-height: 24px;
     padding: 10px;
 }
@@ -2214,13 +2214,13 @@ input::placeholder {
 .chartTop {
     position: absolute;
     top: 0px;
-    right: calc(100% + 10px);
+    right: calc(100%);
 }
 
 .chartBottom {
     position: absolute;
     bottom: 0px;
-    right: calc(100% + 10px);
+    right: calc(100%);
 }
 
 .chartGroup {
@@ -3326,10 +3326,6 @@ nav a:-webkit-any-link:hover {
 
 /* Create book form*/
 
-.adminForm .form-control:focus {
-    border-color: #D3502D;
-}
-
 #questionDetail {
     margin-top: 15px
 }
@@ -3612,6 +3608,14 @@ dt {
         flex: 0 0 25%;
         max-width: 25%;
     }
+}
+
+.inputAdmin select, .inputAdmin input[type=text], .inputAdmin input[type=password] {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    height: calc(1.5em + 0.75rem + 2px);
+    line-height: 1.5;
+    height: calc(1.5em + 0.75rem + 2px);
 }
 
  

@@ -9,5 +9,6 @@ namespace Knigosha.Core.ViewModels
         public List<Book> MostPopularBooks { get; set; }
         public List<Text> RecentNews { get; set; }
         public List<Subscription> Subscriptions { get; set; }
+        public List<int> BooksIds { get; set; }
     }
 }

@@ -70,8 +70,8 @@
                                 <div class="hover bg @(GetClassFromGrade((int)item.Book.Grade))"></div>
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <div class="wishlist" data-book="@Model[i].Book.Id"
-                                         onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                    <div class="wishlist @(ViewBag.BooksIds.Contains(Model[i].Book.Id)? "active": "")" data-book="@Model[i].Book.Id"
+                                         onclick="setWishlist(this); event.stopPropagation();"></div>
                                 }
                                 <div class="details">
                                     <div style="display: table; width: 100%;">
@@ -111,8 +111,8 @@
                             <div class="hover bg @(GetClassFromGrade((int)item.Book.Grade))"></div>
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <div class="wishlist" data-book="@Model[i].Book.Id"
-                                     onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                <div class="wishlist @(ViewBag.BooksIds.Contains(Model[i].Book.Id)? "active": "")" data-book="@Model[i].Book.Id"
+                                     onclick="setWishlist(this); event.stopPropagation();"></div>
                             }
                             <div class="details">
                                 <div style="display: table; width: 100%;">

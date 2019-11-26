@@ -1,0 +1,100 @@
+﻿@using System.Globalization
+@using Knigosha.Core.Models
+@model Knigosha.Core.ViewModels.ManageViewModels.QuizViewModel
+
+@{
+    ViewData["Title"] = "Викторина";
+}
+
+    <div class="shadow_bg">
+        <div class="inner" style="padding-top:80px;padding-bottom:80px;">
+            <div class="quiz_popup" style="padding-top:25px;">
+                <div id="bookInfo">
+                    <table class="sc">
+                        <tr>
+                            <td class="book_info_left" valign="top">
+                                <div class="visible-desktop">
+                                    <a href="/Book/Details?id=@Model.Book.Id"><img src="/uploads/@Model.Book.CoverPhoto" style="border-radius:15px;max-width:100px;"></a>
+                                </div>
+                            </td>
+                            <td valign="top" class="book_info_right">
+                                <span style="font-size:20px; font-weight: bold">@Model.Book.Title /</span> от @Model.Book.BookAuthor
+                                <div style="height:10px;"></div>
+                                <div class="yellow">
+                                    <span style="font-weight: bold">викторина для @Html.DisplayFor(m => m.Book.AgeGroup) /</span>
+                                    <i>автор викторины: <span style="font-weight: bold">@Model.Book.QuestionsAuthor</span></i>
+                                </div>
+                                <div style="height:10px;"></div>
+                                <i>
+                                    Категория: @Html.DisplayFor(m => m.Book.BookCategory)<br>
+                                    Год на издания: @Model.Book.YearPublished<br>
+                                    Издательство: @Model.Book.Publisher<br>
+                                    @if (!string.IsNullOrEmpty(Model.Book.Translator))
+                                    {
+                                        <text>Переводчик: </text>@Model.Book.Translator
+                                    }<br>
+                                </i>
+                                <div style="height:10px;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                @if (Model.HasAccess)
+                {
+                    <div style="padding:20px;">
+                        @if (Model.MyRating == null)
+                        {<div class="rate_book" data-book="@Model.Book.Id">
+                                Как ты оцениваешь книгу?&nbsp;&nbsp;
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="1"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="2"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="3"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="4"></i>
+                                <i class="fa fa-star-o" onmouseover="rateOver(this)" onmouseout="rateOut(this)" onclick="rateBook(this)" data-rate="5"></i>
+                            </div>}
+                        else
+                        {
+                            <div class="rated_book">
+                                Твоя оценка книги:&nbsp;&nbsp;
+                                <i class="@(Model.MyRating < 0.3? "fa fa-star-o" : (Model.MyRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 1.3? "fa fa-star-o" : (Model.MyRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 2.3? "fa fa-star-o" : (Model.MyRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 3.3? "fa fa-star-o" : (Model.MyRating < 3.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                                <i class="@(Model.MyRating < 4.3? "fa fa-star-o" : (Model.MyRating < 4.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
+                            </div>
+                        }
+                        Эта викторина в общей сложности на @(Model.Book.NumberOfQuestionsForResponses * Model.Book.PointsForRightAnswer) очков!
+                        <br>
+                        Каждый правильный ответ приносит @Model.Book.PointsForRightAnswer
+                        @if (Model.Book.PointsForRightAnswer == 1)
+                        {<text>очко</text>}
+                    else if (Model.Book.PointsForRightAnswer == 2 || Model.Book.PointsForRightAnswer == 3 || Model.Book.PointsForRightAnswer == 4)
+                    {
+                        {<text>очка</text>}
+                }
+                else
+                {
+                    <text>очков</text>
+                }, неправильный отнимает @Model.Book.PointsForWrongAnswer.ToString(CultureInfo.GetCultureInfo("en-GB")), а если пропускаешь
+                вопрос – 0 очков.
+                <br><br>
+                После нажатия кнопки «Старт» у тебя будет 30 минут для решения викторины: &nbsp;
+                <a href="/Answer/Quiz?act=start&id=@Model.Book.Id" class="button">СТАРТ</a>
+            </div>
+        }
+        else
+        {
+            <div style="padding:20px;font-size:20px;line-height:26px;color:red;">
+                Чтобы продолжить использование всех функций Книговища, необходимо приобрести абонемент.
+                <br>Ты можешь приобрести абонемент в разделе <a asp-controller="Manage" asp-action="Order">"Купить абонемент"</a>.
+            </div>
+        }
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+

@@ -63,6 +63,22 @@
     <Compile Remove="Persistence\Migrations\20191108061021_AddOneMoreLevel.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191111003541_Remove2Tables.cs" />
     <Compile Remove="Persistence\Migrations\20191111003541_Remove2Tables.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114074925_AddPointsToAnswer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114074925_AddPointsToAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114080537_ChecKAnswer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114080537_ChecKAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114081300_add-points.cs" />
+    <Compile Remove="Persistence\Migrations\20191114081300_add-points.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114082035_AddPointsToAnswer.cs" />
+    <Compile Remove="Persistence\Migrations\20191114082035_AddPointsToAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191117050055_CorrectBook.cs" />
+    <Compile Remove="Persistence\Migrations\20191117050055_CorrectBook.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191118214456_CorrectAnswer.cs" />
+    <Compile Remove="Persistence\Migrations\20191118214456_CorrectAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191118215004_CorrectAnswer.cs" />
+    <Compile Remove="Persistence\Migrations\20191118215004_CorrectAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191126082046_ChangeAnswersId.cs" />
+    <Compile Remove="Persistence\Migrations\20191126082046_ChangeAnswersId.Designer.cs" />
   </ItemGroup>
 
 
@@ -71,12 +87,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="UoN.ExpressiveAnnotations.NetCore" Version="1.0.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Core\Repositories\" />
-    <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
 

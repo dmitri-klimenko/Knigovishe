@@ -1,11 +1,12 @@
-﻿@using Microsoft.EntityFrameworkCore.Internal
+﻿@using Knigosha.Core.Models.Enums
+@using Microsoft.EntityFrameworkCore.Internal
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
-@model IEnumerable<Knigosha.Core.Models.Question>
+@model Knigosha.Controllers.QuestionsViewModel
 
 @{
     ViewData["Title"] = "Вопросы";
 }
-<div class="container">
+<div class="container" style="min-height: calc(100vh - 360px); margin-bottom: 30px">
     <div>
         <partial name="_DashboardPartial" />
         <div class="header">
@@ -16,36 +17,46 @@
         <a asp-controller="Questions" asp-action="Create" asp-route-id=@ViewData["BookId"] class="btn btn btn-light" style="margin-bottom: 15px">Новый вопрос</a>
         <table class="table table-bordered adminTable">
             <thead>
-                <tr>
-                    <th class="questionNumberColumn">
-                        #
-                    </th>
-                    <th>
-                        Текст вопроса
-                    </th>
-                    <th class="deleteEditColumn"></th>
+            <tr>
+                <th class="questionNumberColumn">
+                    #
+                </th>
+                <th>
+                    Текст вопроса
+                </th>
+                <th class="deleteEditColumn"></th>
 
-                </tr>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <th>
-                            @(Model.IndexOf(item) + 1)
-                        </th>
-                        <td class="mainContentColumn">
-                            <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Text)</a>
-                        </td>
-                        <td class="deleteEditColumn">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
-                        </td>
+            @foreach (var item in Model.Questions)
+            {
+                <tr>
+                    <th>
+                        @(Model.Questions.IndexOf(item) + 1)
+                    </th>
+                    <td class="mainContentColumn">
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Text)@if(item.QuestionType == QuestionTypes.Opinion){<span style="color: green"> - вопрос о мнении</span>}</a>
+                    </td>
+                    <td class="deleteEditColumn">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary btn-sm">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a>
+                    </td>
 
-                    </tr>
-                }
+                </tr>
+            }
             </tbody>
         </table>
+        <div>
+            <span>Вопросов о содержании и на понимание должно быть: 
+                <span style="color: red;">@Html.DisplayFor(model => model.Book.NumberOfQuestionsForResponses)</span>
+                </span><br />
+            <span>Вопросов о содержании и на понимание создано: @Html.DisplayFor(model => model.Book.NumberOfQuestionsCreated)</span><br />
+            <span>
+                Вопросов о мнении должно быть: 
+                <span style="color: red;">@Html.DisplayFor(model => model.Book.OpinionQuestions)</span>
+            </span><br />
+            <span>Вопросов о мнении cоздано: @Html.DisplayFor(model => model.Book.OpinionQuestionsCreated)</span><br />
+        </div>
     </div>
-
 </div>

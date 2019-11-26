@@ -60,7 +60,7 @@
 
 <a href="javascript:;" name="s" style="position:relative;top:-100px;"></a>
 
-<form name="form" class="container" asp-controller="Book" asp-action="Index" method="get">
+<form name="form" class="container" asp-controller="Book" asp-action="Index" method="get" style="min-height: calc(100vh - 360px);">
     <input type="hidden" name="page">
     <input type="hidden" name="advanced">
     <div class="container">
@@ -242,8 +242,8 @@
                                                     <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
                                                     @if (User.Identity.IsAuthenticated)
                                                     {
-                                                        <div class="wishlist" data-book="@Model.Books[i].Id"
-                                                             onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                                        <div class="wishlist @(Model.BooksIds.Contains(Model.Books[i].Id)? "active": "")" data-book="@Model.Books[i].Id"
+                                                             onclick="setWishlist(this); event.stopPropagation();"></div>
                                                     }
                                                     <div class="details">
                                                         <div style="display: table; width: 100%;">
@@ -283,8 +283,8 @@
                                                 <div class="hover bg @(GetClassFromGrade((int)item.Grade))"></div>
                                                 @if (User.Identity.IsAuthenticated)
                                                 {
-                                                    <div class="wishlist" data-book="@Model.Books[i].Id"
-                                                         onclick="setMarkedlist(this); event.stopPropagation();"></div>
+                                                    <div class="wishlist @(Model.BooksIds.Contains(Model.Books[i].Id)? "active": "")" data-book="@Model.Books[i].Id"
+                                                         onclick="setWishlist(this); event.stopPropagation();"></div>
                                                 }
                                                 <div class="details">
                                                     <div style="display: table; width: 100%;">

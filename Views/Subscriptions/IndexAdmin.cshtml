@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Абонементы";
 }
-<div class="container"><partial name="_DashboardPartial" />
+<div class="container" style="min-height: calc(100vh - 360px); margin-bottom: 30px"><partial name="_DashboardPartial" />
     <a asp-controller="Subscriptions" asp-action="Create" class="btn btn btn-light adminButton">Новый абонемент</a>
     <table class="table table-bordered adminTable">
         <thead>

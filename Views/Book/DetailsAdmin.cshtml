@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Детали книги";
 }
-<div class="container">
+<div class="container" style="margin-bottom: 30px">
     <partial name="_DashboardPartial" />
     <div>
         <img src="~/uploads/@Model.CoverPhoto" class="coverPhoto" alt="cover photo">
@@ -82,28 +82,16 @@
                 @Html.DisplayFor(model => model.AgeGroup)
             </dd>
             <dt class="col-sm-4">
-                Вопросов о содержании (должно быть):
+                Вопросов о содержании и на понимание (должно быть):
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.ContentQuestions)
+                @Html.DisplayFor(model => model.NumberOfQuestionsForResponses)
             </dd>
             <dt class="col-sm-4">
-                Вопросов о содержании (cоздано):
+                Вопросов о содержании и на понимание (cоздано):
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.ContentQuestionsCreated)
-            </dd>
-            <dt class="col-sm-4">
-                Вопросов на понимание (должно быть):
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.ComprehensionQuestions)
-            </dd>
-            <dt class="col-sm-4">
-                Вопросов на понимание (cоздано):
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.ComprehensionQuestionsCreated)
+                @Html.DisplayFor(model => model.NumberOfQuestionsCreated)
             </dd>
             <dt class="col-sm-4">
                 Вопросов о мнении (должно быть):

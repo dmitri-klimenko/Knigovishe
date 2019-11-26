@@ -1,6 +1,6 @@
 ﻿@using Knigosha.Core.Models.Enums
 @using Knigosha.Views.Manage
-@model  Knigosha.ViewComponents.ManageNavViewModel
+@model  Knigosha.Core.ViewModels.ManageViewModels.ManageNavViewModel
 <div class="invisible-smartphone">
     <div class="logged_menu">
     
@@ -77,26 +77,25 @@
             <a href="/Manage/Licenses" style="font-weight:@ManageNavPages.LicensesNavClass(ViewContext)">Мои абонементы</a>
             <a href="/Manage/License" style="font-weight:@ManageNavPages.LicenseNavClass(ViewContext)">Активировать абонемент</a>
         }
-
-        @if (Model.User.MarkedBooks.Count > 0)
-        {
-            <div class="yellow_border" style="padding: 20px; margin-top: 20px;">
-                <b class="yellow" style="font-size: 16px;">Отмеченные книги</b>
-                <div style="height: 30px;"></div>
-
-                @for (var i = 0; i < Model.User.MarkedBooks.Count; i++)
-                {
-                    <div style="cursor: pointer;" onclick="window.location = '/Book/Details?id=@Model.User.MarkedBooks[i].BookId'">
-                        <div class="dark" style="font-weight: bold; font-size: 14px; line-height: 18px;">@Model.User.MarkedBooks[i].Book.Title</div>
-                        <div style="color: #707070; font-size: 14px; font-style: italic;">@Model.User.MarkedBooks[i].Book.BookAuthor</div>
-                    </div>
-                    <div style="height: 20px;"></div>
-                }
-                <div style="height: 10px;"></div>
-                <a href="" class="a1" style="font-size: 14px;">СМОТРЕТЬ КНИГИ</a>
-            </div>
-        }
-    
     </div>
+
+    @if (Model.User.MarkedBooks.Count > 0)
+    {
+        <div class="yellow_border" style="padding: 20px; margin-top: 20px;">
+            <b class="yellow" style="font-size: 18px;">Отмеченные книги</b>
+            <div style="height: 30px;"></div>
+
+            @for (var i = 0; i < Model.User.MarkedBooks.Count; i++)
+            {
+                <div style="cursor: pointer;" onclick="window.location = '/Book/Details?id=@Model.User.MarkedBooks[i].BookId'">
+                    <div class="dark" style="font-weight: bold; font-size: 16px; line-height: 18px;">@Model.User.MarkedBooks[i].Book.Title</div>
+                    <div style="color: #707070; font-size: 16px; font-style: italic;">@Model.User.MarkedBooks[i].Book.BookAuthor</div>
+                </div>
+                <div style="height: 20px;"></div>
+            }
+            <div style="height: 10px;"></div>
+            <a asp-controller="Manage" asp-action="MarkedBooks" class="a1" style="font-size: 16px;">СМОТРЕТЬ ВСЕ</a>
+        </div>
+    }
 
 </div>

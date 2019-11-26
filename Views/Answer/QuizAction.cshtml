@@ -1,0 +1,157 @@
+﻿@using System.Globalization
+@using Knigosha.Core.Models
+@using Microsoft.AspNetCore.Http
+@model Knigosha.Core.ViewModels.ManageViewModels.QuizViewModel
+@{
+    ViewData["Title"] = "Викторина";
+}
+
+<script>
+    var k = @Model.Book.PointsForRightAnswer;
+
+    var questions = [
+        @foreach (var question in Model.Questions)
+        {
+            <text>{
+            "title": "@question.Text",
+            "answer1": "@question.RightAnswer",
+            "answer2": "@question.WrongAnswer1",
+            "answer3": "@question.WrongAnswer2",
+            "type": @((int)question.QuestionType)},</text>
+        }];
+
+    var texts_correct = ["Это правильный ответ!", "Молодец!", "Верно!", "Супер!", "Так держать!", "Правильно!", "В точку!", "Отлично!", "Умница!", "Молодчина!"];
+    var texts_wrong = ["Это неправильный ответ!", "Неверно!", "Ошибка!", "Этот ответ неверен!", "Ты можешь лучше!"];
+
+    console.log(k, questions);
+
+    var bid = @Model.Book.Id;
+    var stopTimer = false;
+    var finish = '/Book/Details?id=@Model.Book.Id';
+
+ 
+    var q = @Model.CurrentQuestion;
+    var points = @Model.Points;
+
+    var s = @Model.CurrentSecond;
+</script>
+
+<div class="shadow_bg">
+    <div class="inner" style="padding-top:30px;padding-bottom:30px;">
+        <div class="quiz_popup" style="padding-top:0px;">
+            <div class="questionWrap">
+                <div id="question">
+                </div>
+                <div style="height:50px;"></div>
+                <a href="javascript:;" style="color: gray;" onclick="$(this).hide();$('#report').show();">
+                    <i class="fa fa-bell"></i> Сообщить о проблеме
+                </a>
+                <div id="report" data-id="339" style="display:none;">
+                    Есть неточность в вопросе или ответах? Опиши проблему:
+                    <div style="height:10px;"></div>
+                    <textarea style="width:100%;height:300px;"></textarea>
+                    <div style="height:10px;"></div>
+                    <a href="javascript:;" onclick="sendReport()" class="button">Отправить</a>
+                </div>
+            </div>
+            <div class="visible-mobile" style="height:20px;"></div>
+            <div id="dots">
+                @if (Model.Book.NumberOfQuestionsForResponses == 5)
+                {
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                    <div class="dot dot4"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot5"></div>}
+                else if (Model.Book.NumberOfQuestionsForResponses == 10)
+                {
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                    <div class="dot dot4"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot5"></div>
+                    <div class="dot dot6"></div>
+                    <div class="dot dot7"></div>
+                    <div class="dot dot8"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot9"></div>
+                    <div class="dot dot10"></div>
+                }
+                else
+                {
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                    <div class="dot dot4"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot5"></div>
+                    <div class="dot dot6"></div>
+                    <div class="dot dot7"></div>
+                    <div class="dot dot8"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot9"></div>
+                    <div class="dot dot10"></div>
+                    <div class="dot dot11"></div>
+                    <div class="dot dot12"></div>
+                    <div class="visible-mobile" style="height:5px;"></div>
+                    <div class="dot dot13"></div>
+                    <div class="dot dot14"></div>
+                    <div class="dot dot15"></div>}
+                <div id="points">
+                    очков: <span style="font-weight: bold" id="counter"></span>
+                </div>
+            </div>
+        </div>
+        <div style="height:30px;"></div>
+        <div class="quiz_info">
+            <div id="timerLine" class="visible-desktop">
+                <div id="timerFill"></div>
+                <div id="timerInfo">* осталось времени для решения</div>
+            </div>
+            <div id="timerCircle"></div>
+            <div id="timerText">
+                <span id="timer"></span><br>
+                <span>минуты</span>
+            </div>
+            <div class="visible-mobile" style="height:50px;"></div>
+            <div class="visible-desktop">
+                <div id="bookInfo">
+                    <table class="sc">
+                        <tr>
+                            <td class="book_info_left" valign="top">
+                                <div class="visible-desktop">
+                                    <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.Book.Id">
+                                        <img src="/uploads/@Model.Book.CoverPhoto" style="border-radius: 15px; max-width: 100px;">
+                                    </a>
+                                </div>
+                            </td>
+                            <td valign="top" class="book_info_right">
+                                <span style="font-size:20px; font-weight: bold">@Model.Book.Title /</span> от @Model.Book.BookAuthor
+                                <div style="height:10px;"></div>
+                                <div class="yellow">
+                                    <span style="font-weight: bold">викторина для @Html.DisplayFor(m => m.Book.AgeGroup) /</span>
+                                    <i>автор викторины: <span style="font-weight: bold">@Model.Book.QuestionsAuthor</span></i>
+                                </div>
+                                <div style="height:10px;"></div>
+                                <i>
+                                    Категория: @Html.DisplayFor(m => m.Book.BookCategory)<br>
+                                    Год на издания: @Model.Book.YearPublished<br>
+                                    Издательство: @Model.Book.Publisher<br>
+                                    @if (!string.IsNullOrEmpty(Model.Book.Translator))
+                                    {
+                                        <text>Переводчик: </text>@Model.Book.Translator
+                                    }<br>
+                                </i>
+                                <div style="height:10px;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="height:50px;"></div>
+        </div>
+    </div>
+</div>
+

@@ -53,17 +53,17 @@
 }
 
 
-<td colspan="2" valign="top" class="desktop-top-border">
-    <a href="" name="s" style="position:relative;top:-100px;"></a>
-    @if (!Model.HasAccess)
-    {
-        <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
-            Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
-            Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
-        </div>
-    }
-    else
-    {
+
+<a href="" name="s" style="position:relative;top:-100px;"></a>
+@if (!Model.HasAccess)
+{
+    <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+        Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
+        Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
+    </div>
+}
+else
+{
     <td colspan="2" valign="top" class="desktop-top-border" style="padding-left:50px;padding-top:50px;">
         <div style="padding-bottom:50px;font-size:18px;">
             <form name="stats_form" asp-controller="Manage" asp-action="Dashboard" method="get">
@@ -185,7 +185,7 @@
                         <div class="chartGroup" style="left:10px;cursor:pointer;"
                              onclick="window.location='/Manage/Students?id=@Model.Students[i].Id&archive=0'">
                             <div class="chartRow bg @GetClassFromGrade((int)Model.Students[i].Grade)" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
-                            <div class="chartRow" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
+                            <div class="chartRow" style="height:@Model.Average%"></div>
                             <div class="chartInfo" style="bottom:calc(@Model.Students[i].PercentageOfRightResponses% - 50px)">
                                 <div class="chartTitle" style="line-height:150%;">
                                     <span style="text-transform:capitalize">@Model.Students[i].FullName</span><br>
@@ -200,10 +200,11 @@
                                 </div>
                             </div>
                             <div class="chartNum">@(i + 1)</div>
-                            <div class="chartPercent @GetClassFromGrade((int)Model.Students[i].Grade)" style="bottom:41%">@Model.Students[i].PercentageOfRightResponses%</div>
-                        </div>
+                            <div class="chartPercent @GetClassFromGrade((int)Model.Students[i].Grade)"
+                                 style="bottom:@Model.Students[i].PercentageOfRightResponses%">@Model.Students[i].PercentageOfRightResponses%</div>
+                            </div>
+                        }
                     }
-                }
             </div>
         </div>
         <a href="" name="s2"></a>
@@ -217,7 +218,7 @@
                     asp-items="@Model.Locations" asp-for="@Model.Location">
             </select>
         </div>
-        <table style="font-size:18px;">
+        <table style="font-size:18px; width:100%">
             <tr>
                 <td style="font-weight:bold;">Место @(Model.User.UserType == UserTypes.Parent ? "семьи" : "класса") по количеству очков:</td>
                 <td class="yellow" style="padding-left:70px;font-size:40px; font-weight:bold">@Model.PositionInTableAccordingToPoints</td>
@@ -241,26 +242,32 @@
         <div style="height:100px;"></div>
         @if (Model.JustReadBooks != null)
         {
-            <h2>Недавно прочитали мои @(Model.User.UserType == UserTypes.Parent ? "дети" : "ученики")</h2>
+            <h2 style="margin-bottom: 1rem;">Недавно прочитали мои @(Model.User.UserType == UserTypes.Parent ? "дети" : "ученики")</h2>
             <div id="books">
-                <table class="sc" cellspacing="0" cellpadding="0">
+                <table class="sc" cellspacing="0" cellpadding="0" style="table-layout:fixed; width: 100%">
                     <tbody>
-                    <tr>
-                        @foreach (var book in Model.JustReadBooks)
-                        {
-                            <td style="vertical-align: top; width: 31.666666666667%;">
-                                <div onclick="window.location = '/Book/Details?id=@book.Id'" class="book_div">
-                                    <div class="wishlist "
-                                         data-book="@book.Id" onclick="setWishlist(this);event.stopPropagation();"></div>
-                                    <img src="/uploads/@book.CoverPhoto">
-                                    <div style="height: 15px;"></div>
-                                    <h3>@book.Title</h3>
-                                    <div class="bookAuthor">@book.BookAuthor</div>
-                                    <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id">СМОТРЕТЬ КНИГУ</a>
-                                </div>
-                            </td>
-                        }
-                    </tr>
+                        <tr>
+                            @for (var index = 0; index < Model.JustReadBooks.Count; index++)
+                            {
+                                var book = Model.JustReadBooks[index];
+                                <td style="vertical-align: top; width: 31.666666666667%; display: inline-block;">
+                                    <div onclick="window.location = '/Book/Details?id=@book.Id'" class="book_div">
+                                        <div class="wishlist "
+                                             data-book="@book.Id" onclick="setWishlist(this);event.stopPropagation();">
+                                        </div>
+                                        <img src="/uploads/@book.CoverPhoto">
+                                        <div style="height: 15px;"></div>
+                                        <h3>@book.Title</h3>
+                                        <div class="bookAuthor">@book.BookAuthor</div>
+                                        <a asp-controller="Book" asp-action="Details" asp-route-id="@book.Id">СМОТРЕТЬ КНИГУ</a>
+                                    </div>
+                                </td>
+                                @if (index != 2)
+                                {
+                                    <td style="width: 2.5%; display: inline-block">&nbsp;</td>
+                                }
+                            }
+                        </tr>
                     </tbody>
                 </table>
             </div>

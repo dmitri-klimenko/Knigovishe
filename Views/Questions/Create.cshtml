@@ -14,7 +14,7 @@
         <hr />
         <div class="adminForm row">
             <div class="col-md-12">
-                <form asp-action="Create">
+                <form asp-action="Create" class="inputAdmin">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <input asp-for="BookId" type="hidden" />
@@ -63,7 +63,7 @@
                 var questionCategoryVal = $(this).val();
                 console.log(questionCategoryVal);
 
-                if (questionCategoryVal == 3) {
+                if (questionCategoryVal == 2) {
                     $('#rightAnswerDiv').hide();
                     $('#wrongAnswer1Div').hide();
                     $('#wrongAnswer2Div').hide();

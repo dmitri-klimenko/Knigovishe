@@ -23,7 +23,7 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
 
         public bool Invoice { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Пожалуйста, введите адрес почты")]
         [EmailAddress(ErrorMessage = "Адрес должен быть действительным")]
         public string Email { get; set; }
 

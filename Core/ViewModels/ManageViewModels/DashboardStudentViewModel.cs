@@ -12,6 +12,5 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         public bool HasAccess { get; set; }
         public List<Book> Recommended { get; set; }
         public int PointsTillNextLevel { get; set; }
-
     }
 }

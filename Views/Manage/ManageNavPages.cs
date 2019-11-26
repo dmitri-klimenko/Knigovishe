@@ -41,8 +41,6 @@ namespace Knigosha.Views.Manage
 
         public static string AnswersGroup => "AnswersGroup";
 
-
-
         public static string DashboardNavClass(ViewContext viewContext) => PageNavClass(viewContext, Dashboard);
 
         public static string AnswersNavClass(ViewContext viewContext) => PageNavClass(viewContext, Answers);

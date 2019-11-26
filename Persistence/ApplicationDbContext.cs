@@ -12,7 +12,7 @@ namespace Knigosha.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
         ApplicationUserRole, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>>, IApplicationDbContext
+        IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {

@@ -18,7 +18,7 @@ namespace Knigosha.Core.Models
 
         public bool  IsArchive { get; set; }
 
-        public int NumberOfWriteResponses { get; set; }
+        public int NumberOfRightResponses { get; set; }
 
         public int NumberOfWrongResponses { get; set; }
 
@@ -28,25 +28,19 @@ namespace Knigosha.Core.Models
 
         public string ReasonForRestart { get; set; }
 
-        public AnswerTypes AnswerType { get; set; }
-
         public QuizTypes QuizType { get; set; }
 
-        public int Points
-        {
-            get
-            {
-                var result = NumberOfWriteResponses * Book.PointsForRightAnswer -
-                             NumberOfWrongResponses * Book.PointsForWrongAnswer;
-                return result > 0 ? result : 0;
-            }
-        }
+        public float Points { get; set; }
 
-        public int PercentageOfRightResponses => (NumberOfWriteResponses / Book.NumberOfQuestionsForResponses) * 100;
+        public int PercentageOfRightResponses => NumberOfRightResponses * 100 / Book.NumberOfQuestionsForResponses;
 
-        public int PercentageOfWrongResponses => (NumberOfWrongResponses / Book.NumberOfQuestionsForResponses) * 100;
+        public int PercentageOfWrongResponses => NumberOfWrongResponses * 100 / Book.NumberOfQuestionsForResponses;
 
-        public int PercentageOfSkippedQuestions => (NumberOfSkippedQuestions / Book.NumberOfQuestionsForResponses) * 100;
+        public int PercentageOfSkippedQuestions => NumberOfSkippedQuestions * 100/ Book.NumberOfQuestionsForResponses;
+
+        public byte CurrentQuestion { get; set; }
+
+        public DateTime Started { get; set; }
 
         protected Answer() { }
 

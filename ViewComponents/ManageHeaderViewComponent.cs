@@ -35,12 +35,15 @@ namespace Knigosha.ViewComponents
                 case UserTypes.Student:
                 {
                     var student = await _context.Students
-                        .Include(s => s.Answers)
                         .Include(s => s.StudentClasses)
                         .ThenInclude(sc => sc.Class)
                         .Include(s => s.StudentFamilies)
                         .ThenInclude(sf => sf.Family)
                         .SingleAsync(s => s.Id == user.Id);
+
+                    student.Answers = _context.Answers
+                        .Include(a => a.Book)
+                        .Where(a => !a.IsArchive && a.UserId == student.Id).ToList();
 
                     var activeClass = student.StudentClasses.SingleOrDefault(sc => sc.IsActive)?.Class;
                     var activeFamily = student.StudentFamilies.SingleOrDefault(sf => sf.IsActive)?.Family;

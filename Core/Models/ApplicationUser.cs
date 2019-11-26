@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace Knigosha.Core.Models
 {
@@ -67,16 +68,9 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public int PercentageOfRightResponses
-        {
-            get
-            {
-                var percentageSum = Answers.Sum(answer => PercentageOfRightResponses);
-                return NumberOfAnswers != 0 ? percentageSum / NumberOfAnswers : 0;
-            }
-        }
-
-        public int PointsForAnswers => Answers.Sum(answer => answer.Points);
+        public int PercentageOfRightResponses => Answers.Sum(answer => answer.PercentageOfRightResponses) / Answers.Count;
+        
+        public int PointsForAnswers => (int)Math.Ceiling(Answers.Sum(answer => answer.Points));
 
         public int Points =>  PointsForAnswers + PointsForCreatedBooks;
 
@@ -87,14 +81,14 @@ namespace Knigosha.Core.Models
             get
             {
                 var levelName = Levels.Null;
-                if (Points <= 45)  levelName = Levels.Null;
+                if (Points <= 45) levelName = Levels.Null;
                 else if (Points > 45 || Points <= 90) levelName = Levels.One;
-                else if (Points > 90  || Points <= 135) levelName = Levels.Two;
-                else if (Points > 135  || Points <= 180) levelName = Levels.Three;
-                else if (Points > 180  || Points <= 225) levelName = Levels.Four;
-                else if (Points > 225  || Points <= 270) levelName = Levels.Five;
+                else if (Points > 90 || Points <= 135) levelName = Levels.Two;
+                else if (Points > 135 || Points <= 180) levelName = Levels.Three;
+                else if (Points > 180 || Points <= 225) levelName = Levels.Four;
+                else if (Points > 225 || Points <= 270) levelName = Levels.Five;
                 else if (Points > 270 || Points <= 315) levelName = Levels.Six;
-                else if (Points > 315) levelName = Levels.Seven; 
+                else if (Points > 315) levelName = Levels.Seven;
                 return levelName;
             }
 

@@ -20,5 +20,6 @@ namespace Knigosha.Core.ViewModels.BookViewModels
         public BookCategories Category { get; set; }
         public AgeGroups AgeGroup { get; set; }
         public string SortField { get; set; }
+        public List<int> BooksIds { get; set; }
     }
 }

@@ -34,12 +34,9 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
         public string TopInTableAccordingToAnswers { get; set; }
         public string TopInTableAccordingToRightResponses { get; set; }
 
-        public string MyCountry { get; set; }
-
         public int NumberOfGroupsInTable { get; set; }
 
         public int Average { get; set; }
-
 
         public List<SelectListItem> Locations { get; set; }
         public string Location { get; set; }

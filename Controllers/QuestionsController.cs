@@ -22,10 +22,16 @@ namespace Knigosha.Controllers
         public IActionResult Index(int? id)
         {
             var questions = _context.Questions.Where(q => q.BookId == id);
-            var title = _context.Books.Single(b => b.Id == id).Title;
+            var book = _context.Books.Single(b => b.Id == id);
+            var questionsVm = new QuestionsViewModel
+            {
+                Questions = questions.ToList(),
+                Book = book
+            };
+
             ViewData["BookId"] = id;
-            ViewData["BookTitle"] = title;
-            return View(questions);
+            ViewData["BookTitle"] = book.Title;
+            return View(questionsVm);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -133,5 +139,11 @@ namespace Knigosha.Controllers
         {
             return _context.Questions.Any(e => e.Id == id);
         }
+    }
+
+    public class QuestionsViewModel
+    {
+        public List<Question> Questions { get; set; }
+        public Book Book { get; set; }
     }
 }

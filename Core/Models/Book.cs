@@ -30,6 +30,7 @@ namespace Knigosha.Core.Models
         public int NumberOfPages { get; set; }
 
         public double AverageRating {
+
             get
             {
                 var numberOfBookRatings = BookRatings.Count;
@@ -53,18 +54,7 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public int PointsForWrongAnswer
-        {
-            get
-            {
-                var points = 0;
-                if (IsShortForm || Grade == Grades.One) points = 1;
-                else if (Grade != null) points = (int) Grade - 1;
-                return points;
-            }
-        }
-
-        public int NumberOfQuestionsForResponses => ContentQuestions + ComprehensionQuestions;
+        public float PointsForWrongAnswer => (float)PointsForRightAnswer / 2;
 
         [Display(Name = "Возрастная группа:")]
         public AgeGroups AgeGroup
@@ -92,117 +82,24 @@ namespace Knigosha.Core.Models
 
         public string Translator { get; set; }
 
-        public int ContentQuestions
+        public int NumberOfQuestionsForResponses
         {
             get
             {
-                var number = 0;
+                int number;
                 if (IsShortForm || BookCategory == BookCategories.Nonfiction) number = 5;
-                else
-                {
-                    switch (Grade)
-                    {
-                        case Grades.One :
-                            number = 10;
-                            break;
-                        case Grades.Two:
-                            number = 14;
-                            break;
-                        case Grades.Three:
-                            number = 12;
-                            break;
-                        case Grades.Four:
-                            number = 10;
-                            break;
-                        case Grades.Five:
-                            number = 13;
-                            break;
-                        case Grades.Six:
-                            number = 11;
-                            break;
-                        case Grades.Seven:
-                            number = 9;
-                            break;
-                        case Grades.Eight:
-                            number = 12;
-                            break;
-                        case Grades.Nine:
-                            number = 11;
-                            break;
-                        case Grades.Ten:
-                            number = 10;
-                            break;
-                        case Grades.Eleven:
-                            number = 10;
-                            break;
-                    }
-                }
+                else if (Grade == Grades.One) number = 10;
+                else number = 15;
                 return number;
             }
         }
 
-        public int ContentQuestionsCreated
-        {
-            get
-            {
-                return Questions.Count(question => question.QuestionType == QuestionTypes.Content);
-            }
-        }
 
-        public int ComprehensionQuestions
+        public int NumberOfQuestionsCreated
         {
             get
             {
-                var number = 0;
-                if (IsShortForm || BookCategory == BookCategories.Nonfiction) number = 0;
-                else
-                {
-                    switch (Grade)
-                    {
-                        case Grades.One:
-                            number = 0;
-                            break;
-                        case Grades.Two:
-                            number = 1;
-                            break;
-                        case Grades.Three:
-                            number = 3;
-                            break;
-                        case Grades.Four:
-                            number = 5;
-                            break;
-                        case Grades.Five:
-                            number = 2;
-                            break;
-                        case Grades.Six:
-                            number = 4;
-                            break;
-                        case Grades.Seven:
-                            number = 6;
-                            break;
-                        case Grades.Eight:
-                            number = 3;
-                            break;
-                        case Grades.Nine:
-                            number = 4;
-                            break;
-                        case Grades.Ten:
-                            number = 5;
-                            break;
-                        case Grades.Eleven:
-                            number = 5;
-                            break;
-                    }
-                }
-                return number;
-            }
-        }
-
-        public int ComprehensionQuestionsCreated
-        {
-            get
-            {
-                return Questions.Count(question => question.QuestionType == QuestionTypes.Comprehension);
+                return Questions.Count(question => question.QuestionType == QuestionTypes.ContentComprehension);
             }
         }
       

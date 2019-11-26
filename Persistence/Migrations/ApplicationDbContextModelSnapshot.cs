@@ -40,29 +40,38 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("BookId");
 
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("AnswerType");
+                    b.Property<byte>("CurrentQuestion");
 
                     b.Property<DateTime>("DateTime");
 
-                    b.Property<int>("Id");
-
                     b.Property<bool>("IsArchive");
+
+                    b.Property<int>("NumberOfRightResponses");
 
                     b.Property<int>("NumberOfSkippedQuestions");
 
-                    b.Property<int>("NumberOfWriteResponses");
-
                     b.Property<int>("NumberOfWrongResponses");
+
+                    b.Property<float>("Points");
 
                     b.Property<int>("QuizType");
 
                     b.Property<string>("ReasonForRestart");
 
-                    b.HasKey("BookId", "UserId");
+                    b.Property<DateTime>("Started");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -1520,8 +1529,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.Property<string>("DateTime");
-
                     b.HasKey("BookId", "UserId");
 
                     b.HasIndex("UserId");
@@ -1576,7 +1583,6 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<int>("QuestionType");
 
                     b.Property<string>("RightAnswer")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.Property<string>("Text")
@@ -1584,11 +1590,9 @@ namespace Knigosha.Persistence.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("WrongAnswer1")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.Property<string>("WrongAnswer2")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.HasKey("Id");

@@ -585,12 +585,12 @@ function setWishlist(el) {
     var book = $(el).attr('data-book');
 
     if ($(el).hasClass('active')) {
-        var txt = 'Книгата е премахната от Набелязани';
+        var txt = 'Книга была удалена из Отмеченных';
         var action = 'remove';
         $(el).removeClass('active');
     }
     else {
-        var txt = 'Книгата е набелязана';
+        var txt = 'Книга отмечена';
         var action = 'add';
         $(el).addClass('active');
     }
@@ -616,7 +616,7 @@ function ajaxWishlist(action, book) {
         url: ajax_url,
         type: "POST",
         dataType: "json",
-        data: { "action": "setWishlist", "do": action, "book": book },
+        data: { "action": "setWishlist", "act": action, "book": book },
         success: function (data) { }
     });
 }
@@ -761,9 +761,10 @@ function loadQuestion() {
 
     var html = "";
 
+    debugger;
     if (questions.length > 5) {
-        if (q == 4) html += '<div style="color:#43925a;font-size:20px;font-weight:bold;margin-bottom:10px;">Много добре! Стигна до 5. въпрос.</div>';
-        if (q == 10 && questions.length > 13) html += '<div style="color:#43925a;font-size:20px;font-weight:bold;margin-bottom:10px;">Продължавай! Остават само още 5 въпроса!</div>';
+        if (q == 4) html += '<div style="color:#43925a;font-size:20px;font-weight:bold;margin-bottom:10px;">Очень хорошо! Добрались до 5. вопроса.</div>';
+        if (q == 10 && questions.length > 13) html += '<div style="color:#43925a;font-size:20px;font-weight:bold;margin-bottom:10px;">Продолжай! Осталось ещё 5 вопросов!</div>';
     }
 
     html += '<div class="questionTitle">' + questions[q]['title'] + '</div><div class="options" style="display:inline-block;position:relative;margin-top:5px;">';
@@ -792,15 +793,19 @@ function loadQuestion() {
     }
 
     html += '</div><div style="margin-top:30px;margin-bottom:40px;">';
-    html += '<a href="javascript:answer()" class="button next disabled confirm_button" style="float:left;">ПОТВЪРДИ</a>';
-    html += '<a href="javascript:loadQuestion();"  class="button continue" style="float:left;display:none;">СЛЕДВАЩ ВЪПРОС</a>';
-    html += '<a href="javascript:skip()" class="button next" style="float:right;">ПРОПУСНИ</a>';
+    html += '<a href="javascript:answer()" class="button next disabled confirm_button" style="float:left;">ПОДТВЕРДИТЬ</a>';
+    html += '<a href="javascript:loadQuestion();"  class="button continue" style="float:left;display:none;">СЛЕДУЮЩИЙ ВОПРОС</a>';
+    html += '<a href="javascript:skip()" class="button next" style="float:right;">ПРОПУСТИТЬ</a>';
     html += '</div>';
-
+     
 
     html += '</div><div style="color:red;" id="error"></div>';
 
     $("#question").html(html);
+
+    display_points = Math.ceil(points);           // does not work on refresh
+    if (display_points < 0) display_points = 0;
+    $("#counter").html(display_points); 
 }
 
 function skip() {
@@ -846,7 +851,7 @@ function answer() {
     }
 
 
-    display_points = Math.ceil(points);
+    display_points = Math.ceil(points);           // does not work on refresh
     if (display_points < 0) display_points = 0;
     $("#counter").html(display_points);
 
@@ -855,7 +860,6 @@ function answer() {
         $(".quizAnswer[data-value=1]").addClass("quizCorrect");
     }
 
-
     //console.log({"action": "answer", "qa": qa, "q": q,"answer": answer});
 
     $.ajax({
@@ -863,7 +867,7 @@ function answer() {
         type: "POST",
         timeout: 4000,
         dataType: "json",
-        data: { "action": "answer", "qa": qa, "q": q, "answer": answer },
+        data: { "action": "answer", "bid": bid, "q": q, "answer": answer },
         success: function (data) {
 
             console.log(q);
@@ -888,7 +892,6 @@ function answer() {
             $(".quiz_popup").removeClass("wrong");
             $(".say").remove();
             $(".questionWrap").html('<div style="font-size:20px;font-weight:bold;">Възникна проблем във връзката със сървъра. Моля, провери дали твоята интернет връзка работи и презареди страницата или натисни <a href="javascript:location.reload();">тук.</a></div>');
-
         }
     });
 
