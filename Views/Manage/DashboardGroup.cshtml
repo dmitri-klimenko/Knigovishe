@@ -53,18 +53,17 @@
 }
 
 
-
-<a href="" name="s" style="position:relative;top:-100px;"></a>
-@if (!Model.HasAccess)
-{
-    <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
-        Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
-        Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
-    </div>
-}
-else
-{
-    <td colspan="2" valign="top" class="desktop-top-border" style="padding-left:50px;padding-top:50px;">
+<td colspan="2" valign="top" class="desktop-top-border" style="padding-left:50px;padding-top:50px;">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    @if (!Model.HasAccess)
+    {
+        <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+            Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
+            Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
+        </div>
+    }
+    else
+    {
         <div style="padding-bottom:50px;font-size:18px;">
             <form name="stats_form" asp-controller="Manage" asp-action="Dashboard" method="get">
                 <h3>@(Model.User.UserType == UserTypes.Parent ? "МОЯ СЕМЬЯ" : "МОЙ КЛАСС")</h3>
@@ -272,6 +271,6 @@ else
                 </table>
             </div>
         }
-    </td>
-}
+    }
+</td>
 

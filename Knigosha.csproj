@@ -77,8 +77,12 @@
     <Compile Remove="Persistence\Migrations\20191118214456_CorrectAnswer.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191118215004_CorrectAnswer.cs" />
     <Compile Remove="Persistence\Migrations\20191118215004_CorrectAnswer.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191126075618_ChangeAnswerId.cs" />
+    <Compile Remove="Persistence\Migrations\20191126075618_ChangeAnswerId.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20191126082046_ChangeAnswersId.cs" />
     <Compile Remove="Persistence\Migrations\20191126082046_ChangeAnswersId.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20191126203848_AddBookCommentsANDBookOpinionsTables.cs" />
+    <Compile Remove="Persistence\Migrations\20191126203848_AddBookCommentsANDBookOpinionsTables.Designer.cs" />
   </ItemGroup>
 
 

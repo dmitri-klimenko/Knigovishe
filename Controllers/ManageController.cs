@@ -151,8 +151,8 @@ namespace Knigosha.Controllers
                             new SelectListItem("последний месяц", "month", false),
                             new SelectListItem("последняя неделя", "week", false)
                         };
-                    // 1 call to db
-                    dgVm.PointsForCreatedBooks = _context.CreatedBooks
+                 
+                    dgVm.PointsForCreatedBooks = family.CreatedBooks
                         .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
                         .Sum(cb => cb.Points);
 
@@ -190,7 +190,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = allAnswers?.Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
 
                         user.TotalAnswers = dgVm.CountOfAnswers;
 
@@ -208,7 +210,7 @@ namespace Knigosha.Controllers
                             new SelectListItem("последний месяц", "month", true),
                             new SelectListItem("последняя неделя", "week", false)
                         };
-
+                    
                     dgVm.PointsForCreatedBooks = family.CreatedBooks
                         .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
                         .Where(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime)
@@ -224,7 +226,7 @@ namespace Knigosha.Controllers
                         // 2
                         var allAnswers = _context.Answers?
                             .Include(a => a.Book)
-                            .Where(a => a.UserId == family.Id && !a.IsArchive || listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
+                            .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
                             .ToList();
 
                         if (allAnswers.Count != 0)
@@ -238,7 +240,7 @@ namespace Knigosha.Controllers
                             dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
                         }
 
-                        dgVm.CountOfAnswers = allAnswers.Count;
+                        dgVm.CountOfAnswers = allAnswers.Count(a => DateTime.Now.AddMonths(-1) <= a.DateTime);
 
                         dgVm.Students = family.StudentFamilies.Select(sf => sf.Student).ToList();
                         // 3
@@ -255,7 +257,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
                                                   .Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
                     }
                 }
                 else if (model.Period == "week")
@@ -294,7 +298,7 @@ namespace Knigosha.Controllers
                             dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
                         }
 
-                        dgVm.CountOfAnswers = allAnswers.Count;
+                        dgVm.CountOfAnswers = allAnswers.Count(a => DateTime.Now.AddDays(-7) <= a.DateTime);
 
                         dgVm.Students = family.StudentFamilies.Select(sf => sf.Student).ToList();
                         // 3
@@ -310,7 +314,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => DateTime.Now.AddDays(-7) <= a.DateTime)
                                                   .Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
                     }
                 }
 
@@ -333,7 +339,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
                                                   .Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / family.StudentFamilies.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
 
                 }
@@ -356,7 +364,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / family.StudentFamilies.Count;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
 
                 }
@@ -379,7 +389,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / family.StudentFamilies.Count / dgVm.CountOfAnswers; 
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
                 }
                 else if (model.ChartLocation == "country")
@@ -401,7 +413,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / family.StudentFamilies.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
                 }
 
@@ -486,8 +500,8 @@ namespace Knigosha.Controllers
                             new SelectListItem("последний месяц", "month", false),
                             new SelectListItem("последняя неделя", "week", false)
                         };
-                    // 1 call to db
-                    dgVm.PointsForCreatedBooks = _context.CreatedBooks
+               
+                    dgVm.PointsForCreatedBooks = schoolClass.CreatedBooks
                         .Where(cb => !cb.IsArchive && cb.UserId == user.Id)
                         .Sum(cb => cb.Points);
 
@@ -525,7 +539,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = allAnswers?.Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
 
                         user.TotalAnswers = dgVm.CountOfAnswers;
 
@@ -572,7 +588,7 @@ namespace Knigosha.Controllers
                             dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
                         }
 
-                        dgVm.CountOfAnswers = allAnswers.Count;
+                        dgVm.CountOfAnswers = allAnswers.Count(cb => DateTime.Now.AddMonths(-1) <= cb.DateTime);
 
                         dgVm.Students = schoolClass.StudentClasses.Select(sf => sf.Student).ToList();
                         // 3
@@ -588,7 +604,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
                                                   .Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers; ;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
 
                     }
                 }
@@ -628,7 +646,7 @@ namespace Knigosha.Controllers
                             dgVm.JustReadBooks = allReadBooks.Count > 3 ? allReadBooks.Take(3).ToList() : allReadBooks;
                         }
 
-                        dgVm.CountOfAnswers = allAnswers.Count;
+                        dgVm.CountOfAnswers = allAnswers.Count(a => DateTime.Now.AddDays(-7) <= a.DateTime);
 
                         dgVm.Students = schoolClass.StudentClasses.Select(sf => sf.Student).ToList();
                         // 3
@@ -644,7 +662,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => DateTime.Now.AddMonths(-1) <= a.DateTime)
                                                   .Sum(s => s.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / dgVm.CountOfAnswers; ;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.TotalPercentageOfRightResponses = totalPercentage / dgVm.CountOfChildren / forDivide;
                     }
                 }
 
@@ -667,7 +687,9 @@ namespace Knigosha.Controllers
                                                   .Where(a => listOfStudentIds.Contains(a.UserId) && !a.IsArchive)
                                                   .Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / schoolClass.StudentClasses.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
 
                 }
@@ -690,7 +712,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / schoolClass.StudentClasses.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
 
                 }
@@ -713,7 +737,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / schoolClass.StudentClasses.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / schoolClass.StudentClasses.Count / forDivide;
                     }
                 }
                 else if (model.ChartLocation == "country")
@@ -735,7 +761,9 @@ namespace Knigosha.Controllers
 
                         var totalPercentage = answers?.Sum(a => a.PercentageOfRightResponses) ?? 0;
 
-                        dgVm.Average = totalPercentage / schoolClass.StudentClasses.Count / dgVm.CountOfAnswers;
+                        var forDivide = dgVm.CountOfAnswers == 0 ? 1 : dgVm.CountOfAnswers;
+
+                        dgVm.Average = totalPercentage / forDivide;
                     }
                 }
 
@@ -2049,6 +2077,11 @@ namespace Knigosha.Controllers
                         createdAnswer.CurrentQuestion++;
                         createdAnswer.NumberOfRightResponses++;
 
+                        if (q + 1 == createdAnswer.Book.NumberOfQuestionsForResponses && createdAnswer.Points < 0)
+                        {
+                            createdAnswer.Points = 0;
+                        }
+
                         _context.Answers.Update(createdAnswer);
                         await _context.SaveChangesAsync();
 
@@ -2067,7 +2100,12 @@ namespace Knigosha.Controllers
 
                         createdAnswer.CurrentQuestion++;
                         createdAnswer.NumberOfWrongResponses++;
-                   
+
+                        if (q + 1 == createdAnswer.Book.NumberOfQuestionsForResponses && createdAnswer.Points < 0)
+                        {
+                            createdAnswer.Points = 0;
+                        }
+
                         _context.Answers.Update(createdAnswer);
                         await _context.SaveChangesAsync();
 
@@ -2079,6 +2117,11 @@ namespace Knigosha.Controllers
                     {
                         createdAnswer.NumberOfSkippedQuestions++;
                         createdAnswer.CurrentQuestion++;
+
+                        if (q + 1 == createdAnswer.Book.NumberOfQuestionsForResponses && createdAnswer.Points < 0)
+                        {
+                            createdAnswer.Points = 0;
+                        }
 
                         _context.Answers.Update(createdAnswer);
                         await _context.SaveChangesAsync();

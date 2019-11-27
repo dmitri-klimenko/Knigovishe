@@ -40,6 +40,16 @@ namespace Knigosha.Persistence.EntityConfigurations
                 .HasForeignKey(q => q.BookId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(b => b.BookComments)
+                .WithOne(q => q.Book)
+                .HasForeignKey(q => q.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(b => b.BookOpinions)
+                .WithOne(q => q.Book)
+                .HasForeignKey(q => q.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

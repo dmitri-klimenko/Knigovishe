@@ -9,7 +9,7 @@ namespace Knigosha.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<Answer> builder)
         {
             builder.ToTable("Answers");
-            builder.HasKey(a => a.Id);
+            builder.HasKey(a => new { a.BookId, a.UserId });
             builder.Property(a => a.UserId).IsRequired();
             builder.Property(a => a.BookId).IsRequired();
         }

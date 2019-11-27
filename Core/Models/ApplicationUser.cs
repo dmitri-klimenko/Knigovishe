@@ -68,8 +68,17 @@ namespace Knigosha.Core.Models
             }
         }
 
-        public int PercentageOfRightResponses => Answers.Sum(answer => answer.PercentageOfRightResponses) / Answers.Count;
-        
+        public int PercentageOfRightResponses
+        {
+            get
+            {
+                return Answers.Count != 0
+                    ? Answers.Sum(answer => answer.PercentageOfRightResponses) / Answers.Count
+                    : 0;
+            }
+        }
+
+       
         public int PointsForAnswers => (int)Math.Ceiling(Answers.Sum(answer => answer.Points));
 
         public int Points =>  PointsForAnswers + PointsForCreatedBooks;

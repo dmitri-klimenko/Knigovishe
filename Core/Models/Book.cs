@@ -137,12 +137,16 @@ namespace Knigosha.Core.Models
         public ICollection<Question> Questions { get; set; }
         public ICollection<BookRating> BookRatings { get; set; }
         public ICollection<Answer> Answers { get; set; }
+        public ICollection<BookComment> BookComments { get; set; }
+        public ICollection<BookOpinion> BookOpinions { get; set; }
 
         public Book()
         {
             Answers = new Collection<Answer>();
             BookRatings = new Collection<BookRating>();
             Questions = new Collection<Question>();
+            BookComments = new Collection<BookComment>();
+            BookOpinions = new Collection<BookOpinion>();
             DateAdded = DateTime.Now.ToString("d");
         }
     }

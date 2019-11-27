@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191126075618_ChangeAnswerId")]
-    partial class ChangeAnswerId
+    [Migration("20191127040906_ChangesInBookNote")]
+    partial class ChangesInBookNote
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,11 +42,9 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("BookId");
+
+                    b.Property<string>("UserId");
 
                     b.Property<byte>("CurrentQuestion");
 
@@ -68,12 +66,7 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<DateTime>("Started");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
+                    b.HasKey("BookId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -286,13 +279,28 @@ namespace Knigosha.Persistence.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("Knigosha.Core.Models.BookComment", b =>
+                {
+                    b.Property<int>("BookId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<bool>("Share");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("BookId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookComments");
+                });
+
             modelBuilder.Entity("Knigosha.Core.Models.BookNote", b =>
                 {
                     b.Property<string>("UserId");
 
                     b.Property<int>("BookId");
-
-                    b.Property<string>("DateTime");
 
                     b.Property<string>("Text")
                         .HasMaxLength(255);
@@ -302,6 +310,23 @@ namespace Knigosha.Persistence.Migrations
                     b.HasAlternateKey("BookId", "UserId");
 
                     b.ToTable("BookNotes");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.BookOpinion", b =>
+                {
+                    b.Property<int>("BookId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("AnswerText");
+
+                    b.Property<bool>("Share");
+
+                    b.HasKey("BookId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BookOpinions");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.BookRating", b =>
@@ -68502,6 +68527,19 @@ namespace Knigosha.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Knigosha.Core.Models.BookComment", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.Book", "Book")
+                        .WithMany("BookComments")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Knigosha.Core.Models.BookNote", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
@@ -68511,6 +68549,19 @@ namespace Knigosha.Persistence.Migrations
 
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
                         .WithMany("BookNotes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.BookOpinion", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.Book", "Book")
+                        .WithMany("BookOpinions")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

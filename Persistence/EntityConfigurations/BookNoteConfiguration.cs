@@ -12,6 +12,7 @@ namespace Knigosha.Persistence.EntityConfigurations
             builder.HasKey(bn => new { bn.UserId, bn.BookId });
 
             builder.Property(bn => bn.Text).HasMaxLength(255);
+
             builder.Property(bn => bn.BookId).IsRequired();
             builder.Property(bn => bn.UserId).IsRequired();
         }

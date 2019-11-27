@@ -6,7 +6,7 @@ namespace Knigosha.Core.Models
 {
     public class Answer
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         public ApplicationUser User { get; set; }
 

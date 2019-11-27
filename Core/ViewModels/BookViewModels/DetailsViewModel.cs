@@ -10,7 +10,6 @@ namespace Knigosha.Core.ViewModels.BookViewModels
         public Answer Answer { get; set; }
         public int BookId { get; set; }
         public List<Book> Recommended { get; set; }
-        public BookNote BookNote { get; set; }
         public UserTypes UserType { get; set; }
         public int? MyRating { get; set; }
         public int? CountOfStudentsAnswers { get; set; }
@@ -18,7 +17,10 @@ namespace Knigosha.Core.ViewModels.BookViewModels
         public string OpinionQuestion { get; set; }
         public List<int> BooksIds { get; set; }
         public string Action { get; set; }
-        public string Text { get; set; }
-        public int AnswerId { get; set; }
+        public string BookOpinionText { get; set; }
+        public string BookCommentText { get; set; }
+        public string BookNoteText { get; set; }
+        public string ReasonForRestart { get; set; }
+        public bool Share { get; set; }
     }
 }

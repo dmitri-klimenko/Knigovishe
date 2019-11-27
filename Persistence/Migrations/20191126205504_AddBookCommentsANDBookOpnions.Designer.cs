@@ -4,14 +4,16 @@ using Knigosha.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Knigosha.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191126205504_AddBookCommentsANDBookOpnions")]
+    partial class AddBookCommentsANDBookOpnions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +49,8 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<byte>("CurrentQuestion");
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<int>("Id");
 
                     b.Property<bool>("IsArchive");
 
@@ -283,8 +287,6 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.Property<bool>("Share");
-
                     b.Property<string>("Text");
 
                     b.HasKey("BookId", "UserId");
@@ -299,6 +301,8 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<int>("BookId");
+
+                    b.Property<string>("DateTime");
 
                     b.Property<string>("Text")
                         .HasMaxLength(255);
@@ -317,8 +321,6 @@ namespace Knigosha.Persistence.Migrations
                     b.Property<string>("UserId");
 
                     b.Property<string>("AnswerText");
-
-                    b.Property<bool>("Share");
 
                     b.HasKey("BookId", "UserId");
 

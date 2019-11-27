@@ -39,6 +39,8 @@ namespace Knigosha.Persistence
         public DbSet<School> Schools { get; set; }
         public DbSet<Text> Texts { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<BookOpinion> BookOpinions { get; set; }
+        public DbSet<BookComment> BookComments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -151,6 +153,9 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new SchoolConfiguration());
             builder.ApplyConfiguration(new TextConfiguration());
             builder.ApplyConfiguration(new CreatedBookConfiguration());
+            builder.ApplyConfiguration(new BookOpinionConfiguration());
+            builder.ApplyConfiguration(new BookCommentConfiguration());
+          
         }
     }
 }

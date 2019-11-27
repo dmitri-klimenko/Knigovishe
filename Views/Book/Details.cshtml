@@ -157,7 +157,8 @@
                         <a href="javascript:;" class="a1" onclick="$('#notes').show(); $(this).remove();">МОИ ЗАМЕТКИ<i style="margin-left:5px;" class="fa fa-angle-down"></i></a>
                         <div id="notes" style="display:none;">
                             <form method="post" asp-controller="Book" asp-action="Details">
-                                <textarea asp-for="@Model.BookNote.Text" placeholder="Личные заметки о книге" style="width:100%;height:200px;"></textarea>
+                                <input type="hidden" asp-for="@Model.Action" value="makeNote">
+                                <textarea asp-for="@Model.BookNoteText" placeholder="Личные заметки о книге" style="width: 100%; height: 200px;"></textarea>
                                 <input type="hidden" asp-for="@Model.BookId" />
                                 <br />
                                 <br />
@@ -225,10 +226,11 @@
                             <a href="javascript:;" onclick="$('#reset').show();">здесь</a> ты можешь подать заявку на перезапуск викторины.
                             Пожалуйста, опиши причину перезапуска.
                             <div id="reset" style="padding-top: 20px; display: none;">
+
                                 <form name="reset_form" method="post" asp-controller="Book" asp-action="Details">
                                     <input type="hidden" asp-for="@Model.Action" value="reset">
-                                    <input type="hidden" asp-for="@Model.AnswerId" value="@Model.Answer.Id">
-                                    <textarea asp-for="Text" style="width: 100%; height: 100px;"></textarea>
+                                    <input type="hidden" asp-for="@Model.BookId" value="@Model.BookId">
+                                    <textarea asp-for="@Model.ReasonForRestart" style="width: 100%; height: 100px;"></textarea>
                                     <div style="height: 10px;"></div>
                                     <a href="javascript:document.reset_form.submit();" class="button mlarge">
                                         Сделать запрос о перезапуске викторины
@@ -243,18 +245,21 @@
                         <div id="opinion" style="display: none;">
                             <span style="font-weight: bold">Поделись мнением о книге:</span>
                             <div style="height: 10px;"></div>
-                            <form method="post">
-                                <input type="hidden" name="action" value="saveOpinion">
-                                <textarea name="text" style="width: 100%; height: 200px;"></textarea>
+                            
+                            <form method="post" asp-controller="Book" asp-action="Details">
+                                <input type="hidden" asp-for="@Model.Action" value="saveOpinion">
+                                <input type="hidden" asp-for="@Model.BookId" value="@Model.BookId">
+                                <textarea asp-for="@Model.BookCommentText" style="width: 100%; height: 200px;"></textarea>
                                 <div style="height: 10px;"></div>
                                 <div>
-                                    <input type="checkbox" name="share" checked>
+                                    <input type="checkbox" asp-for="@Model.Share" checked>
                                     <span class="cb">Поделиться с другими пользователями</span>
                                 </div>
                                 <div style="height: 10px;"></div>
                                 <input type="submit" class="button" value="Сохранить">
                             </form>
                         </div>
+
                         <div style="height: 20px;"></div>
                         <a href="javascript:;" class="a1" onclick="$('#answerText').show();$(this).hide();">@Model.OpinionQuestion</a>
                         <div id="answerText" style="display: none;">
@@ -262,17 +267,20 @@
                                 @Model.OpinionQuestion:
                             </span>
                             <div style="height: 10px;"></div>
-                            <form method="post">
-                                <input type="hidden" name="action" value="answerText">
-                                <textarea name="answerText" style="width: 100%; height: 200px;"></textarea>
+                            
+                            <form method="post" asp-controller="Book" asp-action="Details">
+                                <input type="hidden" asp-for="@Model.Action" value="answerText">
+                                <input type="hidden" asp-for="@Model.BookId" value="@Model.BookId">
+                                <textarea asp-for="@Model.BookOpinionText" style="width: 100%; height: 200px;"></textarea>
                                 <div style="height: 10px;"></div>
                                 <div>
-                                    <input type="checkbox" name="share" checked>
+                                    <input type="checkbox" asp-for="@Model.Share" checked>
                                     <span class="cb">Поделиться с другими пользователями</span>
                                 </div>
                                 <div style="height: 10px;"></div>
                                 <input type="submit" class="button" value="Сохранить">
-                            </form>
+                           
+                                </form>
                         </div>
                     }
                     <div style="height:80px;"></div>
@@ -284,7 +292,7 @@
                                     <div onclick="window.location = '/Book/Details?id=@Model.Recommended[0].Id'" class="book_div">
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[0].Id)? "active" : ""))" 
+                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[0].Id)? "active" : "")" 
                                                  data-book="@Model.Recommended[0].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
                                         }
                                         <img src="/uploads/@Model.Recommended[0].CoverPhoto">
@@ -299,14 +307,14 @@
                                     <div onclick="window.location = '/Book/Details?id=@Model.Recommended[1].Id'" class="book_div">
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[1].Id)? "active" : ""))" 
+                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[1].Id)? "active" : "")" 
                                                  data-book="@Model.Recommended[1].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
                                         }
                                         <img src="/uploads/@Model.Recommended[1].CoverPhoto">
                                         <div style="height: 15px;"></div>
                                         <h3>@Model.Recommended[1].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[1].BookAuthor</div>
-                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
+                                        <a href="/Book/Details?id=@Model.Recommended[1].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                                 <td style="width:2.7%"></td>
@@ -314,14 +322,14 @@
                                     <div onclick="window.location = '/Book/Details?id=@Model.Recommended[2].Id'" class="book_div">
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[2].Id)? "active" : ""))" 
+                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[2].Id)? "active" : "")" 
                                                  data-book="@Model.Recommended[2].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
                                         }
                                         <img src="/uploads/@Model.Recommended[2].CoverPhoto">
                                         <div style="height: 15px;"></div>
                                         <h3>@Model.Recommended[2].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[2].BookAuthor</div>
-                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
+                                        <a href="/Book/Details?id=@Model.Recommended[2].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                                 <td style="width:2.7%"></td>
@@ -329,14 +337,14 @@
                                     <div onclick="window.location = '/Book/Details?id=@Model.Recommended[3].Id'" class="book_div">
                                         @if (User.Identity.IsAuthenticated)
                                         {
-                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[3].Id)? "active" : ""))" 
+                                            <div class="wishlist @(Model.BooksIds.Contains(Model.Recommended[3].Id)? "active" : "")" 
                                                  data-book="@Model.Recommended[3].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
                                         }
                                         <img src="/uploads/@Model.Recommended[3].CoverPhoto">
                                         <div style="height: 15px;"></div>
                                         <h3>@Model.Recommended[3].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[3].BookAuthor</div>
-                                        <a href="/Book/Details?id=@Model.Recommended[0].Id">СМОТРЕТЬ </a>
+                                        <a href="/Book/Details?id=@Model.Recommended[3].Id">СМОТРЕТЬ </a>
                                     </div>
                                 </td>
                             </tr>

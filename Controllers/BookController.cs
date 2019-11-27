@@ -149,22 +149,22 @@ namespace Knigosha.Controllers
 
                 } else {book = answer.Book;}
 
-                var bookNote =
-                    await _context.BookNotes.SingleOrDefaultAsync(bn => bn.UserId == user.Id && bn.BookId == book.Id) ??
-                    new BookNote()
-                    {
-                        Book = book,
-                        BookId = book.Id,
-                        User = user,
-                        UserId = user.Id
-                    };
+                var bookNoteText =
+                     _context.BookNotes.SingleOrDefault(bn => bn.UserId == user.Id && bn.BookId == book.Id)?.Text;
+
+                var bookCommentText = _context.BookComments.SingleOrDefault(bc =>
+                        bc.UserId == user.Id && bc.BookId == book.Id)?.Text;
+
+                var bookOpinionText =
+                    _context.BookOpinions.SingleOrDefault(bc =>
+                        bc.UserId == user.Id && bc.BookId == book.Id)?.AnswerText;
 
                 var rating = _context.BookRatings.SingleOrDefault(br => br.UserId == user.Id && br.BookId == id)?.Rating;
 
                 var recommended = _context.Books.Take(4).ToList(); // change it later
 
-                var opinionQuestion = await _context.Questions
-                    .SingleOrDefaultAsync(q => q.QuestionType == QuestionTypes.Opinion && q.BookId == book.Id);
+                var opinionQuestionText =  _context.Questions
+                    .SingleOrDefault(q => q.QuestionType == QuestionTypes.Opinion && q.BookId == book.Id)?.Text;
 
                 var booksIds = _context.MarkedBooks
                     .Where(mb => mb.UserId == user.Id)
@@ -176,12 +176,18 @@ namespace Knigosha.Controllers
                     Book = book,
                     BookId = book.Id,
                     Recommended = recommended,
-                    BookNote = bookNote,
                     MyRating = rating,
                     UserType = user.UserType,
-                    OpinionQuestion = opinionQuestion?.Text,
-                    BooksIds = booksIds
+                    OpinionQuestion = opinionQuestionText,
+                    BooksIds = booksIds,
+
+                    BookNoteText = bookNoteText,
+                    BookOpinionText = bookOpinionText,
+                    BookCommentText = bookCommentText,
                 };
+
+                if (answer != null) vm1.ReasonForRestart = answer.ReasonForRestart;
+
 
                 if (user.UserType == UserTypes.Parent)
                 {
@@ -208,9 +214,12 @@ namespace Knigosha.Controllers
                     var studentIds = _context.StudentClasses
                         .Where(uf => uf.ClassId == user.Id)
                         .Select(uf => uf.StudentId)?.ToList();
+
                     var answers = _context.Answers.Where(
                         a => a.BookId == book.Id && studentIds.Contains(a.UserId))?.ToList();
+
                     var count = answers?.Count;
+
                     if (count == 0)
                     {
                         vm1.PercentageOfStudentsRightResponses = 0;
@@ -225,6 +234,7 @@ namespace Knigosha.Controllers
                 }
                 return View(vm1);
             }
+
             var recommended2 = _context.Books.Take(4).ToList(); // change it later
 
             var book2 = await _context.Books
@@ -244,50 +254,104 @@ namespace Knigosha.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(DetailsViewModel detailsViewModel)
         {
-            if (ModelState.IsValid)
+            var user = await _userManager.GetUserAsync(User);
+
+            switch (detailsViewModel.Action)
             {
-                if (detailsViewModel.Action == "reset")
-                {
-
-                }
-
-                var user = await _userManager.GetUserAsync(User);
-
-                var book = await _context.Books
-                    .Include(b => b.Answers)
-                    .Include(b => b.BookRatings)
-                    .FirstOrDefaultAsync(m => m.Id == detailsViewModel.BookId);
-
-                var recommended = _context.Books.Take(4).ToList();
-
-                var bookNote = await _context.BookNotes
-                    .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
-                                                bn.BookId == detailsViewModel.BookId);
-                           
-                if (bookNote == null)
-                {
-                    var newBookNote = new BookNote()
+                case "reset":
                     {
-                        User = user,
-                        UserId = user.Id,
-                        Book = book,
-                        BookId = book.Id,
-                        Text = detailsViewModel.BookNote.Text
-                    };
-                    user.BookNotes.Add(newBookNote);
-                    await _userManager.UpdateAsync(user);
-                }
-                else
+                        var answer = await _context.Answers
+                            .Include(a => a.Book)
+                            .FirstOrDefaultAsync(a => a.BookId == detailsViewModel.BookId && a.UserId == user.Id);
+
+                        answer.ReasonForRestart = detailsViewModel.ReasonForRestart;  // presence of ReasonForRestart indicates request for restart
+                        _context.Answers.Update(answer);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Details", new { id = detailsViewModel.BookId});
+                    }
+                case "saveOpinion":
+                    {
+                        var bookComment = await _context.BookComments
+                            .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
+                                                        bn.BookId == detailsViewModel.BookId);
+                        if (bookComment == null)
+                        {
+                            var newBookComment = new BookComment
+                            {
+                                BookId = detailsViewModel.BookId,
+                                UserId = user.Id,
+                                Text = detailsViewModel.BookCommentText,
+                                Share = detailsViewModel.Share
+                            };
+                            _context.BookComments.Add(newBookComment);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            bookComment.Share = detailsViewModel.Share;
+                            bookComment.Text = detailsViewModel.BookCommentText;
+                            await _context.SaveChangesAsync();
+                        }
+
+                        return RedirectToAction("Details", new { id = detailsViewModel.BookId });
+                    }
+                case "answerText":
+                    {
+                        var bookOpinion = await _context.BookOpinions
+                            .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
+                                                        bn.BookId == detailsViewModel.BookId);
+                        if (bookOpinion == null)
+                        {
+                            var newBookOpinion = new BookOpinion
+                            {
+                                BookId = detailsViewModel.BookId,
+                                UserId = user.Id,
+                                AnswerText = detailsViewModel.BookOpinionText,
+                                Share = detailsViewModel.Share
+                            };
+                            _context.BookOpinions.Add(newBookOpinion);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            bookOpinion.Share = detailsViewModel.Share;
+                            bookOpinion.AnswerText = detailsViewModel.BookOpinionText;
+                            await _context.SaveChangesAsync();
+                        }
+
+                        return RedirectToAction("Details", new { id = detailsViewModel.BookId });
+
+                    }
+                case "makeNote":
                 {
-                    bookNote.Text = detailsViewModel.BookNote.Text;
-                    await _context.SaveChangesAsync();
+                    var bookNote = await _context.BookNotes
+                        .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
+                                                    bn.BookId == detailsViewModel.BookId);
+
+                    if (bookNote == null)
+                    {
+                        var newBookNote = new BookNote()
+                        {
+                            UserId = user.Id,
+                            BookId = detailsViewModel.BookId,
+                            Text = detailsViewModel.BookNoteText
+                        };
+                        user.BookNotes.Add(newBookNote);
+                        await _userManager.UpdateAsync(user);
+                    }
+                    else
+                    {
+                        bookNote.Text = detailsViewModel.BookNoteText;
+                        await _context.SaveChangesAsync();
+                    }
+
+                    return RedirectToAction("Details", new { id = detailsViewModel.BookId });
+
                 }
-                detailsViewModel.Book = book;
-                detailsViewModel.Recommended = recommended;
-                detailsViewModel.BookNote = bookNote;
-                return View(detailsViewModel);
             }
-            return View(detailsViewModel);
+
+            return NoContent();
         }
 
         public IActionResult Create()
