@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Knigosha.Core.Models;
 using Knigosha.Core.Models.Enums;
+using Knigosha.Core.ViewModels;
 using Knigosha.Core.ViewModels.BookViewModels;
 using Knigosha.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.ResultOperators.Internal;
 
 namespace Knigosha.Controllers
 {
@@ -24,8 +24,8 @@ namespace Knigosha.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookController(ApplicationDbContext context, 
-            IHostingEnvironment environment, 
+        public BookController(ApplicationDbContext context,
+            IHostingEnvironment environment,
             UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
@@ -43,10 +43,6 @@ namespace Knigosha.Controllers
         public async Task<IActionResult> Index(string keywords, string bookPublisher, BookCategories category, AgeGroups ageGroup, string yearFrom, string yearTo, string sortField)
         {
             var user = await _userManager.GetUserAsync(User);
-
-            var booksIds = _context.MarkedBooks
-                .Where(mb => mb.UserId == user.Id)
-                .Select(mb => mb.BookId).ToList();
 
             var books = _context.Books
                 .Include(b => b.Answers)
@@ -67,17 +63,17 @@ namespace Knigosha.Controllers
 
             if (!string.IsNullOrEmpty(bookPublisher))
                 books = books.Where(b => b.Publisher == bookPublisher);
-            
+
             if (category != 0) books = books.Where(b => b.BookCategory == category);
 
             if (ageGroup != 0) books = books.Where(b => b.AgeGroup == ageGroup);
 
             if (!string.IsNullOrEmpty(yearFrom) && int.TryParse(yearFrom, out int n))
                 books = books.Where(b => int.Parse(b.YearPublished) >= n);
-            
+
             if (!string.IsNullOrEmpty(yearTo) && int.TryParse(yearTo, out int m))
                 books = books.Where(b => int.Parse(b.YearPublished) <= m);
-            
+
             switch (sortField)
             {
                 case "latest":
@@ -110,16 +106,23 @@ namespace Knigosha.Controllers
             {
                 Books = await books?.ToListAsync(),
                 Publishers = new SelectList(await publishers.Distinct().ToListAsync()),
-                BooksIds = booksIds
             };
 
+            if (User.Identity.IsAuthenticated)
+            {
+                var booksIds = _context.MarkedBooks
+                    .Where(mb => mb.UserId == user.Id)
+                    .Select(mb => mb.BookId).ToList();
+
+                indexVm.BooksIds = booksIds;
+            }
             return View(indexVm);
         }
 
         public async Task<IActionResult> DetailsAdmin(int? id)
         {
             var book = await _context.Books
-                .Include(b=> b.Questions)
+                .Include(b => b.Questions)
                 .Include(b => b.Answers)
                 .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -138,7 +141,7 @@ namespace Knigosha.Controllers
                     .FirstOrDefaultAsync(a => a.BookId == id && a.UserId == user.Id);
 
                 Book book;
- 
+
                 if (answer == null)
                 {
                     book = _context.Books
@@ -147,23 +150,50 @@ namespace Knigosha.Controllers
                         .Include(b => b.BookRatings)
                         .Single(b => b.Id == id);
 
-                } else {book = answer.Book;}
+                }
+                else { book = answer.Book; }
+
+                var bookCommentsFromOthers =
+                    _context.BookComments
+                        .Include(bc => bc.User)
+                        .ThenInclude(u => u.BookRatings)
+                        .Where(bc => bc.UserId != user.Id && bc.Approved)
+                        .Select(bc => new BookCommentViewModel
+                        {
+                            BookComment = bc,
+                            User = bc.User,
+                            BookRating = bc.User.BookRatings.SingleOrDefault(br => br.BookId == bc.BookId)
+                        }).ToList();
+
+
+                var bookOpinionsFromOthers =
+                    _context.BookOpinions
+                        .Include(bo => bo.User)
+                        .ThenInclude(u => u.BookRatings)
+                        .Where(bo => bo.UserId != user.Id && bo.Approved)
+                        .Select(bo => new BookOpinionViewModel
+                        {
+                            BookOpinion = bo,
+                            User = bo.User,
+                            BookRating = bo.User.BookRatings.SingleOrDefault(br => br.BookId == bo.BookId)
+                        }).ToList();
+
 
                 var bookNoteText =
                      _context.BookNotes.SingleOrDefault(bn => bn.UserId == user.Id && bn.BookId == book.Id)?.Text;
 
-                var bookCommentText = _context.BookComments.SingleOrDefault(bc =>
-                        bc.UserId == user.Id && bc.BookId == book.Id)?.Text;
+                var bookComment = await _context.BookComments.SingleOrDefaultAsync(bc =>
+                    bc.UserId == user.Id && bc.BookId == book.Id);
 
-                var bookOpinionText =
-                    _context.BookOpinions.SingleOrDefault(bc =>
-                        bc.UserId == user.Id && bc.BookId == book.Id)?.AnswerText;
+                var bookOpinion =
+                   await  _context.BookOpinions.SingleOrDefaultAsync(bc =>
+                        bc.UserId == user.Id && bc.BookId == book.Id);
 
                 var rating = _context.BookRatings.SingleOrDefault(br => br.UserId == user.Id && br.BookId == id)?.Rating;
 
                 var recommended = _context.Books.Take(4).ToList(); // change it later
 
-                var opinionQuestionText =  _context.Questions
+                var opinionQuestionText = _context.Questions
                     .SingleOrDefault(q => q.QuestionType == QuestionTypes.Opinion && q.BookId == book.Id)?.Text;
 
                 var booksIds = _context.MarkedBooks
@@ -180,14 +210,16 @@ namespace Knigosha.Controllers
                     UserType = user.UserType,
                     OpinionQuestion = opinionQuestionText,
                     BooksIds = booksIds,
+                    BookComment = bookComment,
+                    BookOpinion = bookOpinion,
 
                     BookNoteText = bookNoteText,
-                    BookOpinionText = bookOpinionText,
-                    BookCommentText = bookCommentText,
+                    BookOpinionText = bookOpinion?.AnswerText,
+                    BookCommentText = bookComment?.Text,
+
+                    BookCommentsFromOthers = bookCommentsFromOthers,
+                    BookOpinionsFromOthers = bookOpinionsFromOthers,
                 };
-
-                if (answer != null) vm1.ReasonForRestart = answer.ReasonForRestart;
-
 
                 if (user.UserType == UserTypes.Parent)
                 {
@@ -242,7 +274,7 @@ namespace Knigosha.Controllers
                 .Include(b => b.BookRatings)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
-            var vm2 = new DetailsViewModel() 
+            var vm2 = new DetailsViewModel()
             {
                 Book = book2,
                 Recommended = recommended2
@@ -268,7 +300,7 @@ namespace Knigosha.Controllers
                         _context.Answers.Update(answer);
                         await _context.SaveChangesAsync();
 
-                        return RedirectToAction("Details", new { id = detailsViewModel.BookId});
+                        return RedirectToAction("Details", new { id = detailsViewModel.BookId });
                     }
                 case "saveOpinion":
                     {
@@ -324,36 +356,37 @@ namespace Knigosha.Controllers
 
                     }
                 case "makeNote":
-                {
-                    var bookNote = await _context.BookNotes
-                        .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
-                                                    bn.BookId == detailsViewModel.BookId);
-
-                    if (bookNote == null)
                     {
-                        var newBookNote = new BookNote()
+                        var bookNote = await _context.BookNotes
+                            .SingleOrDefaultAsync(bn => bn.UserId == user.Id &&
+                                                        bn.BookId == detailsViewModel.BookId);
+
+                        if (bookNote == null)
                         {
-                            UserId = user.Id,
-                            BookId = detailsViewModel.BookId,
-                            Text = detailsViewModel.BookNoteText
-                        };
-                        user.BookNotes.Add(newBookNote);
-                        await _userManager.UpdateAsync(user);
-                    }
-                    else
-                    {
-                        bookNote.Text = detailsViewModel.BookNoteText;
-                        await _context.SaveChangesAsync();
-                    }
+                            var newBookNote = new BookNote()
+                            {
+                                UserId = user.Id,
+                                BookId = detailsViewModel.BookId,
+                                Text = detailsViewModel.BookNoteText
+                            };
+                            user.BookNotes.Add(newBookNote);
+                            await _userManager.UpdateAsync(user);
+                        }
+                        else
+                        {
+                            bookNote.Text = detailsViewModel.BookNoteText;
+                            await _context.SaveChangesAsync();
+                        }
 
-                    return RedirectToAction("Details", new { id = detailsViewModel.BookId });
+                        return RedirectToAction("Details", new { id = detailsViewModel.BookId });
 
-                }
+                    }
             }
 
             return NoContent();
         }
 
+       
         public IActionResult Create()
         {
             var createBookVm = new CreateBookViewModel();
@@ -408,7 +441,7 @@ namespace Knigosha.Controllers
                    + Guid.NewGuid().ToString().Substring(0, 4)
                    + Path.GetExtension(fileName);
         }
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();

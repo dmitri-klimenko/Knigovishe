@@ -23,10 +23,10 @@ namespace Knigosha.Controllers
         {
             _context = context;
             _userManager = userManager;
-           
+
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -34,14 +34,14 @@ namespace Knigosha.Controllers
             var latestBooks = _context.Books.OrderByDescending(b => b.DateAdded).Take(5).ToList();
 
             var popularBooks = _context.Books
-                .Include(b=>b.BookRatings)
+                .Include(b => b.BookRatings)
                 .Include(b => b.Answers)
                 .OrderByDescending(b => b.AverageRating).Take(4).ToList();
 
             var recentNews = _context.Texts.Where(n => n.TextType == TextTypes.Post).OrderByDescending(t => t.DateAdded).Take(3).ToList();
 
             var subscriptions = _context.Subscriptions
-                .Where(s => s.SubscriptionType != SubscriptionTypes.FreeClass 
+                .Where(s => s.SubscriptionType != SubscriptionTypes.FreeClass
                             && s.SubscriptionType != SubscriptionTypes.FreeFamily).OrderBy(s => s.Name)
                 .ToList();
 
@@ -72,7 +72,7 @@ namespace Knigosha.Controllers
         public IActionResult Team()
         {
             var team = _context.Texts.Where(t => t.TextType == TextTypes.Author).ToList();
-        
+
             return View(team);
         }
 
@@ -81,7 +81,7 @@ namespace Knigosha.Controllers
             return View();
         }
 
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Knigosha.Core.Models;
 using Knigosha.Persistence;
-using Knigosha.Persistence.Migrations;
+
 
 namespace Knigosha.Controllers
 {

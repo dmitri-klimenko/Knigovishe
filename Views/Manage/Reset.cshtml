@@ -1,11 +1,41 @@
 ﻿@using Knigosha.Views.Manage
+@model List<Knigosha.Core.Models.Answer>
 
 @{
     ViewData["Title"] = "Заявки на рестарт";
     ViewData.AddActivePage(ManageNavPages.Reset);
 }
 
-<td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
-    <a href="" name="s" style="position:relative;top:-100px;"></a>
-    Нет заявок на рестарт викторины.
-</td>
+    <td colspan="2" valign="top" style="border-top:1px solid #ffdb60;padding-left:20px;padding-top:20px;">
+        <a href="" name="s" style="position:relative;top:-100px;"></a>
+        @if (Model.Count == 0)
+        {<text>Нет заявок на рестарт викторины.</text>}
+        else
+        {
+            <table class="table">
+                <tr>
+                    <th>Решена</th>
+                    <th>Викторина</th>
+                    <th>Ученик</th>
+                    <th>Очков</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td align="center">@Model[i].DateTime</td>
+                        <td align="center">#@Model[i].BookId - @Model[i].Book.Title - @Html.DisplayTextFor(m => m[i].Book.AgeGroup)<hr>@Model[i].ReasonForRestart</td>
+                        <td align="center">@Model[i].User.FullName [@Model[i].User.UserName]</td>
+                        <td align="center">@Math.Ceiling(Model[i].Points)</td>
+                        <td align="center"><a asp-controller="Manage" asp-action="Answers" asp-route-type="reset" asp-route-act="reset" asp-route-id="@Model[i].Id">Рестарт</a></td>
+                        <td align="center"><a asp-controller="Manage" asp-action="Answers" asp-route-type="reset" asp-route-act="refuse" asp-route-id="@Model[i].Id">Отказать</a></td>
+                        <td align="center"><a asp-controller="Manage" asp-action="Messages" asp-route-type="send" asp-route-to="@Model[i].User.Id" asp-route-subject="#@Model[i].BookId - @Model[i].Book.Title - @Html.DisplayTextFor(m => m[i].Book.AgeGroup)">Ответить</a></td>
+                    </tr>
+                }
+
+            </table>
+													
+        }
+    </td>

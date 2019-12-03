@@ -907,14 +907,14 @@ function sendReport() {
 
     if (txt == '') return;
 
-    $("#report").html('Благодарим ти за съобщението!');
+    $("#report").html('Благодарим тебя за сообщение!');
 
     $.ajax({
         url: ajax_url,
         type: "POST",
         dataType: "json",
-        data: { "action": "report", "text": txt, "quiz_id": id, "q": q },
-        success: function (data) { }
+        data: { "action": "report", "text": txt, "bid": id, "q": q },
+        success: function () { }
     });
 }
 

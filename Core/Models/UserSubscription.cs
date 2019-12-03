@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Knigosha.Core.Models
 {
-
     public class UserSubscription
     {
         public int Id { get; set; }

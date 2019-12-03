@@ -1,43 +1,86 @@
 ﻿@using Knigosha.Core.Models
 @using Knigosha.Core.Models.Enums
 @using Knigosha.Views.Manage
-@model Knigosha.Core.ViewModels.ManageViewModels.DashboardStudentViewModel
- 
+@model Knigosha.Core.ViewModels.ManageViewModels.DashboardViewModel
+
 @{
     ViewData["Title"] = "Мой профиль";
     ViewData.AddActivePage(ManageNavPages.Dashboard);
 }
 
-
-    <td colspan="2" valign="top" class="desktop-top-border">
-        <a href="" name="s" style="position:relative;top:-100px;"></a>
-        @if (!Model.HasAccess)
+@functions{
+    public string GetClassFromGrade(int grade)
+    {
+        var returnVal = String.Empty;
+        switch (grade)
         {
-            <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
-                Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
-                Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
-            </div>
+            case 1:
+                returnVal = "class1";
+                break;
+            case 2:
+                returnVal = "class2";
+                break;
+            case 3:
+                returnVal = "class3";
+                break;
+            case 4:
+                returnVal = "class4";
+                break;
+            case 5:
+                returnVal = "class5";
+                break;
+            case 6:
+                returnVal = "class6";
+                break;
+            case 7:
+                returnVal = "class7";
+                break;
+            case 8:
+                returnVal = "class8";
+                break;
+            case 9:
+                returnVal = "class9";
+                break;
+            case 10:
+                returnVal = "class10";
+                break;
+            case 11:
+                returnVal = "class11";
+                break;
         }
-        else
-        {
-            <div class="profile_dashboard">
-                <div class="visible-mobile">
-                    <table class="sc">
-                        <tr>
-                            <td style="width:500px;">
-                                <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">@Model.User.Greeting</div>
-                                <div style="font-size:20px;line-height:30px;">
-                                    У тебя <span style="font-weight: bold">@Model.User.Points</span>
-                                    @if (Model.User.Points == 0 || Model.User.Points > 4)
-                                    {<text>очков</text>}
-                                else if (Model.User.Points == 1)
-                                {
-                                    <text>очко</text>
-                                }
-                                else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
-                                {<text>очка</text>} 
-                                    и ты находишься на уровне <span style="font-weight: bold">
-                                        @Html.DisplayFor(m => m.User.Level).</span>
+        return returnVal;
+    }
+}
+<td colspan="2" valign="top" class="desktop-top-border">
+    <a href="" name="s" style="position:relative;top:-100px;"></a>
+    @if (!Model.HasAccess)
+    {
+        <div class="profile_dashboard" style="font-size:18px;line-height:24px;color:red;">
+            Чтобы продолжить использовать функции Книговища, ты должен активировать абонемент.
+            Ты можешь приобрести его в разделе <a asp-controller="Manage" asp-action="Dashboard">"Купить абонемент".</a>
+        </div>
+    }
+    else
+    {
+        <div class="profile_dashboard">
+            <div class="visible-mobile">
+                <table class="sc">
+                    <tr>
+                        <td style="width:500px;">
+                            <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">@Model.User.Greeting</div>
+                            <div style="font-size:20px;line-height:30px;">
+                                У тебя <span style="font-weight: bold">@Model.User.Points</span>
+                                @if (Model.User.Points == 0 || Model.User.Points > 4)
+                                {<text>очков</text>}
+                            else if (Model.User.Points == 1)
+                            {
+                                <text>очко</text>
+                            }
+                            else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                            {<text>очка</text>}
+                                и ты находишься на уровне <span style="font-weight: bold">
+                                    @Html.DisplayFor(m => m.User.Level).
+                                </span>
                                 Тебе нехватает <span style="font-weight: bold">@Model.PointsTillNextLevel</span>
                                 @if (Model.User.Points == 0 || Model.User.Points > 4)
                                 {<text>очков</text>}
@@ -49,89 +92,340 @@
                             {<text>очка</text>} до следующего уровня.
                             </div>
                             <div class="visible-mobile" style="height:40px;"></div>
-                            </td>
-                            <td style="padding-left:50px;padding-top:50px;">
-                                <div style="position:relative;padding-left:30px;">
-                                    <div class="vline" style="border-radius:10px;width:15px;height:100%;
+                        </td>
+                        <td style="padding-left:50px;padding-top:50px;">
+                            <div style="position:relative;padding-left:30px;">
+                                <div class="vline" style="border-radius:10px;width:15px;height:100%;
 											position:absolute;left:0px;top:0px;background:#fbf7eb;overflow:hidden;">
-                                        <div style="border-radius:10px;width:15px;height:100%;position:absolute;
+                                    <div style="border-radius:10px;width:15px;height:100%;position:absolute;
 												left:0px;bottom:0px;background:#f8ae00;height:20px;"></div>
-                                    </div>
-                                    <div style="@(Model.User.Level == Levels.Seven? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 7 - творец</div>
-                                    <div style="@(Model.User.Level == Levels.Six? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 6 - сенсей</div>
-                                    <div style="@(Model.User.Level == Levels.Five? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 5 - шаман</div>
-                                    <div style="@(Model.User.Level == Levels.Four? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 4 - изобретатель</div>
-                                    <div style="@(Model.User.Level == Levels.Three? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 3 - открыватель</div>
-                                    <div style="@(Model.User.Level == Levels.Two? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 2 - путешественик</div>
-                                    <div style="@(Model.User.Level == Levels.One? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 1 - безстрашный</div>
-                                    <div style="@(Model.User.Level == Levels.Null? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 0 - новичок</div>
                                 </div>
-                            </td>
-                        </tr>
-                    </table>
+                                <div style="@(Model.User.Level == Levels.Seven? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 7 - творец</div>
+                                <div style="@(Model.User.Level == Levels.Six? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 6 - сенсей</div>
+                                <div style="@(Model.User.Level == Levels.Five? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 5 - шаман</div>
+                                <div style="@(Model.User.Level == Levels.Four? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 4 - изобретатель</div>
+                                <div style="@(Model.User.Level == Levels.Three? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 3 - открыватель</div>
+                                <div style="@(Model.User.Level == Levels.Two? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 2 - путешественик</div>
+                                <div style="@(Model.User.Level == Levels.One? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 1 - безстрашный</div>
+                                <div style="@(Model.User.Level == Levels.Null? "color:#000; font-weight:bold;" : "color:gray; height:40px;")">Уровень 0 - новичок</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="invisible-mobile">
+                <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">
+                    @Model.User.Greeting
                 </div>
-                <div class="invisible-mobile">
-                    <div style="font-weight:bold;font-size:20px;padding-bottom:10px;">
-                        @Model.User.Greeting
+                <div style="font-size:20px;line-height:30px;">
+                    У тебя <span style="font-weight: bold">@Model.User.Points</span>
+                    @if (Model.User.Points == 0 || Model.User.Points > 4)
+                    {<text>очков</text>}
+                else if (Model.User.Points == 1)
+                {
+                    <text>очко</text>
+                }
+                else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                {<text>очка</text>}
+                    и ты находишься на уровне <span style="font-weight: bold"> @Html.DisplayFor(m => m.User.Level).
+                    </span>
+                    Тебе нехватает <span style="font-weight: bold">@Model.PointsTillNextLevel</span>
+                    @if (Model.User.Points == 0 || Model.User.Points > 4)
+                    {<text>очков</text>}
+                else if (Model.User.Points == 1)
+                {
+                    <text>очко</text>
+                }
+                else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
+                {<text>очка</text>} до следующего уровня.
+                </div>
+                <div style="position:relative;">
+                    <div style="margin-top:10px;background:#fbf7eb;overflow:hidden;border-radius:10px;">
+                        <div style="height:15px;background:#f8ae00;width:0%;"></div>
                     </div>
-                    <div style="font-size:20px;line-height:30px;">
-                        У тебя <span style="font-weight: bold">@Model.User.Points</span>
-                        @if (Model.User.Points == 0 || Model.User.Points > 4)
-                        {<text>очков</text>}
-                        else if (Model.User.Points == 1)
-                        {
-                            <text>очко</text>
-                        }
-                        else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
-                        {<text>очка</text>} 
-                        и ты находишься на уровне <span style="font-weight: bold">
-                            @Html.DisplayFor(m => m.User.Level)</span>.
-                        Тебе нехватает <span style="font-weight: bold">@Model.PointsTillNextLevel</span>
-                        @if (Model.User.Points == 0 || Model.User.Points > 4)
-                        {<text>очков</text>}
-                        else if (Model.User.Points == 1)
-                        {
-                            <text>очко</text>
-                        }
-                        else if (Model.User.Points == 2 || Model.User.Points == 3 || Model.User.Points == 4)
-                        {<text>очка</text>} до следующего уровня.
+                    <div style="position: absolute; top: 25px; font-size: 12px; line-height: 14px; transform: rotate(-30deg); left: 0; @(Model.User.Level == Levels.Null? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;0<br><span style="font-size:10px;">новичок</span>
                     </div>
-                    <div style="position:relative;">
-                        <div style="margin-top:10px;background:#fbf7eb;overflow:hidden;border-radius:10px;">
-                            <div style="height:15px;background:#f8ae00;width:0%;"></div>
-                        </div>
-                        <div style="position: absolute; top: 25px; font-size: 12px; line-height: 14px; transform: rotate(-30deg); left: 0; @(Model.User.Level == Levels.Null? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;0<br><span style="font-size:10px;">новичок</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(14.285714285714% - 30px); @(Model.User.Level == Levels.One? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;1<br><span style="font-size:10px;">безстрашный</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(28.571428571429% - 30px); @(Model.User.Level == Levels.Two? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;2<br><span style="font-size:10px;">путешественник</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(42.857142857143% - 30px); @(Model.User.Level == Levels.Three? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;3<br><span style="font-size:10px;">открыватель</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(57.142857142857% - 30px); @(Model.User.Level == Levels.Four? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;4<br><span style="font-size:10px;">изобретатель</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(71.428571428571% - 30px); @(Model.User.Level == Levels.Five? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;5<br><span style="font-size:10px;">шаман</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(85.714285714286% - 30px); @(Model.User.Level == Levels.Six? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;6<br><span style="font-size:10px;">сенсей</span>
-                        </div>
-                        <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);right:0; @(Model.User.Level == Levels.Seven? "color:#000;font-weight:bold;" : "color:gray;")">
-                            Уровень&nbsp;7<br><span style="font-size:10px;">творец</span>
-                        </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(14.285714285714% - 30px); @(Model.User.Level == Levels.One? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;1<br><span style="font-size:10px;">безстрашный</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(28.571428571429% - 30px); @(Model.User.Level == Levels.Two? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;2<br><span style="font-size:10px;">путешественник</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(42.857142857143% - 30px); @(Model.User.Level == Levels.Three? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;3<br><span style="font-size:10px;">открыватель</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(57.142857142857% - 30px); @(Model.User.Level == Levels.Four? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;4<br><span style="font-size:10px;">изобретатель</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(71.428571428571% - 30px); @(Model.User.Level == Levels.Five? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;5<br><span style="font-size:10px;">шаман</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);left:calc(85.714285714286% - 30px); @(Model.User.Level == Levels.Six? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;6<br><span style="font-size:10px;">сенсей</span>
+                    </div>
+                    <div style="position:absolute;top:25px;font-size:12px;line-height:14px;transform: rotate(-30deg);right:0; @(Model.User.Level == Levels.Seven? "color:#000;font-weight:bold;" : "color:gray;")">
+                        Уровень&nbsp;7<br><span style="font-size:10px;">творец</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="" name="s1"></a>
+            <div style="height:150px;"></div>
+
+            @if (Model.HasActiveFamilyOrClass)
+            {
+                <h2>Решённые викторины</h2>
+                <div style="padding-bottom:20px;">
+                    График правильных ответов в решенных викторинах. Цветные столбцы показывают твой результат, а серые столбцы указывают на среднюю производительность выбранной группы.
+                </div>
+                <div style="text-align:right;">
+                    показать сравнение с:
+                    <div style="margin-left: 10px; display: inline-block; position: relative;">
+                        <select asp-for="@Model.Group" asp-items="@Model.Groups"
+                                    onchange="window.location = '?group=' + this.value" class="s1" style="width: 220px;">
+                            </select>
+                    </div>
+                </div>
+                <div style="height:20px;"></div>
+                <div class="rc mobile_chart">
+                    <div class="chartArea ">
+                        <div class="chartTop">100%</div>
+                        <div class="chartBottom">0%</div>
+
+
+                        @foreach (var answer in @Model.Answers)
+                        {
+                            <div class="chartGroup" style="left: 10px;" onclick="window.location = '/Book/Details?id=@answer.BookId';event.stopPropagation();">
+
+                                <div class="chartRow bg @GetClassFromGrade((int)answer.Book.Grade)" style="height: @answer.PercentageOfRightResponses%"></div>
+                                <div class="chartRow" style="height: @Model.Average%"></div>
+
+
+                                <div class="chartInfo" style="bottom: calc(@answer.PercentageOfRightResponses% - 50px)">
+                                    <div class="chartLines">
+                                        <div class="chartLine bg @GetClassFromGrade((int) answer.Book.Grade)" style="width: @answer.PercentageOfRightResponses%">
+                                            <div class="chartLinePercent txt @GetClassFromGrade((int) answer.Book.Grade)">@answer.PercentageOfRightResponses%</div>
+                                        </div>
+                                        <div class="chartLine" style="width: @Model.Average%">
+                                            <div class="chartLinePercent">@Model.Average%</div>
+                                        </div>
+                                    </div>
+                                    <div class="chartTitle">
+                                        @answer.Book.Title
+                                        <i class="fa fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div style="height:50px;"></div>
+                <div class="visible-smartphone">
+                    <img src="/skin/podium_pic.png" style="width:100%;">
+                </div>
+                <div class="podium">
+                    <div class="mobile_stats">
+                        <div style="font-size:18px;font-weight:bold;padding-bottom:10px;">Средний успех всех викторин</div>
+                        <div style="height:30px;" class="visible-desktop"></div>
+                        <div style="font-size:18px;padding-bottom:5px;">artur</div>
+                        <table cellspacing="0" cellpading="0">
+                            <tr>
+                                <td>
+                                    <div style="border-radius:10px;width:calc((@Model.User.PercentageOfRightResponses / 100) * 350px);height:10px;background:#f8ad04;"></div>
+                                </td>
+                                <td style="font-size:16px;padding-left:5px;">
+                                    @Model.User.PercentageOfRightResponses%
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
-                <a href="" name="s1"></a>
 
-                <div style="height:100px;"></div>
-                <div style="height:150px;"></div>
+                <div style="height:50px;"></div>
+                <table style="font-size:18px;">
+                    <tr>
+                        <td style="font-weight:bold;">Позиция в @(Model.HasActiveFamily? "семье":"классе") по количеству очков:</td>
+                        <td class="yellow" style="padding-left:50px;font-size:40px;font-weight:bold">@Model.PositionInGroupAccordingToPoints</td>
+                        <td style="padding-left:10px;">место из <span style="font-weight:bold">@Model.StudentsInGroup</span></td>
+                    </tr>
+                    <tr><td colspan="3" style="height:50px;">&nbsp;</td></tr>
+                    <tr>
+                        <td style="font-weight:bold;">Позиция в @(Model.HasActiveFamily ? "семье" : "классе") по % верных ответов:</td>
+                        <td class="yellow" style="padding-left:50px;font-size:40px;font-weight:bold">@Model.PositionInGroupAccordingToAnswers</td>
+                        <td style="padding-left:10px;">мeсто из <span style="font-weight: bold">@Model.StudentsInGroup</span></td>
+                    </tr>
+                    <tr><td colspan="3" style="height:50px;">&nbsp;</td></tr>
+                    <tr>
+                        <td style="font-weight:bold;">Позиция в @(Model.HasActiveFamily ? "семье" : "классе") по кол-ву решённых викторин:</td>
+                        <td class="yellow" style="padding-left:50px;font-size:40px;font-weight:bold">@Model.PositionInGroupAccordingToRightResponses</td>
+                        <td style="padding-left:10px;">место из <span style="font-weight: bold">@Model.StudentsInGroup</span></td>
+                </table>
 
+                @*<div style="height:150px;"></div>
+                <h1 class="section_title">Что читает мой класс</h1>
+                <div style="height:40px;"></div>
+                <h3>2019/2020 учебна година</h3>
+                <div style="height:10px;"></div>
+                <table cellspacing="0" cellpadding="0" style="width:100%;" class="sc tc" id="quiz_results">
+                    <tr>
+                        <td style="vertical-align:top;width:23%;">
+                            <div class="quiz_bg" onclick="window.location='/user/quiz?id=339'">
+
+                                <table cellspacing="0" cellpadding="0" style="width:100%;">
+
+                                    <tr>
+                                        <td style="width:120px;">
+                                            <img src="/uploads/76792403b528984f2ee5bbf9445e6209.jpg" style="width:120px;height:200px;margin:0px;display:block;">
+                                        </td>
+                                        <td style="vertical-align:top;">
+
+                                            <div class="quiz_inner class1">
+
+                                                <div class="quiz_inner_right">
+                                                    <div class="answers" style="margin-bottom:20px;">Въпросникът е попълнен<br>от <b>1</b> ученици</div>
+                                                </div>
+
+                                                <div class="bookTitle">Падингтън се развихря</div>
+                                                <div class="bookAuthor">Майкъл Бонд</div>
+
+                                                <div class="visible-desktop">
+                                                    <div class="quizLabel"></div>
+                                                    <div class="quizYear">6+</div>
+                                                </div>
+
+                                                <div class="visible-mobile quizMobileYear">6+</div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2" class="bg class1" style="padding:20px;vertical-align:top;">
+                                            <table style="width:100%;font-size:20px;">
+                                                <tr>
+                                                    <td style="text-align:right;">Верни отговори: <b>30%</b></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </td>
+
+                        <td style="width:2%"></td>
+
+
+
+                        <td style="vertical-align:top;width:23%;">
+                            <div class="quiz_bg" onclick="window.location='/user/quiz?id=566'">
+
+                                <table cellspacing="0" cellpadding="0" style="width:100%;">
+
+                                    <tr>
+                                        <td style="width:120px;">
+                                            <img src="/uploads/adfe528604f5a8c2ad9be3581616d2bd.jpg" style="width:120px;height:200px;margin:0px;display:block;">
+                                        </td>
+                                        <td style="vertical-align:top;">
+
+                                            <div class="quiz_inner class3">
+
+                                                <div class="quiz_inner_right">
+                                                    <div class="answers" style="margin-bottom:20px;">Въпросникът е попълнен<br>от <b>1</b> ученици</div>
+                                                </div>
+
+                                                <div class="bookTitle">Тими Провала 1: Стават и грешки</div>
+                                                <div class="bookAuthor">Стефан Пастис</div>
+
+                                                <div class="visible-desktop">
+                                                    <div class="quizLabel"></div>
+                                                    <div class="quizYear">8+</div>
+                                                </div>
+
+                                                <div class="visible-mobile quizMobileYear">8+</div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2" class="bg class3" style="padding:20px;vertical-align:top;">
+                                            <table style="width:100%;font-size:20px;">
+                                                <tr>
+                                                    <td style="text-align:right;">Верни отговори: <b>0%</b></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td colspan="3" height="40">&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align:top;width:23%;">
+                            <div class="quiz_bg" onclick="window.location='/user/quiz?id=579'">
+                                <table cellspacing="0" cellpadding="0" style="width:100%;">
+                                    <tr>
+                                        <td style="width:120px;">
+                                            <img src="/uploads/a46a92a8c225db0ed6fc54f2a4d6b47c.jpg" style="width:120px;height:200px;margin:0px;display:block;">
+                                        </td>
+                                        <td style="vertical-align:top;">
+                                            <div class="quiz_inner class3">
+
+                                                <div class="quiz_inner_right">
+                                                    <div class="answers" style="margin-bottom:20px;">Въпросникът е попълнен<br>от <span style="font-weight: bold">1</span> ученици</div>
+                                                </div>
+
+                                                <div class="bookTitle">Малкият Никола тръгва пак на училище</div>
+                                                <div class="bookAuthor">Рьоне Госини</div>
+
+                                                <div class="visible-desktop">
+                                                    <div class="quizLabel"></div>
+                                                    <div class="quizYear">8+</div>
+                                                </div>
+
+                                                <div class="visible-mobile quizMobileYear">8+</div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="2" class="bg class3" style="padding:20px;vertical-align:top;">
+                                            <table style="width:100%;font-size:20px;">
+                                                <tr>
+                                                    <td style="text-align:right;">Верни отговори: <b>27%</b></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </td>
+
+                        <td style="width:2%"></td>
+
+
+                </table>
+
+                <div style="text-align:center;margin-top:20px;">
+                    <a href="/user/answers?type=class#s" class="button">Виж всички</a>
+                </div>*@
+            }
+
+            <div style="height:150px;"></div>
+            @if (Model.Recommended.Count != 0)
+            {
                 <div id="books">
                     <h1 class="section_title" onclick="window.location='/Book/Index'">Рекомендовано для тебя</h1>
                     <table class="sc" cellspacing="0" cellpadding="0" style="width:100%;">
@@ -141,7 +435,7 @@
                                     <div onclick="window.location='/Book/Details?id=@Model.Recommended[0].Id'" class="book_div">
                                         <div class="wishlist "
                                              data-book="@Model.Recommended[0].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
-                                        <img src="/uploads//@Model.Recommended[0].CoverPhoto">							
+                                        <img src="/uploads//@Model.Recommended[0].CoverPhoto">
                                         <div style="height:15px;"></div>
                                         <h3>@Model.Recommended[0].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[0].BookAuthor</div>
@@ -153,7 +447,7 @@
                                     <div onclick="window.location='/Book/Details?id=@Model.Recommended[1].Id'" class="book_div">
                                         <div class="wishlist "
                                              data-book="@Model.Recommended[1].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
-                                        <img src="/uploads/@Model.Recommended[1].CoverPhoto">							
+                                        <img src="/uploads/@Model.Recommended[1].CoverPhoto">
                                         <div style="height:15px;"></div>
                                         <h3>@Model.Recommended[1].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[1].BookAuthor</div>
@@ -165,7 +459,7 @@
                                     <div onclick="window.location='/Book/Details?id=@Model.Recommended[2].Id'" class="book_div">
                                         <div class="wishlist "
                                              data-book="@Model.Recommended[2].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
-                                        <img src="/uploads//@Model.Recommended[2].CoverPhoto">							
+                                        <img src="/uploads//@Model.Recommended[2].CoverPhoto">
                                         <div style="height:15px;"></div>
                                         <h3>@Model.Recommended[2].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[2].BookAuthor</div>
@@ -177,7 +471,7 @@
                                     <div onclick="window.location='/Book/Details?id=@Model.Recommended[3].Id'" class="book_div">
                                         <div class="wishlist "
                                              data-book="@Model.Recommended[3].Id" onclick="setWishlist(this);event.stopPropagation();"></div>
-                                        <img src="/uploads//@Model.Recommended[3].CoverPhoto">							
+                                        <img src="/uploads//@Model.Recommended[3].CoverPhoto">
                                         <div style="height:15px;"></div>
                                         <h3>@Model.Recommended[3].Title</h3>
                                         <div class="bookAuthor">@Model.Recommended[3].BookAuthor</div>
@@ -188,5 +482,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        }
+
+            }
+        </div>
+    }

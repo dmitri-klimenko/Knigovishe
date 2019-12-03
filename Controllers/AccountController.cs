@@ -34,7 +34,7 @@ namespace Knigosha.Controllers
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
 
-        public AccountController(ApplicationDbContext context, 
+        public AccountController(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
@@ -44,7 +44,7 @@ namespace Knigosha.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
-            _context = context; 
+            _context = context;
         }
 
         [TempData]
@@ -178,7 +178,7 @@ namespace Knigosha.Controllers
             if (result.Succeeded)
             {
                 // save last login
-                user.LastLogin = DateTime.Now.ToString("g"); 
+                user.LastLogin = DateTime.Now.ToString("g");
                 var lastLoginResult = await _userManager.UpdateAsync(user);
                 if (!lastLoginResult.Succeeded)
                 {
@@ -278,10 +278,11 @@ namespace Knigosha.Controllers
             var vm = new RegisterViewModel
             {
                 Countries =
-                    _context.Countries.Select(c => new SelectListItem() {Value = c.Title, Text = c.Title}).ToList(),
+                    _context.Countries.Select(c => new SelectListItem() { Value = c.Title, Text = c.Title }).ToList(),
                 MainCitiesRussia = _context.Cities.Select(c => new SelectListItem()
                 {
-                    Value = c.Title, Text = c.Title
+                    Value = c.Title,
+                    Text = c.Title
                 }).ToList()
             };
             return View(vm);
@@ -318,7 +319,7 @@ namespace Knigosha.Controllers
                             Password = model.Password,
                             Email = model.Email ?? model.ParentEmail,
                             PhoneNumber = model.PhoneNumber,
-                            City = !string.IsNullOrWhiteSpace(model.CityInput)? model.CityInput: model.MainCityRussia,
+                            City = !string.IsNullOrWhiteSpace(model.CityInput) ? model.CityInput : model.MainCityRussia,
                             School = !string.IsNullOrWhiteSpace(model.SchoolInput) ? model.SchoolInput : model.SchoolSelect,
                             Grade = model.Grade,
                             Parallel = model.Parallel,
@@ -326,13 +327,20 @@ namespace Knigosha.Controllers
                             SubscribedToNewsletter = model.SubscribedToNewsletter,
                             Greeting = "Привет, " + model.UserName
                         };
+
                         var result = await _userManager.CreateAsync(student, model.Password);
+
                         await _userManager.AddToRoleAsync(student, "User");
+
                         if (result.Succeeded)
                         {
-                            await new UserSubscriptionController(_context).CreateFree(student);
+                            if(student.Email != "a@a.com")
+                                await new UserSubscriptionController(_context).CreateFree(student);  
+
                             await _signInManager.SignInAsync(student, isPersistent: false);
+
                             _logger.LogInformation("Student created a new account with password.");
+
                             return RedirectToLocal(returnUrl);
                         }
                         AddErrors(result);
@@ -361,9 +369,13 @@ namespace Knigosha.Controllers
                         await _userManager.AddToRoleAsync(family, "User");
                         if (result.Succeeded)
                         {
-                            await new UserSubscriptionController(_context).CreateFree(family);
+                            if (family.Email != "a@a.com")
+                                await new UserSubscriptionController(_context).CreateFree(family);
+
                             await _signInManager.SignInAsync(family, isPersistent: false);
+
                             _logger.LogInformation("Family created a new account with password.");
+
                             return RedirectToLocal(returnUrl);
                         }
                         AddErrors(result);
@@ -393,9 +405,13 @@ namespace Knigosha.Controllers
                         await _userManager.AddToRoleAsync(schoolClass, "User");
                         if (result.Succeeded)
                         {
-                            await new UserSubscriptionController(_context).CreateFree(schoolClass);
+                            if (schoolClass.Email != "a@a.com")
+                                await new UserSubscriptionController(_context).CreateFree(schoolClass);
+
                             await _signInManager.SignInAsync(schoolClass, isPersistent: false);
+
                             _logger.LogInformation("Family created a new account with password.");
+
                             return RedirectToLocal(returnUrl);
                         }
                         AddErrors(result);

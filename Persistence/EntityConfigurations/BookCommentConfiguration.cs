@@ -13,7 +13,7 @@ namespace Knigosha.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<BookComment> builder)
         {
             builder.ToTable("BookComments");
-            builder.HasKey(bc => new { bc.BookId, bc.UserId });
+            builder.HasKey(bc => bc.Id);
             builder.Property(bc => bc.UserId).IsRequired();
             builder.Property(bc => bc.BookId).IsRequired();
         }

@@ -261,7 +261,7 @@
                                                     <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                                 </div>
                                                 <div class="rating">
-                                                    <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5 &nbsp;
+                                                    <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5 
                                                     <i class="@(Model.Books[i].AverageRating < 0.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                     <i class="@(Model.Books[i].AverageRating < 1.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                     <i class="@(Model.Books[i].AverageRating < 2.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
@@ -302,7 +302,7 @@
                                                 <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                             </div>
                                             <div class="rating">
-                                                <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5 &nbsp;
+                                                <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5
                                                 <i class="@(Model.Books[i].AverageRating < 0.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                 <i class="@(Model.Books[i].AverageRating < 1.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                 <i class="@(Model.Books[i].AverageRating < 2.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>

@@ -36,8 +36,8 @@
             <a href="/Manage/Students" style="font-weight:@ManageNavPages.StudentsNavClass(ViewContext)">Мои дети</a>
             <a href="/Manage/Answers?type=reset" style="font-weight: @ManageNavPages.ResetNavClass(ViewContext)">
                 Заявки на рестарт
-                @*@if (Model.ResetsCount > 0)
-                {<span class="red">(@Model.ResetsCount)</span>}*@
+                @if (Model.AnswersCount > 0)
+                {<span class="red">(@Model.AnswersCount)</span>}
             </a>
             <a href="/Manage/Answers" style="font-weight: @ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
             <a href="/Manage/Help"style="font-weight: @ManageNavPages.HelpNavClass(ViewContext)">Справка</a>
@@ -62,7 +62,11 @@
                 @if (Model.RequestsCount > 0)
                 {<span class="red">(@Model.RequestsCount)</span>}
             </a>
-            <a href="/Manage/Answers?type=reset" style="font-weight:@ManageNavPages.ResetNavClass(ViewContext)">Заявки на рестарт</a>
+            <a href="/Manage/Answers?type=reset" style="font-weight: @ManageNavPages.ResetNavClass(ViewContext)">
+                Заявки на рестарт
+                @if (Model.AnswersCount > 0)
+                {<span class="red">(@Model.AnswersCount)</span>}
+            </a>
             <a href="/Manage/Answers" style="font-weight:@ManageNavPages.AnswersGroupNavClass(ViewContext)">Прочитанные книги</a>
             <a href="/Manage/Answers?type=group" style="font-weight:@ManageNavPages.AnswersNavClass(ViewContext)">ВМЕСТЕ</a>
             <a href="/Manage/Help" style="font-weight:@ManageNavPages.HelpNavClass(ViewContext)">Справка</a>

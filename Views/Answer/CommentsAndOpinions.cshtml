@@ -1,0 +1,52 @@
+﻿@model Knigosha.Core.ViewModels.AnswerViewModel.CommentsAndOpinionsViewModel
+@{
+    ViewData["Title"] = "Мнения и комментарии";
+}
+    <div class="container" style="min-height: calc(100vh - 360px); margin-bottom: 30px; margin-top: 15px;">
+        <partial name="_DashboardPartial" />
+
+        <table class="table table-bordered adminTable" style="margin-top: 30px;">
+            <tr>
+                <th style="width: 15%">Юзер</th>
+                <th style="width: 20%">Книга</th>
+                <th >Комментарий</th>
+                <th style="width: 12%"></th>
+                <th style="width: 5%"></th>
+            </tr>
+
+            @for (int i = 0; i < Model.BookComments.Count; i++)
+            {
+                <tr>
+                    <td align="center">@Model.BookComments[i].User.FullName [@Model.BookComments[i].User.UserName]</td>
+                    <td align="center">#@Model.BookComments[i].Book.Id - @Model.BookComments[i].Book.Title - @Html.DisplayTextFor(m => m.BookComments[i].Book.AgeGroup)</td>
+                    <td align="center">@Model.BookComments[i].Text</td>
+                    <td align="center">@if(Model.BookComments[i].Approved){<text>Показан</text>}else{<a asp-controller="Answer" asp-action="CommentsAndOpinions" asp-route-type="comment" asp-route-act="approve" asp-route-id="@Model.BookComments[i].Id">Подтвердить</a>}</td>
+                    <td align="center"><a asp-controller="Answer" asp-action="DeleteBookComment" asp-route-id="@Model.BookComments[i].Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a></td>
+                </tr>
+            }
+
+        </table>
+        <div style="height: 40px"></div>
+        <table class="table table-bordered adminTable" style="margin-top: 30px;">
+            <tr>
+                <th style="width: 15%">Юзер</th>
+                <th style="width: 20%">Книга</th>
+                <th>Ответ</th>
+                <th style="width: 12%"></th>
+                <th style="width: 5%"></th>
+
+            </tr>
+
+            @for (int i = 0; i < Model.BookOpinions.Count; i++)
+            {
+                <tr>
+                    <td align="center">@Model.BookOpinions[i].User.FullName [@Model.BookOpinions[i].User.UserName]</td>
+                    <td align="center">#@Model.BookOpinions[i].Book.Id - @Model.BookOpinions[i].Book.Title - @Html.DisplayTextFor(m => m.BookOpinions[i].Book.AgeGroup)</td>
+                    <td align="center">@Model.BookOpinions[i].AnswerText</td>
+                    <td align="center">@if(Model.BookOpinions[i].Approved){<text>Показан</text>}else{<a asp-controller="Answer" asp-action="CommentsAndOpinions" asp-route-type="opinion" asp-route-act="approve" asp-route-id="@Model.BookOpinions[i].Id">Подтвердить</a>}</td>
+                    <td align="center"><a asp-controller="Answer" asp-action="DeleteBookOpinion" asp-route-id="@Model.BookOpinions[i].Id"><i id="deleteIcon" class="fa fa-trash-o"></i></a></td>
+                </tr>
+            }
+
+        </table>
+    </div>

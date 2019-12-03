@@ -1,12 +1,14 @@
 ﻿using Knigosha.Core.Models.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Knigosha.Core.Models
 {
     public class Answer
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
 
         public ApplicationUser User { get; set; }
 
@@ -48,7 +50,7 @@ namespace Knigosha.Core.Models
         {
             User = user ?? throw new ArgumentNullException(nameof(User));
             Book = book ?? throw new ArgumentNullException(nameof(Book));
-            DateTime = System.DateTime.Today;
+            DateTime = DateTime.Now;
         }
 
     }

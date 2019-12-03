@@ -104,7 +104,7 @@ namespace Knigosha
             });
 
             CreateUserRoles(serviceProvider).Wait();
-        
+
         }
     }
 }

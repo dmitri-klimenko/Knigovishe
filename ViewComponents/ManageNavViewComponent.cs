@@ -58,22 +58,38 @@ namespace Knigosha.ViewComponents
                     var parent = await _context.Families
                         .Include(f => f.MarkedBooks)
                         .ThenInclude(mb => mb.Book)
+                        .Include(f => f.StudentFamilies)
+                        .ThenInclude(sf => sf.Student)
                         .SingleAsync(f => f.Id == user.Id);
 
                     var messagesCount = _context.Messages.Count(m => !m.IsRead && m.RecipientId == user.Id);
-                    
+
                     var componentVm2 = new ManageNavViewModel()
                     {
                         User = parent,
                         MessagesCount = messagesCount,
-                        MarkedBooks = user.MarkedBooks.ToList()
+                        MarkedBooks = user.MarkedBooks.ToList(),
                     };
+
+                    if (parent.StudentFamilies.Count != 0)
+                    {
+                        var studentIds = parent.StudentFamilies.Select(sf => sf.StudentId).ToList();
+
+                        var answersWithReasonForRestart =
+                            _context.Answers
+                                .Count(a => studentIds.Contains(a.UserId) && !string.IsNullOrEmpty(a.ReasonForRestart));
+
+                        componentVm2.AnswersCount = answersWithReasonForRestart;
+                    }
+
                     return View(componentVm2);
                 }
 
                 case UserTypes.Teacher:
                 {
                     var teacher = await _context.Classes
+                        .Include(f => f.StudentClasses)
+                        .ThenInclude(sf => sf.Student)
                         .Include(c => c.MarkedBooks)
                         .ThenInclude(mb => mb.Book)
                         .SingleAsync(c => c.Id == user.Id);
@@ -82,13 +98,26 @@ namespace Knigosha.ViewComponents
                         var requestsCount = _context.Requests.Count(r => r.ClassId == user.Id);
 
                         var componentVm3 = new ManageNavViewModel()
-                    {
-                        User = teacher,
-                        MessagesCount = messagesCount,
-                        MarkedBooks = teacher.MarkedBooks.ToList(),
-                        RequestsCount = requestsCount
+                        {
+                            User = teacher,
+                            MessagesCount = messagesCount,
+                            MarkedBooks = teacher.MarkedBooks.ToList(),
+                            RequestsCount = requestsCount
                         };
-                    return View(componentVm3);
+
+                        if (teacher.StudentClasses.Count != 0)
+                        {
+                            var studentIds = teacher.StudentClasses.Select(sf => sf.StudentId).ToList();
+
+                            var answersWithReasonForRestart =
+                                _context.Answers
+                                    .Count(a => studentIds.Contains(a.UserId) && !string.IsNullOrEmpty(a.ReasonForRestart));
+
+                            componentVm3.AnswersCount = answersWithReasonForRestart;
+                        }
+
+
+                        return View(componentVm3);
                 }
             }
             return View();

@@ -33,39 +33,39 @@ namespace Knigosha.ViewComponents
             switch (user.UserType)
             {
                 case UserTypes.Student:
-                {
-                    var student = await _context.Students
-                        .Include(s => s.StudentClasses)
-                        .ThenInclude(sc => sc.Class)
-                        .Include(s => s.StudentFamilies)
-                        .ThenInclude(sf => sf.Family)
-                        .SingleAsync(s => s.Id == user.Id);
-
-                    student.Answers = _context.Answers
-                        .Include(a => a.Book)
-                        .Where(a => !a.IsArchive && a.UserId == student.Id).ToList();
-
-                    var activeClass = student.StudentClasses.SingleOrDefault(sc => sc.IsActive)?.Class;
-                    var activeFamily = student.StudentFamilies.SingleOrDefault(sf => sf.IsActive)?.Family;
-
-                    var componentVm = new ManageHeaderViewModel()
                     {
-                        User = student,
-                        ActiveClass = activeClass,
-                        ActiveFamily = activeFamily
-                    };
-                    return View(componentVm);
-                }
+                        var student = await _context.Students
+                            .Include(s => s.StudentClasses)
+                            .ThenInclude(sc => sc.Class)
+                            .Include(s => s.StudentFamilies)
+                            .ThenInclude(sf => sf.Family)
+                            .SingleAsync(s => s.Id == user.Id);
+
+                        student.Answers = _context.Answers
+                            .Include(a => a.Book)
+                            .Where(a => !a.IsArchive && a.UserId == student.Id).ToList();
+
+                        var activeClass = student.StudentClasses.SingleOrDefault(sc => sc.IsActive)?.Class;
+                        var activeFamily = student.StudentFamilies.SingleOrDefault(sf => sf.IsActive)?.Family;
+
+                        var componentVm = new ManageHeaderViewModel()
+                        {
+                            User = student,
+                            ActiveClass = activeClass,
+                            ActiveFamily = activeFamily
+                        };
+                        return View(componentVm);
+                    }
                 case UserTypes.Teacher:
-                {
-                    var teacher = await _context.Classes
-                        .SingleAsync(c => c.Id == user.Id);
-                    var componentVm2 = new ManageHeaderViewModel()
                     {
-                        User = teacher
-                    };
-                    return View(componentVm2);
-                }
+                        var teacher = await _context.Classes
+                            .SingleAsync(c => c.Id == user.Id);
+                        var componentVm2 = new ManageHeaderViewModel()
+                        {
+                            User = teacher
+                        };
+                        return View(componentVm2);
+                    }
                 case UserTypes.Parent:
                     var parent = await _context.Families
                         .SingleAsync(c => c.Id == user.Id);

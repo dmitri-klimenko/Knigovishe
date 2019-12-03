@@ -14,8 +14,8 @@ namespace Knigosha.Core.ViewModels.ManageViewModels
             public bool HasActiveFamily { get; set; }
             public int MessagesCount { get; set; }
             public int RequestsCount { get; set; }
-            public int ResetsCount { get; set; }
             public List<MarkedBook> MarkedBooks { get; set; }
+            public int AnswersCount { get; set; }
         }
     
 }

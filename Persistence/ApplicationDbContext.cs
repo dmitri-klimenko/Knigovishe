@@ -18,6 +18,7 @@ namespace Knigosha.Persistence
         {
         }
 
+        public DbSet<Report> Reports { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<CreatedBook> CreatedBooks { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -155,7 +156,7 @@ namespace Knigosha.Persistence
             builder.ApplyConfiguration(new CreatedBookConfiguration());
             builder.ApplyConfiguration(new BookOpinionConfiguration());
             builder.ApplyConfiguration(new BookCommentConfiguration());
-          
+
         }
     }
 }

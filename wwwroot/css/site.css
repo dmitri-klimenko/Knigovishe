@@ -763,6 +763,7 @@ body.scroll #header, body:not(.hero) #header {
 
 
 #footer {
+
     padding-top: 60px;
     padding-bottom: 50px;
     background: #f8ae00;
@@ -1659,6 +1660,7 @@ input::placeholder {
     }
 
     .quiz_bg:hover .quiz_button {
+        /*border: solid 1px #d54f24;*/
         background-color: #d54f24;
         color: #fff;
         height: 80px;

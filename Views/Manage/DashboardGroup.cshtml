@@ -1,7 +1,7 @@
 ﻿@using Knigosha.Core.Models
 @using Knigosha.Core.Models.Enums
 @using Knigosha.Views.Manage
-@model Knigosha.Core.ViewModels.ManageViewModels.DashboardGroupViewModel
+@model Knigosha.Core.ViewModels.ManageViewModels.DashboardViewModel
 
 @{
     ViewData["Title"] = "Мой профиль";
@@ -185,6 +185,7 @@
                              onclick="window.location='/Manage/Students?id=@Model.Students[i].Id&archive=0'">
                             <div class="chartRow bg @GetClassFromGrade((int)Model.Students[i].Grade)" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
                             <div class="chartRow" style="height:@Model.Average%"></div>
+                            
                             <div class="chartInfo" style="bottom:calc(@Model.Students[i].PercentageOfRightResponses% - 50px)">
                                 <div class="chartTitle" style="line-height:150%;">
                                     <span style="text-transform:capitalize">@Model.Students[i].FullName</span><br>

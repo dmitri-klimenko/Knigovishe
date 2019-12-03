@@ -8,37 +8,44 @@
 
 <td colspan="2" valign="top"  style="border-top:1px solid #ffdb60;">
     <a href="" name="s" style="position:relative;top:-100px;"></a>
-    @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)		
-    <div style="padding:50px;line-height:24px;">
-        @if (Model.User.UserType == UserTypes.Student)
-        {
-            <span>Ключ абонамента: </span><span style="font-weight: bold">@Model.MyUserSubscription.ActivationKeys.Last().Code</span>
-            <br>
-            <span>Действителен до: </span><span style="font-weight: bold"> @Model.MyUserSubscription.Subscription.ValidUntil</span>
-            <br>
-        }
-        else
-        {
-            <span>Тип абонамента: </span><span style="font-weight: bold">@Html.DisplayFor(m => m.MyUserSubscription.Subscription.Name)</span>
-            <br>
-        }
-        <br>
-        Введи ключ абонамента:<div style="height:5px;"></div>
-        <form method="post" asp-controller="Manage" asp-action="License">
-            <table>
-                <tr>
-                    <td>
-                        <input asp-for="Code">
-                    </td>
-                    <td><input type="submit" class="button" value="Активировать"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><span asp-validation-for="Code" class="text-danger"></span></td>
-                </tr>
-            </table>
-        </form>
+    
+    @if (Model.MyUserSubscription != null)
+    {
+        @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)		
+        <div style="padding:50px;line-height:24px;">
+      
 
-        <div style="height:30px;"></div>
-        <a asp-controller="Manage" asp-action="Licenses" class="button">Купить абонемент</a><div style="height:15px;"></div>
-    </div>
+            @if (Model.User.UserType == UserTypes.Student)
+            {
+                <span>Ключ абонамента: </span><span style="font-weight: bold">@Model.MyUserSubscription.ActivationKeys.Last().Code</span>
+                <br>
+                <span>Действителен до: </span><span style="font-weight: bold"> @Model.MyUserSubscription.Subscription.ValidUntil</span>
+                <br>
+            }
+            else
+            {
+                <span>Тип абонамента: </span><span style="font-weight: bold">@Html.DisplayFor(m => m.MyUserSubscription.Subscription.Name)</span>
+                <br>
+            }
+            <br>
+            Введи ключ абонамента:<div style="height:5px;"></div>
+            <form method="post" asp-controller="Manage" asp-action="License">
+                <table>
+                    <tr>
+                        <td>
+                            <input asp-for="Code">
+                        </td>
+                        <td><input type="submit" class="button" value="Активировать"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><span asp-validation-for="Code" class="text-danger"></span></td>
+                    </tr>
+                </table>
+            </form>
+
+            <div style="height:30px;"></div>
+            <a asp-controller="Manage" asp-action="Licenses" class="button">Купить абонемент</a><div style="height:15px;"></div>
+        </div>
+    }
+   
 </td>

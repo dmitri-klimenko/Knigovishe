@@ -40,9 +40,11 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.Answer", b =>
                 {
-                    b.Property<int>("BookId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("BookId");
 
                     b.Property<byte>("CurrentQuestion");
 
@@ -64,7 +66,12 @@ namespace Knigosha.Persistence.Migrations
 
                     b.Property<DateTime>("Started");
 
-                    b.HasKey("BookId", "UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -279,15 +286,26 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.BookComment", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Approved");
+
                     b.Property<int>("BookId");
 
-                    b.Property<string>("UserId");
+                    b.Property<int>("MyProperty");
 
                     b.Property<bool>("Share");
 
                     b.Property<string>("Text");
 
-                    b.HasKey("BookId", "UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -312,15 +330,24 @@ namespace Knigosha.Persistence.Migrations
 
             modelBuilder.Entity("Knigosha.Core.Models.BookOpinion", b =>
                 {
-                    b.Property<int>("BookId");
-
-                    b.Property<string>("UserId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AnswerText");
 
+                    b.Property<bool>("Approved");
+
+                    b.Property<int>("BookId");
+
                     b.Property<bool>("Share");
 
-                    b.HasKey("BookId", "UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
@@ -1625,6 +1652,27 @@ namespace Knigosha.Persistence.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BookId");
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<int>("Question");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Request", b =>
@@ -68554,9 +68602,9 @@ namespace Knigosha.Persistence.Migrations
             modelBuilder.Entity("Knigosha.Core.Models.BookOpinion", b =>
                 {
                     b.HasOne("Knigosha.Core.Models.Book", "Book")
-                        .WithMany("BookOpinions")
+                        .WithMany()
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Knigosha.Core.Models.ApplicationUser", "User")
                         .WithMany()
@@ -68616,6 +68664,13 @@ namespace Knigosha.Persistence.Migrations
                         .WithMany("Questions")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Knigosha.Core.Models.Report", b =>
+                {
+                    b.HasOne("Knigosha.Core.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId");
                 });
 
             modelBuilder.Entity("Knigosha.Core.Models.Request", b =>
