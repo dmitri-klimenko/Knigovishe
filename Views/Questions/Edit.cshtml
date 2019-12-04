@@ -56,13 +56,19 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
     <script>
         $(document).ready(function() {
-            $('#selectQuestionCategory').change(function() {
+            $('#selectQuestionCategory').change(function () {
                 var questionCategoryVal = $(this).val();
                 console.log(questionCategoryVal);
+
                 if (questionCategoryVal == 2) {
                     $('#rightAnswerDiv').hide();
                     $('#wrongAnswer1Div').hide();
                     $('#wrongAnswer2Div').hide();
+                } else {
+
+                    $('#rightAnswerDiv').show();
+                    $('#wrongAnswer1Div').show();
+                    $('#wrongAnswer2Div').show();
                 }
             }).change();
         });
