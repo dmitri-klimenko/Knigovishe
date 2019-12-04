@@ -373,7 +373,7 @@
                         }
                     }
 
-                    @if (Model.BookCommentsFromOthers.Count > 0)
+                    @if (Model.BookCommentsFromOthers != null)
                     {
                         @for (int j = 0; j < Model.BookCommentsFromOthers.Count; j++)
                         {

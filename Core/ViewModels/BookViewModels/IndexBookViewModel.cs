@@ -21,5 +21,20 @@ namespace Knigosha.Core.ViewModels.BookViewModels
         public AgeGroups AgeGroup { get; set; }
         public string SortField { get; set; }
         public List<int> BooksIds { get; set; }
+
+
+        public int CurrentPage { get; set; }
+
+        public int Count { get; set; }
+
+        public int PageSize { get; set; }
+
+        public int TotalPages { get; set; }
+
+        public bool EnablePrevious { get; set; }
+
+        public bool EnableNext { get; set; }
     }
+
 }
+

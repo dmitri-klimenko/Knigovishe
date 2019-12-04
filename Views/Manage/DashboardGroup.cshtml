@@ -181,7 +181,7 @@
                 {
                     for (var i = 0; i < Model.Students.Count; i++)
                     {
-                        <div class="chartGroup" style="left:10px;cursor:pointer;"
+                        <div class="chartGroup" style="left:10px; cursor:pointer;"
                              onclick="window.location='/Manage/Students?id=@Model.Students[i].Id&archive=0'">
                             <div class="chartRow bg @GetClassFromGrade((int)Model.Students[i].Grade)" style="height:@Model.Students[i].PercentageOfRightResponses%"></div>
                             <div class="chartRow" style="height:@Model.Average%"></div>

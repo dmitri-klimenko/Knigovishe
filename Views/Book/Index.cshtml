@@ -6,7 +6,7 @@
     Layout = "_Layout";
 }
 
-@functions{ 
+@functions{
     public string GetClassFromGrade(int grade)
     {
         var returnVal = String.Empty;
@@ -71,7 +71,7 @@
         <div style="padding-top:20px;padding-bottom:20px;">
             <table width="100%" class="sc">
                 <tr>
-                    <td style="font-size:16px;">
+                    <td style="font-size:18px;">
 
                         <div class="advanced" style="display:none;">
                             <div style="height:40px;"></div>
@@ -95,7 +95,7 @@
                         @{
                             if (Model.Books.Count == 1)
                             {<span>Найдена 1 книга</span>}
-                            else if (Model.Books.Count == 2 || Model.Books.Count == 3)
+                            else if (Model.Books.Count % 10 == 2 || Model.Books.Count % 10 == 3 || Model.Books.Count == 4)
                             {<span>Найдено @Model.Books.Count книги</span>}
                         else
                         {<span>Найдено @Model.Books.Count книг</span>}
@@ -164,8 +164,8 @@
                                     <input type="radio" asp-for="AgeGroup" value="1"
                                            onclick="document.form.submit()">
                                 </td>
-                                <td onclick="check(this);document.form.submit();" style="cursor: pointer; padding-bottom: 10px;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      vertical-align: top; font-size: 16px;">
+                                <td onclick="check(this);document.form.submit();"
+                                    style="cursor: pointer; padding-bottom: 10px;vertical-align: top; font-size: 16px;">
                                     6+
                                 </td>
                             </tr>
@@ -224,16 +224,16 @@
                             <text>Что нужно для этого сделать ты можешь узнать</text><a asp-controller="Home" asp-action="CreateQuiz"> здесь.</a>
                         }
                         else
-                           {<table class="sc tc">
+                        {<table class="sc tc">
                                 @for (int i = 0; i < Model.Books.Count; i++)
                                 {
                                     var cells = 4;
                                     var item = Model.Books[i];
-                                    if ((i % cells) == 0)
+                                    if (i % cells == 0)
                                     {
                                         @:<tr>
                                         }
-                                        if ((i % cells) == (cells - 1))
+                                        if (i % cells == cells - 1)
                                         {
                                             <td style="vertical-align: top; width: 200px;" class="book_quiz">
                                                 <div class="cover @(GetClassFromGrade((int)item.Grade))"
@@ -261,7 +261,7 @@
                                                     <div class="quizYear">@Html.DisplayFor(m => m.Books[i].AgeGroup)</div>
                                                 </div>
                                                 <div class="rating">
-                                                    <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5 
+                                                    <span style="font-weight: bold">@Model.Books[i].AverageRating.ToString(CultureInfo.GetCultureInfo("en-GB"))</span>/5
                                                     <i class="@(Model.Books[i].AverageRating < 0.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 0.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                     <i class="@(Model.Books[i].AverageRating < 1.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 1.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
                                                     <i class="@(Model.Books[i].AverageRating < 2.3? "fa fa-star-o" : (Model.Books[i].AverageRating < 2.8? "fa fa-star-half-o" : "fa fa-star"))"></i>
@@ -312,14 +312,88 @@
                                             <div class="bl"></div>
                                             <a href="/user/quiz?id=522" class="ba">РЕШИТЬ ВИКТОРИНУ<i class="fa fa-angle-right"></i></a>
                                         </td>
-                                        <td width="30">&nbsp;</td>
+                                        @if (i != Model.Books.Count - 1)
+                                        {
+                                            <td width="30">&nbsp;</td>
+                                        }
+                                        else
+                                        {
+                                            @:</tr>
+                                            <tr><td colspan="7" style="height: 40px;">&nbsp;</td></tr>
+                                        }
                                     }
                                 }
                             </table>
+
+                            @if (Model.TotalPages > 1)
+                            {
+                                <div class="pagination">
+                                    <a href="javascript:;" onclick="go_to_page(1)" class="page_link first-page @(Model.EnablePrevious? " " : "disabled")">
+                                        <i class="fa fa-angle-double-left"></i>
+                                    </a>
+                                    <a href="javascript:;" onclick="go_to_page(1)" class="page_link prev-page @(Model.EnablePrevious? " " : "disabled")">
+                                        <i class="fa fa-angle-left"></i>
+                                    </a>
+
+                                    @{
+                                        var previousPageIsEllipsis = false;
+
+                                        for (var i = 1; i < Model.TotalPages + 1; i++)
+                                        {
+                                            var linkClass = (i == Model.CurrentPage) ? "active" : " ";
+
+                                            if (i == Model.CurrentPage)
+                                            {
+
+                                                <a href="javascript:;" onclick="go_to_page(@i)" class="page_link page @linkClass">@i</a>
+
+                                                previousPageIsEllipsis = false;
+                                            }
+                                            else
+                                            {
+                                                if (i == 1
+                                                    || i == 2
+                                                    || i == Model.CurrentPage - 2
+                                                    || i == Model.CurrentPage - 1
+                                                    || i == Model.CurrentPage + 1
+                                                    || i == Model.CurrentPage + 2
+                                                    || i == Model.TotalPages - 1
+                                                    || i == Model.TotalPages)
+                                                {
+
+                                                    <a href="javascript:;" onclick="go_to_page(@i)" class="page_link page @linkClass">@i</a>
+
+                                                    previousPageIsEllipsis = false;
+                                                }
+                                                else
+                                                {
+                                                    if (previousPageIsEllipsis)
+                                                    {
+                                                        continue;
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="space">...</span>
+                                                        previousPageIsEllipsis = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    <a href="javascript:;" onclick="go_to_page(@(Model.CurrentPage + 1))" class="page_link next-page  @(Model.EnableNext? " " : "disabled")">
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                    <a href="javascript:;" onclick="go_to_page(@Model.TotalPages)" class="page_link last-page  @(Model.EnableNext? " " : "disabled")">
+                                        <i class="fa fa-angle-double-right"></i>
+                                    </a>
+                                </div>
+
+                            }
                         }
                     </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-</form>
+                    </td>
+                    </tr>
+                    </table>
+                    </div>
+                </form>

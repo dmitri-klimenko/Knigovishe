@@ -33,6 +33,19 @@ namespace Knigosha.Controllers
             _context = context;
         }
 
+        public int CurrentPage { get; set; } = 1;
+
+        public int Count { get; set; }
+
+        public int PageSize { get; set; } = 24;
+
+        public int TotalPages => (int)Math.Ceiling(decimal.Divide(Count, PageSize));
+
+        public bool EnablePrevious => CurrentPage > 1;
+
+        public bool EnableNext => CurrentPage < TotalPages;
+
+
         public async Task<IActionResult> IndexAdmin()
         {
             return View(await _context.Books.ToListAsync());
@@ -40,7 +53,7 @@ namespace Knigosha.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string keywords, string bookPublisher, BookCategories category, AgeGroups ageGroup, string yearFrom, string yearTo, string sortField)
+        public async Task<IActionResult> Index(string keywords, string bookPublisher, BookCategories category, AgeGroups ageGroup, string yearFrom, string yearTo, string sortField, int page = 1)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -49,6 +62,7 @@ namespace Knigosha.Controllers
                 .Include(b => b.BookRatings)
                 .AsQueryable();
 
+            CurrentPage = page == 0 ? 1 : page;
 
             var publishers = books.Select(b => b.Publisher);
 
@@ -102,10 +116,25 @@ namespace Knigosha.Controllers
                     break;
             }
 
+            Count = books.Count();
+
+            if (CurrentPage > TotalPages)
+                CurrentPage = TotalPages;
+
             var indexVm = new IndexBookViewModel()
             {
-                Books = await books?.ToListAsync(),
+                Books = await books.Skip((CurrentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToListAsync(),
+
                 Publishers = new SelectList(await publishers.Distinct().ToListAsync()),
+
+                CurrentPage = CurrentPage,
+                Count = Count,
+                PageSize = PageSize,
+                TotalPages = TotalPages,
+                EnablePrevious = EnablePrevious,
+                EnableNext = EnableNext
             };
 
             if (User.Identity.IsAuthenticated)
@@ -118,6 +147,10 @@ namespace Knigosha.Controllers
             }
             return View(indexVm);
         }
+
+
+
+
 
         public async Task<IActionResult> DetailsAdmin(int? id)
         {
